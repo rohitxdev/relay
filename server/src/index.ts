@@ -6,6 +6,7 @@ import cors from "cors";
 import agoraAccessToken from "agora-access-token";
 import express from "express";
 import { config } from "dotenv";
+import { dirname, join, resolve } from "path";
 
 config({ path: "../.env" });
 const PORT = Number(process.env.PORT || 4000);
@@ -81,23 +82,22 @@ server.get("/api/get-access-token", async (request, reply) => {
   reply.send({ appId, uid, accessToken });
 });
 
-server.get("/api/get-username", async (request, reply) => {
-  const { roomId, uid } = request.query as { roomId: string; uid: string };
+server.get("/api/get-username", async (req, res) => {
+  const { roomId, uid } = req.query as { roomId: string; uid: string };
   const snapshot = await get(child(ref(getDatabase()), `/rooms/${roomId}`));
-  reply.send(snapshot.val()[uid]);
+  res.send(snapshot.val()[uid]);
 });
 
-server.delete("/api/remove-username", async (request, reply) => {
-  const { roomId, uid } = request.query as { roomId: string; uid: string };
+server.delete("/api/remove-username", async (req, res) => {
+  const { roomId, uid } = req.query as { roomId: string; uid: string };
   await update(ref(db, `/rooms/${roomId}`), { [uid]: null });
-  reply.send(true);
+  res.send(true);
 });
 
-server.get("/api/get-og-image", async (request, reply) => {
-  const stream = fs.createReadStream("./assets/spark.jpg");
-  reply.type("image/jpeg").send(stream);
+server.get("/api/get-og-image", async (req, res) => {
+  res.sendFile(`/assets/spark.jpg`, { root: "../" });
 });
 
-server.listen(PORT, HOST, () => {
+server.listen(PORT, HOST, async () => {
   console.log(`Server is listening to http://${HOST}:${PORT}`);
 });
