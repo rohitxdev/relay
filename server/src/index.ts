@@ -98,6 +98,6 @@ server.get("/api/get-og-image", async (request, reply) => {
   reply.type("image/jpeg").send(stream);
 });
 
-server.listen(PORT, HOST, () => {
-  console.log(`Server is listening to http://${HOST}:${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server is running.`);
 });
