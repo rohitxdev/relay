@@ -1,4 +1,3 @@
-import { SERVER_URL } from "../pages/index";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PageContext } from "./AppContext";
@@ -28,7 +27,7 @@ export default function JoinRoom() {
   };
 
   const verifyRoomId = async (roomId: string) => {
-    const response = await fetch(`${SERVER_URL}/api/verify-room-id?roomId=${roomId}`);
+    const response = await fetch(`/api/verify-room-id?roomId=${roomId}`);
     const isVerified = await response.text();
     if (isVerified === "true") {
       sessionStorage.setItem("spark-vc-room-id", roomId);
