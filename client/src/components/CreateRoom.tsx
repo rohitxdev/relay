@@ -1,4 +1,3 @@
-import { SERVER_URL } from "../pages/index";
 import { useContext, useRef, useState } from "react";
 import RenderIf from "./RenderIf";
 import { PageContext } from "./AppContext";
@@ -13,7 +12,7 @@ export default function CreateRoom() {
 
   const getRoomId = async () => {
     setShowLoading(true);
-    const response = await fetch(SERVER_URL + "/api/get-room-id");
+    const response = await fetch(`/api/get-room-id`);
     const roomId = await response.text();
     setTimeout(() => {
       setRoomId(roomId);
