@@ -26,6 +26,10 @@ const db = getDatabase(app);
 server.use(cors());
 server.use(express.static("../../client/dist/"));
 
+server.get("/api", (req, res) => {
+  res.send("*Cricket sounds*");
+});
+
 server.get("/api/get-room-id", async (request, reply) => {
   const generateRoomId = async () => {
     let currentTimestamp = Math.floor(Date.now() / 1000);
