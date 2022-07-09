@@ -10,7 +10,6 @@ import { config } from "dotenv";
 config({ path: "../.env" });
 const PORT = Number(process.env.PORT || 4000);
 const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1";
-const { RtcRole, RtcTokenBuilder } = agoraAccessToken;
 const server = express();
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -21,6 +20,7 @@ const firebaseConfig = {
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.FIREBASE_APP_ID,
 };
+const { RtcRole, RtcTokenBuilder } = agoraAccessToken;
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 server.use(cors());
