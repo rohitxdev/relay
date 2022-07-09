@@ -1,0 +1,59 @@
+{
+  "name": "spark-vc",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"cd ./client && vite\" \"cd ./server && tsc --watch \" \"cd ./server/dist && nodemon index.js\"",
+    "build": "concurrently \"cd ./client && tsc && vite build\" \"cd ./server && tsc\"",
+    "start": "cd ./server/dist && node index.js",
+    "preview": "npm run build && npm run start",
+    "preview:client": "cd ./client && vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rohitman47/spark-vc.git"
+  },
+  "keywords": [
+    "video",
+    "calling",
+    "conferencing",
+    "react",
+    "express",
+    "typescript"
+  ],
+  "bugs": {
+    "url": "https://github.com/rohitman47/spark-vc/issues"
+  },
+  "homepage": "https://github.com/rohitman47/spark-vc#readme",
+  "author": "rohitman47",
+  "license": "MIT",
+  "dependencies": {
+    "agora-rtc-sdk-ng": "^4.11.1",
+    "agora-access-token": "^2.0.4",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "firebase": "^9.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.34",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/react-helmet": "^6.1.5",
+    "@vitejs/plugin-react": "^1.3.0",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "nodemon": "^2.0.16",
+    "typescript": "^4.6.4",
+    "concurrently": "^7.2.1",
+    "postcss": "^8.4.14",
+    "postcss-preset-env": "^7.6.0",
+    "sass": "^1.51.0",
+    "vite": "^2.9.9",
+    "vite-plugin-svgr": "^2.1.0"
+  }
+}

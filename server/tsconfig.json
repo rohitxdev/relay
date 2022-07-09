@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "ES6",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2018",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "outDir": "./dist",
+    "outDir": "./dist",
+    "paths": {
+      "*": [
+        "../node_modules/*",
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "src"
+  ]
+}

@@ -1,0 +1,224 @@
+@use './config' as *;
+@use './room.scss';
+
+@media (hover:hover) {
+
+  .btn:hover,
+  .links svg:hover {
+    transform: scale(1.04);
+    transition: all 0.3s;
+  }
+}
+
+.home,
+.create-room,
+.join-room {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  text-align: center;
+  color: var(--white);
+}
+
+.background {
+  background: url("../assets/images/blob-scene-haikei.svg") center / cover no-repeat;
+  position: absolute;
+  z-index: -10;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  filter: brightness(0.65);
+}
+
+.home-info {
+  h1 {
+    font-variation-settings: "wght" 800;
+    font-size: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .spark-logo {
+      height: 3rem;
+      margin: 0 0.25rem;
+    }
+  }
+
+  h3 {
+    font-size: 1.25em;
+    font-variation-settings: "wght" 700;
+    line-height: 2;
+    margin: 0.25em;
+  }
+
+
+}
+
+.loader {
+  margin: 2em 0;
+
+  svg {
+    height: 3em;
+    transform: scale(1.2);
+  }
+}
+
+.btn-container {
+  display: grid;
+  place-items: center;
+  width: fit-content;
+}
+
+.btn {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  font-size: 1.2em;
+  font-variation-settings: "wght" 700;
+  border: none;
+  border-radius: 0.75em;
+  padding: 0.75em 1em;
+  margin: 1em 1em;
+  display: flex;
+  justify-content: space-evenly;
+  cursor: pointer;
+  width: 12em;
+
+  &:active {
+    filter: brightness(0.8);
+  }
+
+  & > svg {
+    height: 1.25em;
+    margin: 0 0.25em;
+    fill: currentColor;
+  }
+}
+
+.room-id {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5em 1em;
+  color: var(--white);
+  border-radius: 0.5em;
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  box-shadow: 0px 0px 1px 1px var(--secondary-lavender);
+  width: 90%;
+  margin: 2em 0;
+
+  p {
+    margin: auto;
+    font-variation-settings: "wght" 600;
+    font-size: 2em;
+    font-family: monospace;
+    letter-spacing: 0.25ch;
+    user-select: text;
+  }
+
+  svg {
+    height: 2em;
+    padding: 0.25em;
+    cursor: pointer;
+  }
+}
+
+.add-margin {
+  margin: 0 2em;
+  width: 100%;
+}
+
+.tooltip {
+  display: none;
+  position: relative;
+
+  &::before {
+    content: 'Copied!';
+    font-variation-settings: "wght" 500;
+    font-size: 0.75em;
+    background-color: var(--white);
+    color: var(--dark);
+    border-radius: 0.5em;
+    padding: 0.5em;
+    position: absolute;
+    top: -5em;
+    left: -1em;
+  }
+}
+
+.user-container {
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.enter-room-id,
+.enter-username {
+  position: relative;
+  width: max(70%, 12em);
+
+  span {
+    color: var(--secondary-lavender);
+    position: absolute;
+    pointer-events: none;
+    top: 1.6em;
+    left: 0;
+    font-variation-settings: "wght" 600;
+    font-size: calc(0.8 * 1.5em);
+    margin: 0.5em 1em;
+  }
+
+
+  input:is(:focus, :valid) ~ span {
+    background-color: #000c15;
+    top: 1.05em;
+    left: 0.7em;
+    font-size: 0.9em;
+    font-variation-settings: "wght" 600;
+    padding: 0 0.55em;
+    margin: 0 0.5em;
+    transition: all 0.1s ease-in-out;
+  }
+
+  input:invalid ~ span {
+    transition: all 0.1s ease-in-out;
+  }
+
+
+
+  input {
+    background-color: transparent;
+    color: var(--white);
+    padding: 0.5em 0.75em;
+    margin: 1em 0;
+    outline: none;
+    border-radius: 0.4em;
+    border: 2px solid var(--secondary-lavender);
+    font-variation-settings: "wght" 600;
+    font-size: 1.5em;
+    width: 100%;
+    letter-spacing: 0.1ch;
+  }
+}
+
+.links {
+  svg {
+    height: 3.5em;
+    fill: white;
+    margin: 0.75em 1.5em;
+    cursor: pointer;
+  }
+}
+
+.error {
+  position: absolute;
+  top: -4em;
+  padding: 0.6em 1.5em;
+  background-color: var(--error);
+  color: var(--white);
+  font-variation-settings: "wght" 500;
+  font-size: 0.9em;
+  border-radius: 0.4em;
+  animation: pop 2s linear 1 forwards;
+}
