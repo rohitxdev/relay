@@ -10,8 +10,12 @@ const PORT = Number(process.env.PORT || 4000);
 const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1";
 const server = express();
 const { RtcRole, RtcTokenBuilder } = agoraAccessToken;
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+
+const redis = createClient({
+  url: process.env.REDIS_URL,
+  username: process.env.REDIS_ROLE,
+  password: process.env.REDIS_PASSWORD,
+});
 server.use(cors());
 server.use(express.static("../../client/dist/"));
 
@@ -36,11 +40,11 @@ server.get("/api/get-room-id", async (req, res) => {
   res.send(roomId);
 });
 
-server.get("/api/verify-room-id", async (request, reply) => {
-  const { roomId } = request.query as { roomId: string };
-  const snapshot = await get(child(ref(getDatabase()), `/rooms/${roomId}`));
-  if (snapshot.exists()) {
-    reply.send(true);
+server.get("/api/verify-room-id", async (req, res) => {
+  const { roomId } = req.query as { roomId: string };
+  await redis.connect();
+  if (await redis.get(roomId)) {
+    res.send(true);
   } else {
     res.send(false);
   }
