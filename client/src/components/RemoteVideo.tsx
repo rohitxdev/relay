@@ -17,7 +17,7 @@ export default function RemoteVideo({ client }: { client: IAgoraRTCClient }) {
   userLeftTone.volume = 0.5;
   userJoinedTone.volume = 0.5;
 
-  const cleanUp = async () => {
+  const cleanUp = () => {
     client.removeAllListeners();
   };
 

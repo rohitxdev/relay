@@ -8,7 +8,7 @@ export default function CreateRoom() {
   const [roomId, setRoomId] = useState("");
   const [showLoading, setShowLoading] = useState(false);
   const { setPage } = useContext(PageContext);
-  const tooltipRef = useRef<HTMLSpanElement>(null);
+  const tooltipRef = useRef<HTMLSpanElement | null>(null);
 
   const getRoomId = async () => {
     setShowLoading(true);

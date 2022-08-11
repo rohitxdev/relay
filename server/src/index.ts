@@ -1,74 +1,68 @@
-import { getDatabase, ref, set, get, child, update } from "firebase/database";
-import { initializeApp } from "firebase/app";
 import crypto from "crypto";
-import fs from "fs";
 import cors from "cors";
 import agoraAccessToken from "agora-access-token";
 import express from "express";
 import { config } from "dotenv";
-import { dirname, join, resolve } from "path";
+import { createClient } from "redis";
 
 config({ path: "../.env" });
 const PORT = Number(process.env.PORT || 4000);
 const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1";
 const server = express();
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-};
 const { RtcRole, RtcTokenBuilder } = agoraAccessToken;
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+
+const redis = createClient({
+  url: "redis://redis-11253.c305.ap-south-1-1.ec2.cloud.redislabs.com:11253",
+  username: "admin",
+  password: process.env.REDIS_PASSWORD,
+});
 server.use(cors());
 server.use(express.static("../../client/dist/"));
 
 server.get("/api", (req, res) => {
   res.send("*Cricket sounds*");
 });
-
-server.get("/api/get-room-id", async (request, reply) => {
+const EXPIRATION_TIME = 2 * 60 * 60 * 24;
+server.get("/api/get-room-id", async (req, res) => {
   const generateRoomId = async () => {
-    let currentTimestamp = Math.floor(Date.now() / 1000);
     let roomId = crypto.randomInt(0, 10e9).toString(36);
-    let snapshot = await get(child(ref(getDatabase()), `/rooms/${roomId}`));
-    while (snapshot.exists()) {
-      currentTimestamp = Math.floor(Date.now() / 1000);
+    await redis.connect();
+    while (true) {
+      if (!(await redis.get(roomId))) {
+        await redis.setEx(roomId, EXPIRATION_TIME, roomId);
+        await redis.quit();
+        return roomId;
+      }
       roomId = crypto.randomInt(0, 10e9).toString(36);
-      snapshot = await get(child(ref(getDatabase()), `/rooms/${roomId}`));
     }
-    await set(ref(db, `/rooms/${roomId}`), { roomId, currentTimestamp });
-    return roomId;
   };
   const roomId = await generateRoomId();
-  reply.send(roomId);
+  res.send(roomId);
 });
 
-server.get("/api/verify-room-id", async (request, reply) => {
-  const { roomId } = request.query as { roomId: string };
-  const snapshot = await get(child(ref(getDatabase()), `/rooms/${roomId}`));
-  if (snapshot.exists()) {
-    reply.send(true);
+server.get("/api/verify-room-id", async (req, res) => {
+  const { roomId } = req.query as { roomId: string };
+  await redis.connect();
+  const idExists = await redis.get(roomId);
+  if (idExists) {
+    res.send(true);
   } else {
-    reply.send(false);
+    res.send(false);
   }
 });
 
-server.get("/api/get-access-token", async (request, reply) => {
-  const { roomId, username } = request.query as { roomId: string; username: string };
+server.get("/api/get-access-token", async (req, res) => {
+  const {
+    query: { roomId, username },
+  } = req;
   const expirationTimeInSeconds = 86400;
   const currentTimestamp = Math.floor(Date.now() / 1000);
   const appId = process.env.AGORA_APP_ID;
   const appCertificate = process.env.AGORA_APP_CERTIFICATE;
-  const channelName = roomId;
+  const channelName = roomId as string;
   const uid = crypto.randomUUID();
   const role = RtcRole.PUBLISHER;
   const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
-  //Generate access token.
   const accessToken = RtcTokenBuilder.buildTokenWithAccount(
     appId,
     appCertificate,
@@ -77,20 +71,16 @@ server.get("/api/get-access-token", async (request, reply) => {
     role,
     privilegeExpiredTs
   );
-  //Add username to database.
-  update(ref(db, `/rooms/${roomId}`), { [uid]: username });
-  reply.send({ appId, uid, accessToken });
+
+  res.send({ appId, uid, accessToken });
 });
 
 server.get("/api/get-username", async (req, res) => {
   const { roomId, uid } = req.query as { roomId: string; uid: string };
-  const snapshot = await get(child(ref(getDatabase()), `/rooms/${roomId}`));
-  res.send(snapshot.val()[uid]);
 });
 
 server.delete("/api/remove-username", async (req, res) => {
   const { roomId, uid } = req.query as { roomId: string; uid: string };
-  await update(ref(db, `/rooms/${roomId}`), { [uid]: null });
   res.send(true);
 });
 
