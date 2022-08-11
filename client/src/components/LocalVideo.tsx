@@ -5,7 +5,7 @@ import AgoraRTC, {
   IMicrophoneAudioTrack,
 } from "agora-rtc-sdk-ng";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import VideoOnIcon from "../assets/icons/videocam.svg";
 import VideoOffIcon from "../assets/icons/videocam-off.svg";
 import MicOnIcon from "../assets/icons/mic.svg";
@@ -14,7 +14,7 @@ import EndCallIcon from "../assets/icons/call.svg";
 import FlipCameraIcon from "../assets/icons/flip-camera.svg";
 import Avatar from "./Avatar";
 
-export default function LocalVideo({ client }: { client: IAgoraRTCClient }) {
+function LocalVideo({ client }: { client: IAgoraRTCClient }) {
   const navigate = useNavigate();
   const vidRef = useRef<HTMLDivElement>(null);
   const exitModalRef = useRef<HTMLDivElement>(null);
@@ -148,3 +148,4 @@ export default function LocalVideo({ client }: { client: IAgoraRTCClient }) {
     </>
   );
 }
+export default memo(LocalVideo);
