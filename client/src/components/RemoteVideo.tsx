@@ -1,5 +1,5 @@
 import { IRemoteVideoTrack, IRemoteAudioTrack, IAgoraRTCClient, UID } from "agora-rtc-sdk-ng";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import discordJoinedTone from "../assets/audio/call-join.mp3";
 import discordLeftTone from "../assets/audio/call-leave.mp3";
 import RemoteUser from "./RemoteUser";
@@ -9,8 +9,7 @@ export interface ICustomRemoteUser {
   remoteVideoTrack?: IRemoteVideoTrack | undefined;
   remoteAudioTrack?: IRemoteAudioTrack | undefined;
 }
-
-export default function RemoteVideo({ client }: { client: IAgoraRTCClient }) {
+function RemoteVideo({ client }: { client: IAgoraRTCClient }) {
   const [users, setUsers] = useState<ICustomRemoteUser[]>([]);
   const userLeftTone = new Audio(discordLeftTone);
   const userJoinedTone = new Audio(discordJoinedTone);
@@ -108,3 +107,5 @@ export default function RemoteVideo({ client }: { client: IAgoraRTCClient }) {
     </>
   );
 }
+
+export default memo(RemoteVideo);

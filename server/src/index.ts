@@ -12,8 +12,8 @@ const server = express();
 const { RtcRole, RtcTokenBuilder } = agoraAccessToken;
 
 const redis = createClient({
-  url: "redis://redis-11253.c305.ap-south-1-1.ec2.cloud.redislabs.com:11253",
-  username: "admin",
+  url: process.env.REDIS_URL,
+  username: process.env.REDIS_ROLE,
   password: process.env.REDIS_PASSWORD,
 });
 server.use(cors());
@@ -43,8 +43,7 @@ server.get("/api/get-room-id", async (req, res) => {
 server.get("/api/verify-room-id", async (req, res) => {
   const { roomId } = req.query as { roomId: string };
   await redis.connect();
-  const idExists = await redis.get(roomId);
-  if (idExists) {
+  if (await redis.get(roomId)) {
     res.send(true);
   } else {
     res.send(false);

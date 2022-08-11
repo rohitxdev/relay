@@ -13,16 +13,17 @@ import MicOffIcon from "../assets/icons/mic-off.svg";
 import EndCallIcon from "../assets/icons/call.svg";
 import FlipCameraIcon from "../assets/icons/flip-camera.svg";
 import Avatar from "./Avatar";
+import RenderIf from "./RenderIf";
 
 function LocalVideo({ client }: { client: IAgoraRTCClient }) {
   const navigate = useNavigate();
   const vidRef = useRef<HTMLDivElement>(null);
-  const exitModalRef = useRef<HTMLDivElement>(null);
   const controlsRef = useRef<HTMLDivElement>(null);
   const localAudioTrack = useRef<IMicrophoneAudioTrack | null>(null);
   const localVideoTrack = useRef<ICameraVideoTrack | null>(null);
   const [isVideoOn, setIsVideoOn] = useState(false);
   const [isMicOn, setIsMicOn] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   let timeOut: ReturnType<typeof setTimeout>;
   const localAudioConfig = {
     ANS: true,
@@ -98,18 +99,6 @@ function LocalVideo({ client }: { client: IAgoraRTCClient }) {
     navigate("/");
   };
 
-  const showModal = async () => {
-    if (exitModalRef.current) {
-      exitModalRef.current.style.display = "unset";
-    }
-  };
-
-  const hideModal = async () => {
-    if (exitModalRef.current) {
-      exitModalRef.current.style.display = "none";
-    }
-  };
-
   const cleanUp = async () => {
     localVideoTrack.current?.close();
     localAudioTrack.current?.close();
@@ -130,7 +119,12 @@ function LocalVideo({ client }: { client: IAgoraRTCClient }) {
           <button style={buttonStyles(isVideoOn)} onClick={toggleVideo}>
             {isVideoOn ? <VideoOnIcon /> : <VideoOffIcon />}
           </button>
-          <button className="exit-btn" onClick={showModal}>
+          <button
+            className="exit-btn"
+            onClick={() => {
+              setShowModal(true);
+            }}
+          >
             <EndCallIcon />
           </button>
           <button style={buttonStyles(isMicOn)} onClick={toggleMic}>
@@ -138,13 +132,21 @@ function LocalVideo({ client }: { client: IAgoraRTCClient }) {
           </button>
         </div>
       </div>
-      <div className="exit-modal" ref={exitModalRef}>
-        <p>Are you sure you want to exit?</p>
-        <div>
-          <button onClick={hideModal}>Stay</button>
-          <button onClick={handleExit}>Exit</button>
+      <RenderIf isTrue={showModal}>
+        <div className="exit-modal">
+          <p>Are you sure you want to exit?</p>
+          <div>
+            <button
+              onClick={() => {
+                setShowModal(false);
+              }}
+            >
+              Stay
+            </button>
+            <button onClick={handleExit}>Exit</button>
+          </div>
         </div>
-      </div>
+      </RenderIf>
     </>
   );
 }

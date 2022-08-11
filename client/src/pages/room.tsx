@@ -1,5 +1,5 @@
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { useEffect, useLayoutEffect } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import LocalVideo from "../components/LocalVideo";
 import RemoteVideo from "../components/RemoteVideo";
@@ -9,7 +9,7 @@ export default function Room() {
   const [searchParams] = useSearchParams();
   const roomId = searchParams.get("roomId");
   const username = searchParams.get("username");
-  const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp9" });
+  const client = useMemo(() => AgoraRTC.createClient({ mode: "rtc", codec: "vp9" }), []);
 
   const enterRoom = async (roomId: string) => {
     const response = await fetch(`/api/get-access-token?roomId=${roomId}&username=${username}`);
@@ -18,6 +18,7 @@ export default function Room() {
   };
 
   const cleanUp = async () => {
+    console.log("CLIENT LEFT");
     await client.leave();
   };
 

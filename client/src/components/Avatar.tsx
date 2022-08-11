@@ -1,6 +1,6 @@
-import { useRef } from "react";
+import { memo, useRef } from "react";
 
-export default function Avatar(isTrue: { isTrue: Boolean }) {
+function Avatar(isTrue: { isTrue: Boolean }) {
   const avatarRef = useRef<HTMLImageElement | null>(null);
   const srcRef = useRef<string | null>(null);
   if (!srcRef.current) {
@@ -23,3 +23,5 @@ export default function Avatar(isTrue: { isTrue: Boolean }) {
   }
   return isTrue && <img className="avatar-image" ref={avatarRef} src="" alt="" />;
 }
+
+export default memo(Avatar);
