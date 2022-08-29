@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Home, CreateRoom, JoinRoom, Room } from "@pages";
 import { registerServiceWorker } from "./register-service-worker";
-registerServiceWorker();
+// registerServiceWorker();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
