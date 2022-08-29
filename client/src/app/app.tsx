@@ -21,10 +21,8 @@ export const App = () => {
   };
   const checkForScreenShare = async () => {
     if ("getDisplayMedia" in navigator.mediaDevices) {
-      alert("screen share available");
       setIsScreenShareAvailable(true);
     } else {
-      alert("no screenshare");
       console.error("SCREENSHARING NOT AVAILABLE");
     }
   };

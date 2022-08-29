@@ -1,4 +1,3 @@
-import { memo, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import EndCallIcon from "@assets/icons/call.svg";
 import styles from "./controls.module.scss";
 import VideoOnIcon from "@assets/icons/video-on.svg";
@@ -8,8 +7,6 @@ import MicOffIcon from "@assets/icons/mic-off.svg";
 import FlipCameraIcon from "@assets/icons/flip-camera.svg";
 import ScreenShareOnIcon from "@assets/icons/screen-share.svg";
 import ScreenShareOffIcon from "@assets/icons/stop-screen-share.svg";
-import { ExitModal } from "@components";
-import AgoraRTC from "agora-rtc-sdk-ng";
 import { useAppContext } from "@utils/hooks";
 
 export const Controls = ({
@@ -49,7 +46,7 @@ export const Controls = ({
           aria-label={isSharingScreen ? "Stop screenshare" : "Start screenshare"}
           onClick={toggleScreenShare}
           className={isSharingScreen ? styles.btnOn : styles.btnOff}
-          // disabled={!isScreenShareAvailable}
+          disabled={!isScreenShareAvailable}
         >
           {isSharingScreen ? <ScreenShareOnIcon /> : <ScreenShareOffIcon />}
         </button>
