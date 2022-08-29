@@ -1,0 +1,33 @@
+.client {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5em;
+    outline: rgb(194, 194, 194) solid 2px;
+    height: 100%;
+    width: 100%;
+
+    video {
+        background-color: var(--color-dark-200);
+        object-fit: contain !important;
+    }
+}
+
+.client-username {
+    position: absolute;
+    color: var(--color-white);
+    width: 100%;
+    text-align: center;
+    margin-block: 1em;
+    font-size: 1em;
+    font-family: "Inter";
+    font-variation-settings: 'wght' 700;
+    // opacity: 0;
+    // transform: translateY(-100%);
+    transition: all 0.2s ease-in-out;
+    z-index: 10;
+    opacity: 1;
+    transform: translateY(0);
+    text-shadow: 0 0 5px var(--color-purple);
+
+    .client:hover > & {}
+}

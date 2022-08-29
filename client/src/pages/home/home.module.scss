@@ -1,0 +1,154 @@
+.btn-container {
+  display: grid;
+  place-items: center;
+  width: fit-content;
+  margin: auto;
+}
+
+.btn {
+  background-color: var(--color-purple);
+  color: var(--color-white);
+  font-size: 1.2em;
+  font-variation-settings: "wght" 700;
+  border: none;
+  border-radius: 0.75em;
+  padding: 0.75em 1em;
+  margin: 1em 1em;
+  display: flex;
+  justify-content: space-evenly;
+  cursor: pointer;
+  width: 12em;
+
+  &:active {
+    filter: brightness(0.8);
+  }
+
+  & > svg {
+    height: 1.25em;
+    width: 1.25em;
+    margin: 0 0.25em;
+    fill: currentColor;
+  }
+}
+
+.home {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  color: var(--white);
+}
+
+
+@media (width<600px) {
+  .illustration-wrapper {
+    animation: slide-up 0.5s 1 forwards;
+  }
+}
+
+@media (width>600px) {
+  .illustration {
+    animation: slide-from-left 0.5s 1 forwards;
+  }
+
+  .animate-btns {
+    animation: slide-from-right 0.5s 1 forwards;
+
+
+  }
+}
+
+
+
+.illustration-wrapper {
+  width: 80%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+}
+
+.illustration {
+  margin-block: 2em;
+  width: clamp(5em, 90%, 25em);
+  aspect-ratio: 1 / 1;
+  // background: url('./video-conference-illustration.svg');
+
+
+  svg {
+    height: auto;
+    width: clamp(5em, 90%, 25em);
+  }
+}
+
+@keyframes slide-from-left {
+  from {
+    transform: translateX(-50%);
+
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slide-from-right {
+  from {
+    transform: translateX(50%);
+
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+.banner {
+  margin: 1.5em;
+  animation: slide-down 0.5s 1 forwards;
+  color: var(--color-white);
+
+  .app-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    height: calc(2vw + 2em);
+
+    p {
+      font-size: calc(1.5vw + 2em);
+      font-variation-settings: "wght" 700;
+    }
+
+    img {
+      height: 100%;
+    }
+  }
+
+  .app-description {
+    color: var(--color-grey);
+    font-size: calc(0.75vw + 0.75em);
+    font-variation-settings: "wght" 700;
+    text-align: center;
+    margin: 0.5em;
+  }
+
+
+}
+
+.links {
+  margin: 2em 1em;
+  display: flex;
+  gap: 3em;
+
+  a {
+    display: inline-block;
+  }
+
+  svg {
+    height: 3.5em;
+    width: 3.5em;
+    fill: white;
+    cursor: pointer;
+  }
+}

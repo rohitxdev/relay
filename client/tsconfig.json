@@ -1,33 +1,54 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "useDefineForClassFields": true,
     "lib": [
       "DOM",
       "DOM.Iterable",
-      "ESNext"
+      "ESNext",
+      "WebWorker"
     ],
-    "allowJs": false,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "composite": true,
+    "noEmit": true,
     "strict": true,
-    "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
+    "target": "ES2017",
+    "skipLibCheck": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "useDefineForClassFields": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "preserveWatchOutput": false,
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
     "noEmitOnError": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@assets/*": [
+        "./src/assets/*"
+      ],
+      "@components": [
+        "./src/components"
+      ],
+      "@context": [
+        "./src/context"
+      ],
+      "@pages": [
+        "./src/pages"
+      ],
+      "@store": [
+        "./src/store"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
+    }
   },
   "include": [
     "src",
-    "vite.config.ts"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
+    "vite.config.ts",
   ]
 }

@@ -1,0 +1,27 @@
+ .avatar-container {
+     height: 100%;
+     width: 100%;
+     display: grid;
+     place-items: center;
+     position: absolute;
+     z-index: -100;
+
+     .avatar {
+         border-radius: 50%;
+         filter: drop-shadow(0 0 10px var(--color-purple));
+         outline: var(--color-purple) solid 2px;
+         display: grid;
+         place-items: center;
+         height: 12em;
+         aspect-ratio: 1 / 1;
+         background-color: var(--color-dark-100);
+
+
+         p {
+             font-size: 5em;
+             font-variation-settings: 'wght' 700;
+             color: var(--color-white);
+             text-transform: uppercase;
+         }
+     }
+ }

@@ -1,0 +1,8 @@
+.screen-share {
+    height: 100%;
+    width: 100%;
+
+    video {
+        object-fit: contain !important;
+    }
+}
