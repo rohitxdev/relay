@@ -55,6 +55,14 @@ export const JoinRoom = () => {
   };
 
   useEffect(() => {
+    navigator.mediaDevices
+      .getUserMedia({ video: { facingMode: { exact: "environment" } } })
+      .then(() => {
+        alert("Rear cam exists. ");
+      })
+      .catch((err) => {
+        alert("Failed getting rear cam.");
+      });
     window.addEventListener("keydown", handleKeyPress);
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
