@@ -8,20 +8,20 @@ import styles from "./home.module.scss";
 import { useEffect } from "react";
 
 export const Home = () => {
-  useEffect(() => {
-    const mobileRegex = /(android|iphone|ipad|ipod|mini)/gi;
-    const isMobile = "ontouchstart" in window && mobileRegex.test(navigator.userAgent);
+  // useEffect(() => {
+  //   const mobileRegex = /(android|iphone|ipad|ipod|mini)/gi;
+  //   const isMobile = "ontouchstart" in window && mobileRegex.test(navigator.userAgent);
 
-    navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: { exact: "environment" } } })
-      .then(() => {
-        alert("Rear cam exists. Is mobile? " + isMobile);
-      })
-      .catch((err) => {
-        alert(err);
-        alert("Failed getting rear cam. Is mobile? " + isMobile);
-      });
-  });
+  //   navigator.mediaDevices
+  //     .getUserMedia({ video: { facingMode: { exact: "environment" } } })
+  //     .then(() => {
+  //       alert("Rear cam exists. Is mobile? " + isMobile);
+  //     })
+  //     .catch((err) => {
+  //       alert(err);
+  //       alert("Failed getting rear cam. Is mobile? " + isMobile);
+  //     });
+  // });
   return (
     <div className={styles.home}>
       <div className={styles.banner} role="banner">
