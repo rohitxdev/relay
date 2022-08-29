@@ -5,12 +5,8 @@ import LinkedInIcon from "@assets/icons/linkedin.svg";
 import Illustration from "@assets/images/video-conference-illustration.svg";
 import { Link } from "react-router-dom";
 import styles from "./home.module.scss";
-import { useEffect } from "react";
 
 export const Home = () => {
-  const mobileRegex = /(android|iphone|ipad|ipod|mini)/gi;
-  const isMobile = "ontouchstart" in window && mobileRegex.test(navigator.userAgent);
-
   return (
     <div className={styles.home}>
       <div className={styles.banner} role="banner">

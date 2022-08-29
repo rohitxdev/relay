@@ -63,7 +63,6 @@ export const ClientVideo = memo(
         }
       }
     }, [isMicOn]);
-    alert(clientVideoTrack?.getTrackId() + "agora");
 
     useEffect(() => {
       AgoraRTC.createMicrophoneAndCameraTracks(clientAudioConfig, clientVideoConfig).then(
@@ -88,33 +87,3 @@ export const ClientVideo = memo(
     );
   }
 );
-
-// function SelectCamera({ clientVideoTrack }: { clientVideoTrack: ICameraVideoTrack }) {
-//   const [cameras, setCameras] = useState<MediaDeviceInfo[] | []>([]);
-//   const changeCamera = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-//     const deviceLabel = e.currentTarget.value;
-//     for (const camera of cameras) {
-//       if (camera.label === deviceLabel) {
-//         clientVideoTrack.setDevice(camera?.deviceId);
-//       }
-//     }
-//   };
-
-//   useEffect(() => {
-//     AgoraRTC.getCameras().then((cameras) => {
-//       setCameras(cameras);
-//     });
-//   }, []);
-//   return (
-//     <>
-//       <div style={{ position: "absolute", zIndex: 100 }}>
-//         <p>Select device:</p>
-//         <select name="Camera" id="camera" onChange={changeCamera} title="Select camera">
-//           {cameras.map((camera) => (
-//             <option>{camera.label}</option>
-//           ))}
-//         </select>
-//       </div>
-//     </>
-//   );
-// }

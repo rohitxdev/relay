@@ -10,6 +10,7 @@ import ScreenShareOnIcon from "@assets/icons/screen-share.svg";
 import ScreenShareOffIcon from "@assets/icons/stop-screen-share.svg";
 import { ExitModal } from "@components";
 import AgoraRTC from "agora-rtc-sdk-ng";
+import { useAppContext } from "@utils/hooks";
 
 export const Controls = ({
   roomState,
@@ -19,6 +20,7 @@ export const Controls = ({
   roomDispatch: React.Dispatch<RoomAction>;
 }) => {
   const { isVideoOn, isMicOn, isSharingScreen, facingMode } = roomState;
+  const { isScreenShareAvailable, isRearCameraAvailable } = useAppContext();
 
   const toggleExitModal = () => {
     roomDispatch({ type: "TOGGLE_EXIT_MODAL" });
@@ -47,6 +49,7 @@ export const Controls = ({
           aria-label={isSharingScreen ? "Stop screenshare" : "Start screenshare"}
           onClick={toggleScreenShare}
           className={isSharingScreen ? styles.btnOn : styles.btnOff}
+          // disabled={!isScreenShareAvailable}
         >
           {isSharingScreen ? <ScreenShareOnIcon /> : <ScreenShareOffIcon />}
         </button>
@@ -75,6 +78,7 @@ export const Controls = ({
           aria-label="Flip camera"
           onClick={toggleFacingMode}
           className={facingMode === "environment" ? styles.btnOn : styles.btnOff}
+          disabled={!isRearCameraAvailable}
         >
           <FlipCameraIcon />
         </button>

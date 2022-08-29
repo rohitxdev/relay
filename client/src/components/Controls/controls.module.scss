@@ -22,8 +22,13 @@
         fill: currentColor;
     }
 
-    &:active {
+    &:active:not(:disabled) {
         filter: brightness(0.8);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        filter: brightness(0.3);
     }
 }
 

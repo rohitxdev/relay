@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import EnterIcon from "@assets/icons/enter.svg";
 import BackIcon from "@assets/icons/arrow-back.svg";
 import styles from "./join-room.module.scss";
-import { fetchData } from "../../utils/helpers/fetchData";
+import { fetchData } from "@utils/helpers";
+import { useAppContext } from "@utils/hooks";
 
 export const JoinRoom = () => {
   const navigate = useNavigate();
@@ -55,14 +56,6 @@ export const JoinRoom = () => {
   };
 
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: { exact: "environment" } } })
-      .then(() => {
-        alert("Rear cam exists. ");
-      })
-      .catch((err) => {
-        alert("Failed getting rear cam.");
-      });
     window.addEventListener("keydown", handleKeyPress);
     return () => {
       window.removeEventListener("keydown", handleKeyPress);

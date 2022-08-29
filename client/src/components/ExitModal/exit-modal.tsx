@@ -1,4 +1,4 @@
-import { useRoomContext } from "@utils/hooks/useRoomContext";
+import { useRoomContext } from "@utils/hooks";
 import { useNavigate } from "react-router-dom";
 import styles from "./exit-modal.module.scss";
 
