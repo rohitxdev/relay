@@ -38,11 +38,13 @@ export const CreateRoom = () => {
           setIsLoading(false);
         }, 400);
       } else {
-        throw new Error();
+        throw new Error("Error: could not get room ID");
       }
     } catch (error) {
       setIsLoading(false);
-      showError("Error: could not get room id");
+      if (error instanceof Error) {
+        showError(error.message);
+      }
     }
   };
 

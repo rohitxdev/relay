@@ -7,15 +7,14 @@ import { fetchData } from "@utils/helpers";
 
 export const JoinRoom = () => {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const roomIdRef = useRef<HTMLInputElement>(null);
   const usernameRef = useRef<HTMLInputElement>(null);
 
   const showError = (error: string) => {
     setError(error);
-    document.getElementsByClassName(styles.error)[0].classList.toggle(styles.hideError);
     setTimeout(() => {
-      document.getElementsByClassName(styles.error)[0].classList.toggle(styles.hideError);
+      setError(null);
     }, 2000);
   };
 
@@ -64,9 +63,7 @@ export const JoinRoom = () => {
   return (
     <div className={styles.joinRoom}>
       <div className={styles.form}>
-        <div className={[styles.error, "hide"].join(" ")}>
-          <p>{error}</p>
-        </div>
+        {error && <p className={styles.error}>{error}</p>}
         <div className={styles.enterRoomId}>
           <input type="text" maxLength={7} ref={roomIdRef} required />
           <span>Room ID</span>
