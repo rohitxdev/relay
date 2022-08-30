@@ -1,3 +1,13 @@
+@keyframes slide-up {
+    from {
+        transform: translate(-50%, 100%);
+    }
+
+    to {
+        transform: translate(-50%, 0);
+    }
+}
+
 .btn-on {
     background-color: var(--color-purple);
 }
@@ -9,7 +19,7 @@
 .btn-on,
 .btn-off {
     border-radius: 50%;
-    margin: 1em;
+    margin: 0.75em;
     display: inline-flex;
     transition: all 0.1s linear;
     height: 4em;
@@ -19,8 +29,8 @@
         height: 100%;
         width: 100%;
         padding: 1em;
-        fill: var(--color-white);
         color: var(--color-white);
+        fill: currentColor;
     }
 
     &:active:not(:disabled) {
@@ -39,7 +49,7 @@
     outline-offset: -1px;
     border-radius: 50%;
     overflow: hidden;
-    margin: 1em;
+    margin: 0.75em;
     display: inline-flex;
     transform: rotate(135deg);
     transition: all 0.2s;
@@ -53,28 +63,16 @@
         fill: var(--color-white);
     }
 
-
-    &:hover {
-        outline-offset: 3px;
-    }
-
-    &:active {
+    &:where(:hover, :focus, :active) {
         outline-offset: 3px;
         transform: rotate(135deg) scale(0.95);
     }
 }
 
-.video {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-}
-
 .client-controls {
     background-color: var(--color-dark-100);
     border-radius: 3em 3em 0 0;
-    padding: 0.5em 1em;
+    padding: 0.25em 1em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -82,14 +80,4 @@
     left: 50vw;
     bottom: 0;
     animation: slide-up ease 0.5s 1 forwards;
-}
-
-@keyframes slide-up {
-    from {
-        transform: translate(-50%, 100%);
-    }
-
-    to {
-        transform: translate(-50%, 0);
-    }
 }

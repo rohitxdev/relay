@@ -1,7 +1,10 @@
-self.addEventListener("install", () => {
-  console.log("SW INSTALLED");
-});
-
-self.addEventListener("fetch", (e) => {
-  // e.respondWith("JOHNNY IS HERE");
-});
+const a = (params) => {
+  self.addEventListener("install", () => {
+    console.warn("🍻🍻🍻🍻");
+  });
+  self.addEventListener("activate", () => {
+    console.warn("🐼🐼🐼🐼");
+  });
+};
+a();
+export { a };

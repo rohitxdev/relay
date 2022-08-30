@@ -3,6 +3,8 @@ interface RoomState {
   isMicOn: boolean;
   showExitModal: boolean;
   isSharingScreen: boolean;
+  isScreenShareAvailable: boolean;
+  isRearCameraAvailable: boolean;
   facingMode: "user" | "environment";
 }
 interface RoomAction {
@@ -15,4 +17,6 @@ const roomActionType = {
   TOGGLE_EXIT_MODAL: "TOGGLE_EXIT_MODAL",
   TOGGLE_SCREENSHARE: "TOGGLE_SCREENSHARE",
   TOGGLE_FACING_MODE: "TOGGLE_FACING_MODE",
+  SET_SCREENSHARE_AVAILABILITY: "SET_SCREENSHARE_AVAILABILITY",
+  SET_REAR_CAMERA_AVAILABILITY: "SET_REAR_CAMERA_AVAILABILITY",
 };

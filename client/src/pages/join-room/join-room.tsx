@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import EnterIcon from "@assets/icons/enter.svg";
 import BackIcon from "@assets/icons/arrow-back.svg";
 import styles from "./join-room.module.scss";
-import { fetchData } from "@utils/helpers";
+import { api } from "@services";
 
 export const JoinRoom = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
   const roomIdRef = useRef<HTMLInputElement>(null);
   const usernameRef = useRef<HTMLInputElement>(null);
-
   const showError = (error: string) => {
     setError(error);
     setTimeout(() => {
@@ -19,7 +18,7 @@ export const JoinRoom = () => {
   };
 
   const verifyRoomId = async (roomId: string) => {
-    const res = await fetchData(`/api/verify-room-id/${roomId}`);
+    const res = await api.verifyRoomId(roomId);
     if (res.status === 200) {
       sessionStorage.setItem("roomId", roomId);
       sessionStorage.setItem("username", "" + usernameRef.current?.value);

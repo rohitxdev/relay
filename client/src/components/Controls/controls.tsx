@@ -7,37 +7,72 @@ import MicOffIcon from "@assets/icons/mic-off.svg";
 import FlipCameraIcon from "@assets/icons/flip-camera.svg";
 import ScreenShareOnIcon from "@assets/icons/screen-share.svg";
 import ScreenShareOffIcon from "@assets/icons/stop-screen-share.svg";
-import { useAppContext } from "@utils/hooks";
+import { useEffect } from "react";
 
 export const Controls = ({
-  roomState,
-  roomDispatch,
+  state,
+  dispatch,
 }: {
-  roomState: RoomState;
-  roomDispatch: React.Dispatch<RoomAction>;
+  state: RoomState;
+  dispatch: React.Dispatch<RoomAction>;
 }) => {
-  const { isVideoOn, isMicOn, isSharingScreen, facingMode } = roomState;
-  const { isScreenShareAvailable, isRearCameraAvailable } = useAppContext();
+  const {
+    isVideoOn,
+    isMicOn,
+    isSharingScreen,
+    isScreenShareAvailable,
+    isRearCameraAvailable,
+    facingMode,
+  } = state;
+
+  const checkForRearCamera = async () => {
+    if (localStorage.getItem("rear-camera-availability")) {
+      dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
+      return;
+    }
+    try {
+      await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: "environment" } },
+      });
+      localStorage.setItem("rear-camera-availability", "available");
+      dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    }
+  };
+
+  const checkForScreenShare = () => {
+    if ("getDisplayMedia" in navigator.mediaDevices) {
+      dispatch({ type: "SET_SCREENSHARE_AVAILABILITY", payload: true });
+    }
+  };
 
   const toggleExitModal = () => {
-    roomDispatch({ type: "TOGGLE_EXIT_MODAL" });
+    dispatch({ type: "TOGGLE_EXIT_MODAL" });
   };
 
   const toggleVideo = () => {
-    roomDispatch({ type: "TOGGLE_VIDEO" });
+    dispatch({ type: "TOGGLE_VIDEO" });
   };
 
   const toggleMic = () => {
-    roomDispatch({ type: "TOGGLE_MIC" });
+    dispatch({ type: "TOGGLE_MIC" });
   };
 
   const toggleScreenShare = () => {
-    roomDispatch({ type: "TOGGLE_SCREENSHARE" });
+    dispatch({ type: "TOGGLE_SCREENSHARE" });
   };
 
   const toggleFacingMode = () => {
-    roomDispatch({ type: "TOGGLE_FACING_MODE" });
+    dispatch({ type: "TOGGLE_FACING_MODE" });
   };
+
+  useEffect(() => {
+    checkForScreenShare();
+    checkForRearCamera();
+  }, []);
 
   return (
     <>
@@ -57,7 +92,7 @@ export const Controls = ({
         >
           {isVideoOn ? <VideoOnIcon /> : <VideoOffIcon />}
         </button>
-        <button aria-label="Exit room" onClick={toggleExitModal} className={styles.exitBtn}>
+        <button aria-label="Leave room" onClick={toggleExitModal} className={styles.exitBtn}>
           <EndCallIcon />
         </button>
         <button

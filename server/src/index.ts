@@ -4,24 +4,21 @@ import agoraAccessToken from "agora-access-token";
 import express from "express";
 import { config } from "dotenv";
 import { createClient } from "redis";
+import { EXPIRATION_TIME_IN_SECONDS, HOST, PORT } from "./utils/constants.js";
 
 config({ path: "../.env" });
 const { RtcRole, RtcTokenBuilder } = agoraAccessToken;
-const PORT = Number(process.env.PORT || 4000);
-const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1";
-const EXPIRATION_TIME_IN_SECONDS = 2 * 86400;
 const server = express();
+server.use(cors(), express.static("../../client/dist/"));
+
 const redis = createClient({
   url: process.env.REDIS_URL,
   username: process.env.REDIS_USERNAME,
   password: process.env.REDIS_PASSWORD,
 });
-
-server.use(cors());
-server.use(express.static("../../client/dist/"));
 await redis.connect();
 
-const generateRoomId = async () => {
+export const generateRoomId = async () => {
   let roomId = crypto.randomInt(0, 10e9).toString(36).slice(0, 7);
   while (true) {
     if (!(await redis.get(roomId))) {
@@ -32,57 +29,41 @@ const generateRoomId = async () => {
   }
 };
 
-const addUsernameToDb = async (uid: string, username: string) => {
-  try {
-    await redis.setEx(uid, EXPIRATION_TIME_IN_SECONDS, username);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const getUsernameFromDb = async (uid: string) => {
-  try {
-    const username = await redis.get(uid);
-    return username;
-  } catch (error) {
-    console.log(error);
-    return "anonymous";
-  }
-};
-
-const deleteUsernameFromDb = async (uid: string) => {
-  try {
-    await redis.getDel(uid);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 server.get("/api", (req, res) => {
-  res.send("*Cricket sounds*");
+  res.send("<h3>*Cricket sounds*</h3>");
 });
 
 server.get("/api/get-room-id", async (req, res) => {
-  const roomId = await generateRoomId();
-  res.send(roomId);
+  try {
+    const roomId = await generateRoomId();
+    res.send(roomId);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
+    res.sendStatus(500);
+  }
 });
 
-server.get("/api/verify-room-id/:roomId", async (req, res) => {
-  const {
-    params: { roomId },
-  } = req;
+server.post("/api/verify-room-id/:roomId", async (req, res) => {
+  const { roomId } = req.params;
   try {
-    await redis.get(roomId);
-    res.sendStatus(200);
+    const data = await redis.get(roomId);
+    if (data) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(400);
+    }
   } catch (error) {
-    res.sendStatus(400);
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
+    res.sendStatus(500);
   }
 });
 
 server.get("/api/get-access-token", async (req, res) => {
-  const {
-    query: { roomId, username },
-  } = req;
+  const { roomId, username } = req.query;
   const currentTimestamp = Math.floor(Date.now() / 1000);
   const appId = process.env.AGORA_APP_ID as string;
   const appCertificate = process.env.AGORA_APP_CERTIFICATE as string;
@@ -98,24 +79,41 @@ server.get("/api/get-access-token", async (req, res) => {
     role,
     privilegeExpiredTs
   );
-  await addUsernameToDb(uid, username as string);
-  res.send({ appId, uid, accessToken });
+  try {
+    await redis.setEx(uid, EXPIRATION_TIME_IN_SECONDS, username as string);
+    res.send({ appId, uid, accessToken });
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
+    res.sendStatus(500);
+  }
 });
 
 server.get("/api/get-username/:uid", async (req, res) => {
-  const {
-    params: { uid },
-  } = req;
-  const username = await getUsernameFromDb(uid as string);
-  res.send(username);
+  const { uid } = req.params;
+  try {
+    const username = await redis.get(uid);
+    res.send(username);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
+    res.sendStatus(500);
+  }
 });
 
-server.get("/api/delete-username/:uid", async (req, res) => {
-  const {
-    params: { uid },
-  } = req;
-  deleteUsernameFromDb(uid as string);
-  res.status(200);
+server.delete("/api/delete-username/:uid", async (req, res) => {
+  const { uid } = req.params;
+  try {
+    await redis.del(uid);
+    res.status(200);
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error.message);
+    }
+    res.sendStatus(500);
+  }
 });
 
 server.get("/api/get-og-image", async (req, res) => {

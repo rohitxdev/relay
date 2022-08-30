@@ -1,11 +1,11 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import CopyIcon from "@assets/icons/copy.svg";
 import BackIcon from "@assets/icons/arrow-back.svg";
 import LoaderIcon from "@assets/icons/loader.svg";
 import ShareIcon from "@assets/icons/share.svg";
-import { fetchData } from "@utils/helpers/fetchData";
 import styles from "./create-room.module.scss";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../services/api-service";
 
 export const CreateRoom = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export const CreateRoom = () => {
   const getRoomId = async () => {
     try {
       setIsLoading(true);
-      const response = await fetchData(`/api/get-room-id`);
+      const response = await api.getRoomID();
       if (response.ok) {
         const roomId = await response.text();
         setTimeout(() => {
@@ -69,6 +69,17 @@ export const CreateRoom = () => {
   const goToPreviousPage = () => {
     navigate("/");
   };
+
+  const getCameraVideoTrack = async () => {
+    const track = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" },
+      audio: true,
+    });
+    track.getTracks().forEach((track) => {
+      console.warn(track.kind);
+    });
+  };
+  getCameraVideoTrack();
 
   useEffect(() => {
     if (navigator.canShare(shareData)) {

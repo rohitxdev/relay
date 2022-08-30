@@ -19,6 +19,7 @@
         display: grid;
         place-items: center;
         object-fit: contain !important;
+        transform: scale(-1, 1) !important;
     }
 }
 

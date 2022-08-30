@@ -9,6 +9,7 @@
     video {
         background-color: var(--color-dark-200);
         object-fit: contain !important;
+        transform: scale(-1, 1) !important;
     }
 }
 

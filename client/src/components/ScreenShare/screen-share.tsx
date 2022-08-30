@@ -1,4 +1,4 @@
-import { fetchData } from "@utils/helpers/fetchData";
+import { api } from "@services";
 import { useRoomContext } from "@utils/hooks/useRoomContext";
 import AgoraRTC, { ILocalVideoTrack } from "agora-rtc-sdk-ng";
 import { memo, useEffect, useRef } from "react";
@@ -11,9 +11,7 @@ export const ScreenShare = () => {
   const screenClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp9" });
 
   const shareScreen = async () => {
-    const response = await fetchData(
-      `/api/get-access-token?roomId=${roomId}&username=${screenUsername}`
-    );
+    const response = await api.getAccessToken(roomId, screenUsername);
     const { appId, uid, accessToken } = await response.json();
     if (screenRef.current) {
       await screenClient.join(appId, roomId, accessToken, uid);

@@ -1,9 +1,18 @@
+import "./global.scss";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { App } from "./app";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Home, CreateRoom, JoinRoom, Room } from "@pages";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/create-room" element={<CreateRoom />} />
+        <Route path="/join-room" element={<JoinRoom />} />
+        <Route path="/room" element={<Room />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );

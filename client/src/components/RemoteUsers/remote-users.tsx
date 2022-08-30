@@ -1,9 +1,9 @@
 import { IRemoteVideoTrack, IRemoteAudioTrack, UID, IAgoraRTCClient } from "agora-rtc-sdk-ng";
 import { memo, useEffect, useState } from "react";
-import discordJoinedTone from "@assets/audio/call-join.mp3";
-import discordLeftTone from "@assets/audio/call-leave.mp3";
+import callJoinTone from "@assets/audio/call-join.mp3";
+import callLeftTone from "@assets/audio/call-leave.mp3";
 import { RemoteUser } from "./remote-video";
-import { fetchData } from "@utils/helpers/fetchData";
+import { api } from "@services";
 import { useRoomContext } from "@utils/hooks/useRoomContext";
 
 export interface IRemoteUser {
@@ -15,12 +15,14 @@ export interface IRemoteUser {
 export const RemoteUsers = memo(() => {
   const [remoteUsers, setRemoteUsers] = useState<IRemoteUser[]>([]);
   const { client, screenUsername } = useRoomContext();
-  const userLeftTone = new Audio(discordLeftTone);
-  const userJoinedTone = new Audio(discordJoinedTone);
+  const userLeftTone = new Audio(callLeftTone);
+  const userJoinedTone = new Audio(callJoinTone);
+  userJoinedTone.volume = 0.3;
+  userLeftTone.volume = 0.3;
 
   useEffect(() => {
     client.on("user-joined", async (user) => {
-      const res = await fetchData(`/api/get-username/${user.uid}`);
+      const res = await api.getUsername(user.uid as string);
       const username = await res.text();
       if (username !== screenUsername) {
         setRemoteUsers((prevUsers) => [
@@ -37,7 +39,7 @@ export const RemoteUsers = memo(() => {
     });
 
     client.on("user-left", async (user) => {
-      const res = await fetchData(`/api/delete-username/${user.uid}`);
+      await api.deleteUsername(user.uid as string);
       setRemoteUsers((prevUsers) => prevUsers.filter((prevUser) => prevUser.uid !== user.uid));
       await userLeftTone.play();
     });

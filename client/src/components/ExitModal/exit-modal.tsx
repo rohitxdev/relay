@@ -2,12 +2,12 @@ import { useRoomContext } from "@utils/hooks";
 import { useNavigate } from "react-router-dom";
 import styles from "./exit-modal.module.scss";
 
-export const ExitModal = ({ roomDispatch }: { roomDispatch: React.Dispatch<RoomAction> }) => {
+export const ExitModal = ({ dispatch }: { dispatch: React.Dispatch<RoomAction> }) => {
   const navigate = useNavigate();
   const { client } = useRoomContext();
 
   const stayInRoom = () => {
-    roomDispatch({ type: "TOGGLE_EXIT_MODAL" });
+    dispatch({ type: "TOGGLE_EXIT_MODAL" });
   };
 
   const exitRoom = async () => {
