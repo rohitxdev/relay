@@ -4,7 +4,6 @@ import EnterIcon from "@assets/icons/enter.svg";
 import BackIcon from "@assets/icons/arrow-back.svg";
 import styles from "./join-room.module.scss";
 import { fetchData } from "@utils/helpers";
-import { useAppContext } from "@utils/hooks";
 
 export const JoinRoom = () => {
   const navigate = useNavigate();
@@ -14,9 +13,9 @@ export const JoinRoom = () => {
 
   const showError = (error: string) => {
     setError(error);
-    document.getElementsByClassName(styles.error)[0].classList.toggle("hide");
+    document.getElementsByClassName(styles.error)[0].classList.toggle(styles.hideError);
     setTimeout(() => {
-      document.getElementsByClassName(styles.error)[0].classList.toggle("hide");
+      document.getElementsByClassName(styles.error)[0].classList.toggle(styles.hideError);
     }, 2000);
   };
 
