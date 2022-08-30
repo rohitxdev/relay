@@ -16,7 +16,6 @@ export const RemoteUser = memo(
     remoteVideoTrack?: IRemoteVideoTrack;
   }) => {
     const [isAudioOn, setIsAudioOn] = useState(true);
-    const [showControls, setShowControls] = useState(false);
     const vidRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -24,12 +23,7 @@ export const RemoteUser = memo(
         remoteVideoTrack.play(vidRef.current);
       }
       remoteAudioTrack?.play();
-    });
-
-    const buttonStyles = (value: boolean) =>
-      value
-        ? { backgroundColor: "var(--primary-blue)" }
-        : { backgroundColor: "rgba(255,255,255,0.3)" };
+    }, []);
 
     const toggleAudio = async () => {
       if (isAudioOn) {
@@ -39,18 +33,22 @@ export const RemoteUser = memo(
       }
       setIsAudioOn(!isAudioOn);
     };
+
     return (
-      <div className={styles.remoteUser}>
+      <div className={styles.remoteVideo} ref={vidRef}>
         <p className={styles.remoteUsername}>{username}</p>
         <Avatar username={username} />
-        <div className={styles.remoteVideo} ref={vidRef}></div>
-        {showControls && (
-          <div className={styles.remoteControls}>
-            <button style={buttonStyles(isAudioOn)} onClick={toggleAudio}>
-              {isAudioOn ? <AudioOnIcon /> : <AudioOffIcon />}
-            </button>
-          </div>
-        )}
+        <div className={styles.remoteControls}>
+          {/* <button
+            aria-aria-label={
+              isAudioOn ? `Turn off ${username}'s audio` : `Turn on ${username}'s audio`
+            }
+            className={isAudioOn ? styles.btnOn : styles.btnOff}
+            onClick={toggleAudio}
+          >
+            {isAudioOn ? <AudioOnIcon /> : <AudioOffIcon />}
+          </button> */}
+        </div>
       </div>
     );
   }

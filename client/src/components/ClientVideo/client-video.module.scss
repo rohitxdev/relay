@@ -2,9 +2,10 @@
     position: relative;
     overflow: hidden;
     border-radius: 0.5em;
-    outline: rgb(194, 194, 194) solid 2px;
+    outline: var(--color-grey) solid 2px;
     height: 100%;
     width: 100%;
+    margin: 0.25em;
 
     video {
         background-color: var(--color-dark-200);
@@ -25,7 +26,7 @@
     text-shadow: 0 0 5px var(--color-purple);
     z-index: 10;
     opacity: 0;
-    transform: translateY(-100%);
+    transform: translateY(-150%);
     transition: all 0.2s ease-in-out;
 
     .client:hover > & {

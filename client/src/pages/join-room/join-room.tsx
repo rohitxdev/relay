@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import EnterIcon from "@assets/icons/enter.svg";
 import BackIcon from "@assets/icons/arrow-back.svg";
 import styles from "./join-room.module.scss";
@@ -7,9 +7,10 @@ import { api } from "@services";
 
 export const JoinRoom = () => {
   const navigate = useNavigate();
+  const [searchParams, _] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
-  const roomIdRef = useRef<HTMLInputElement>(null);
-  const usernameRef = useRef<HTMLInputElement>(null);
+  const roomIdRef = useRef<HTMLInputElement | null>(null);
+  const usernameRef = useRef<HTMLInputElement | null>(null);
   const showError = (error: string) => {
     setError(error);
     setTimeout(() => {
@@ -53,6 +54,9 @@ export const JoinRoom = () => {
   };
 
   useEffect(() => {
+    if (roomIdRef.current) {
+      roomIdRef.current.value = searchParams.get("roomId") ?? "";
+    }
     window.addEventListener("keydown", handleKeyPress);
     return () => {
       window.removeEventListener("keydown", handleKeyPress);

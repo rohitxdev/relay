@@ -37,5 +37,9 @@ export const ScreenShare = () => {
     };
   }, []);
 
-  return <div className={styles.screenShare} ref={screenRef}></div>;
+  return (
+    <div className={styles.screenShare} ref={screenRef}>
+      <p className={styles.screenUsername}>Your screen</p>
+    </div>
+  );
 };

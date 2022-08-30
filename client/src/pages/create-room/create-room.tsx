@@ -15,9 +15,10 @@ export const CreateRoom = () => {
   const [showTooltip, setShowTooltip] = useState(false);
   const [canShare, setCanShare] = useState(false);
   const shareData: ShareData = {
-    text: `Room ID is ${roomId}`,
-    title: "You've been invited to join a room on Spark!",
-    url: "/join-room",
+    title: "Relay: Free video conferencing for everyone",
+    text: `You've been invited to join a room on Relay!\n
+    Room ID is ${roomId}.\n
+    Link:${window.location.hostname}/join-room?roomId=${roomId}`,
   };
 
   const showError = (error: string) => {
@@ -69,17 +70,6 @@ export const CreateRoom = () => {
   const goToPreviousPage = () => {
     navigate("/");
   };
-
-  const getCameraVideoTrack = async () => {
-    const track = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" },
-      audio: true,
-    });
-    track.getTracks().forEach((track) => {
-      console.warn(track.kind);
-    });
-  };
-  getCameraVideoTrack();
 
   useEffect(() => {
     if (navigator.canShare(shareData)) {

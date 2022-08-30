@@ -39,8 +39,8 @@ export const RemoteUsers = memo(() => {
     });
 
     client.on("user-left", async (user) => {
-      await api.deleteUsername(user.uid as string);
       setRemoteUsers((prevUsers) => prevUsers.filter((prevUser) => prevUser.uid !== user.uid));
+      await api.deleteUsername(user.uid as string);
       await userLeftTone.play();
     });
 
