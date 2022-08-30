@@ -16,14 +16,14 @@ export const App = () => {
       });
       setIsRearCameraAvailable(true);
     } catch (error) {
-      console.error("REAR CAMERA NOT AVAILABLE");
+      console.info("REAR CAMERA NOT AVAILABLE");
     }
   };
-  const checkForScreenShare = async () => {
+  const checkForScreenShare = () => {
     if ("getDisplayMedia" in navigator.mediaDevices) {
       setIsScreenShareAvailable(true);
     } else {
-      console.error("SCREENSHARING NOT AVAILABLE");
+      console.info("SCREENSHARING NOT AVAILABLE");
     }
   };
 

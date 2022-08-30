@@ -21,8 +21,13 @@
     --color-grey:hsl(257, 12%, 65%);
 }
 
+button {
+    cursor: pointer;
+    border: none;
+}
+
 polygon#elm4o3g09y01 {
-    // fill: rebeccapurple !important;
+    fill: rebeccapurple !important;
 }
 
 polygon#elohfi28orqjb {
@@ -43,56 +48,8 @@ polygon#elvzkpjystud9 {
 
 }
 
-@keyframes slide-up {
-    from {
-        transform: translateY(50%);
-
-    }
-
-    to {
-        transform: translateY(0%);
-    }
-}
-
-@keyframes slide-from-left {
-    from {
-        transform: translateX(-50%);
-
-    }
-
-    to {
-        transform: translateX(0%);
-    }
-}
-
-@keyframes slide-from-right {
-    from {
-        transform: translateX(50%);
-
-    }
-
-    to {
-        transform: translateX(0%);
-    }
-}
-
-@keyframes slide-down {
-    from {
-        transform: translateY(-100%);
-
-    }
-
-    to {
-        transform: translateY(0%);
-    }
-}
-
 .router-link {
     text-decoration: none;
-}
-
-.hide {
-    display: none;
 }
 
 .btn-container {

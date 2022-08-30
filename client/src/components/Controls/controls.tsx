@@ -57,11 +57,7 @@ export const Controls = ({
         >
           {isVideoOn ? <VideoOnIcon /> : <VideoOffIcon />}
         </button>
-        <button
-          aria-label="Exit room"
-          onClick={toggleExitModal}
-          className={[styles.exitBtn, styles.controlBtn].join(" ")}
-        >
+        <button aria-label="Exit room" onClick={toggleExitModal} className={styles.exitBtn}>
           <EndCallIcon />
         </button>
         <button

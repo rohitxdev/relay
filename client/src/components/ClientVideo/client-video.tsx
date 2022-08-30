@@ -1,7 +1,6 @@
 import AgoraRTC, {
   CameraVideoTrackInitConfig,
   IMicrophoneAudioTrack,
-  ICameraVideoTrack,
   ILocalVideoTrack,
   MicrophoneAudioTrackInitConfig,
 } from "agora-rtc-sdk-ng";

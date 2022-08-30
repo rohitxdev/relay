@@ -4,7 +4,7 @@ import AgoraRTC, { ILocalVideoTrack } from "agora-rtc-sdk-ng";
 import { memo, useEffect, useRef } from "react";
 import styles from "./screen-share.module.scss";
 
-export const ScreenShare = memo(() => {
+export const ScreenShare = () => {
   const { roomId, screenUsername } = useRoomContext();
   const screenRef = useRef<HTMLDivElement | null>(null);
   const screenVideoRef = useRef<ILocalVideoTrack | null>(null);
@@ -34,10 +34,10 @@ export const ScreenShare = memo(() => {
 
   useEffect(() => {
     shareScreen();
-
     return () => {
       cleanUp();
     };
-  });
+  }, []);
+
   return <div className={styles.screenShare} ref={screenRef}></div>;
-});
+};

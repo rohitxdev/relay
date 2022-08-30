@@ -8,6 +8,6 @@
 .user-grid {
     height: 100%;
     width: 100%;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }

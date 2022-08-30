@@ -59,8 +59,6 @@
   }
 }
 
-
-
 .illustration-wrapper {
   width: 80%;
   display: grid;
@@ -78,28 +76,6 @@
   svg {
     height: auto;
     width: clamp(5em, 90%, 25em);
-  }
-}
-
-@keyframes slide-from-left {
-  from {
-    transform: translateX(-50%);
-
-  }
-
-  to {
-    transform: translateX(0%);
-  }
-}
-
-@keyframes slide-from-right {
-  from {
-    transform: translateX(50%);
-
-  }
-
-  to {
-    transform: translateX(0%);
   }
 }
 
@@ -150,5 +126,38 @@
     width: 3.5em;
     fill: white;
     cursor: pointer;
+  }
+}
+
+@keyframes slide-from-left {
+  from {
+    transform: translateX(-50%);
+
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slide-from-right {
+  from {
+    transform: translateX(50%);
+
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%);
+
+  }
+
+  to {
+    transform: translateY(0%);
   }
 }
