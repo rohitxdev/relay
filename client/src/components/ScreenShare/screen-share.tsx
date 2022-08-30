@@ -1,7 +1,7 @@
 import { api } from "@services";
 import { useRoomContext } from "@utils/hooks/useRoomContext";
 import AgoraRTC, { ILocalVideoTrack } from "agora-rtc-sdk-ng";
-import { memo, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./screen-share.module.scss";
 
 export const ScreenShare = () => {
