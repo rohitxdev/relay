@@ -9,10 +9,11 @@ import { api } from "@services";
 
 export const Room = () => {
   const [state, dispatch] = useRoomReducer();
-  const { isVideoOn, isMicOn, isSharingScreen, facingMode, screenUid } = state;
+  const { isVideoOn, isMicOn, isSharingScreen, facingMode } = state;
   const navigate = useNavigate();
   const roomId = sessionStorage.getItem("roomId");
   const username = sessionStorage.getItem("username");
+  const screenUsername = `${username}'s screen`;
   const { current: client } = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp9" }));
 
   const enterRoom = async (roomId: string, username: string) => {
@@ -54,12 +55,12 @@ export const Room = () => {
   }
 
   return (
-    <RoomContextProvider value={{ roomId, username, client: client }}>
+    <RoomContextProvider value={{ roomId, username, screenUsername, client: client }}>
       <div className={styles.room}>
         <div className={styles.userGrid}>
           {isSharingScreen && <ScreenShare dispatch={dispatch} />}
           <ClientVideo isVideoOn={isVideoOn} isMicOn={isMicOn} facingMode={facingMode} />
-          <RemoteUsers screenUid={screenUid} />
+          <RemoteUsers />
         </div>
         <Controls state={state} dispatch={dispatch} />
       </div>

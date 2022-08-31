@@ -2,15 +2,14 @@
 
 .client-controls {
     position: sticky;
-    bottom: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    bottom: 0em;
+    display: grid;
+    place-items: center;
 
     & > div {
-
-        border-radius: 3em 3em 0 0;
-        padding: 0.75em 1.5em;
+        margin-block: 0.5em;
+        border-radius: 1.5em;
+        padding: 0.75em;
         display: flex;
         gap: 1em;
         justify-content: center;

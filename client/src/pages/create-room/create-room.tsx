@@ -16,9 +16,7 @@ export const CreateRoom = () => {
   const [canShare, setCanShare] = useState(false);
   const shareData: ShareData = {
     title: "Relay: Free video conferencing for everyone",
-    text: `You've been invited to join a room on Relay!
-    Room ID is ${roomId}.
-    Link: ${window.location.hostname}/join-room?roomId=${roomId}`,
+    text: `You've been invited to join a room on Relay! Room ID is ${roomId}. Link: ${window.location.hostname}/join-room?roomId=${roomId}`,
   };
 
   const showError = (error: string) => {

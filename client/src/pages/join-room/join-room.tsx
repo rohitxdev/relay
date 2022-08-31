@@ -68,11 +68,11 @@ export const JoinRoom = () => {
       <div className={styles.form}>
         {error && <p className={styles.error}>{error}</p>}
         <div className={styles.enterRoomId}>
-          <input type="text" maxLength={7} ref={roomIdRef} required />
+          <input type="text" maxLength={6} ref={roomIdRef} required />
           <span>Room ID</span>
         </div>
         <div className={styles.enterUsername}>
-          <input type="text" maxLength={15} ref={usernameRef} required />
+          <input type="text" maxLength={24} ref={usernameRef} required />
           <span>Name</span>
         </div>
         <div className={"btn-container"}>

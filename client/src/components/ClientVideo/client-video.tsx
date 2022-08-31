@@ -1,10 +1,4 @@
-import AgoraRTC, {
-  CameraVideoTrackInitConfig,
-  IMicrophoneAudioTrack,
-  ILocalVideoTrack,
-  MicrophoneAudioTrackInitConfig,
-  ILocalAudioTrack,
-} from "agora-rtc-sdk-ng";
+import AgoraRTC, { ILocalVideoTrack, ILocalAudioTrack } from "agora-rtc-sdk-ng";
 import { memo, useEffect, useRef, useState } from "react";
 import styles from "./client-video.module.scss";
 import { useRoomContext } from "@utils/hooks/useRoomContext";
@@ -28,7 +22,7 @@ export const ClientVideo = memo(
     const getClientMediaTracks = async () => {
       const mediaTracks = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: facingMode === "user" ? "user" : { exact: "environment" },
+          facingMode: { ideal: facingMode },
           frameRate: 25,
           latency: 20,
         },

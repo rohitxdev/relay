@@ -19,7 +19,7 @@ const redis = createClient({
 await redis.connect();
 
 export const generateRoomId = async () => {
-  let roomId = crypto.randomInt(0, 10e9).toString(36).slice(0, 7);
+  let roomId = crypto.randomInt(0, 10e9).toString(36).slice(0, 6);
   while (true) {
     if (!(await redis.get(roomId))) {
       await redis.setEx(roomId, EXPIRATION_TIME_IN_SECONDS, roomId);
