@@ -18,9 +18,7 @@ export const App = () => {
         localStorage.setItem("rear-camera", "available");
         setRearCameraAvailability(true);
       } catch (error) {
-        if (error instanceof Error) {
-          console.error(error.name, error.message);
-        }
+        console.warn("Rear camera is not available on this device.");
       }
     }
   };

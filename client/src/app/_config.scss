@@ -19,11 +19,7 @@
     outline: var(--color-grey-opaque) solid 2px;
     height: 100%;
     width: 100%;
-
-    video {
-        object-fit: contain !important;
-        transform: scale(-1, 1) !important;
-    }
+    border-radius: 0.5em;
 }
 
 @keyframes shake {

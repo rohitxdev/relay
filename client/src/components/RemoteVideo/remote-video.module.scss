@@ -2,6 +2,10 @@
 
 .remote-video {
     @include config.video-stream;
+
+    video {
+        object-fit: contain !important;
+    }
 }
 
 .remote-username {

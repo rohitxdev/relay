@@ -3,6 +3,7 @@
     height: 100vh;
     background-color: var(--color-dark-200);
     overflow: hidden;
+    padding: 0.5em;
 }
 
 .user-grid {
@@ -11,4 +12,9 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 0.5em;
+    border-radius: 1em;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
