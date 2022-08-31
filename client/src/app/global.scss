@@ -8,8 +8,7 @@
 
     user-select: none;
     scroll-behavior:smooth;
-    background: url('../assets/images/blob-scene-haikei.svg') center / cover;
-
+    -webkit-tap-highlight-color: transparent;
 
     --color-purple:hsl(253, 94%, 58%);
     --color-lightblue:hsl(208, 97%, 87%);
@@ -19,6 +18,7 @@
     --color-dark-200:hsl(208, 100%, 5%);
     --color-white: hsl(0, 0%, 100%);
     --color-grey:hsl(257, 12%, 65%);
+    --color-grey-opaque:hsla(0, 0%, 100%, 0.3);
 }
 
 button {

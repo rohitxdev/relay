@@ -7,7 +7,7 @@ import AgoraRTC, {
 import { memo, useEffect, useRef, useState } from "react";
 import styles from "./client-video.module.scss";
 import { useRoomContext } from "@utils/hooks/useRoomContext";
-import { Avatar } from "@components";
+import { UserIcon } from "@components";
 
 export const ClientVideo = memo(
   ({
@@ -34,8 +34,6 @@ export const ClientVideo = memo(
         frameRate: { min: 20, ideal: 25, max: 30 },
         bitrateMin: 512,
         bitrateMax: 2048,
-        height: { min: 360, ideal: 720, max: 1080 },
-        width: { min: 640, ideal: 1280, max: 1920 },
       },
       facingMode: facingMode,
       optimizationMode: "motion",
@@ -81,7 +79,7 @@ export const ClientVideo = memo(
     return (
       <div className={styles.client} ref={clientVideoRef}>
         <p className={styles.clientUsername}>{username}</p>
-        <Avatar />
+        <UserIcon />
       </div>
     );
   }

@@ -1,0 +1,108 @@
+@mixin username {
+    position: absolute;
+    color: var(--color-white);
+    width: 100%;
+    text-align: center;
+    margin-block: 1em;
+    font-size: 1em;
+    font-family: "Inter";
+    font-variation-settings: 'wght' 700;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(-150%);
+    transition: all 0.2s ease-in-out;
+}
+
+@mixin video-stream {
+    position: relative;
+    overflow: hidden;
+    outline: var(--color-grey-opaque) solid 2px;
+    height: 100%;
+    width: 100%;
+
+    video {
+        object-fit: contain !important;
+        transform: scale(-1, 1) !important;
+    }
+}
+
+@keyframes shake {
+
+    0% {
+        transform: translateY(calc(0vh - 100%));
+        opacity: 0;
+    }
+
+    10% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    14% {
+        transform: translateX(-0.5em);
+    }
+
+    18% {
+        transform: translateX(0.5em);
+    }
+
+    22% {
+        transform: translateX(-0.5em);
+    }
+
+    26% {
+        transform: translateX(0.5em);
+    }
+
+    30% {
+        transform: translateX(0);
+    }
+
+    90% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(calc(0vh - 100%));
+    }
+}
+
+@keyframes show-up {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 50%);
+    }
+
+    10%,
+    90% {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 50%);
+    }
+}
+
+@keyframes scale-up {
+    from {
+        transform: scale(0.5);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}

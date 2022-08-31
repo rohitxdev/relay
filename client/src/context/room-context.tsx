@@ -4,7 +4,6 @@ import { createContext, ReactNode } from "react";
 export interface RoomContext {
   roomId: string;
   username: string;
-  screenUsername: string;
   client: IAgoraRTCClient;
 }
 export const RoomContext = createContext<RoomContext | null>(null);

@@ -1,16 +1,14 @@
 @use '../../app/config';
 
-.client {
+.remote-video {
     @include config.video-stream;
 }
 
-
-.client-username {
+.remote-username {
     @include config.username;
 
-    .client:hover > & {
+    .remote-video:hover > & {
         opacity: 1;
         transform: translateY(0);
-
     }
 }

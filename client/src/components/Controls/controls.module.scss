@@ -1,11 +1,26 @@
-@keyframes slide-up {
-    from {
-        transform: translate(-50%, 100%);
+@use '../../app/config';
+
+.client-controls {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & > div {
+
+        border-radius: 3em 3em 0 0;
+        padding: 0.75em 1.5em;
+        display: flex;
+        gap: 1em;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--color-dark-100);
+        width: clamp(18em, 95%, 25em);
+        filter: drop-shadow(0 0 1px var(--color-grey));
+        animation: slide-up ease 0.5s 1 forwards;
     }
 
-    to {
-        transform: translate(-50%, 0);
-    }
 }
 
 .btn-on {
@@ -13,22 +28,21 @@
 }
 
 .btn-off {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: var(--color-grey-opaque);
 }
 
 .btn-on,
 .btn-off {
     border-radius: 50%;
-    margin: 0.75em;
     display: inline-flex;
     transition: all 0.1s linear;
-    height: 4em;
-    width: 4em;
+    aspect-ratio: 1 / 1;
+    width: clamp(3.5em, 100%, 4em);
 
     svg {
         height: 100%;
         width: 100%;
-        padding: 1em;
+        padding: 25%;
         color: var(--color-white);
         fill: currentColor;
     }
@@ -49,17 +63,16 @@
     outline-offset: -1px;
     border-radius: 50%;
     overflow: hidden;
-    margin: 0.75em;
     display: inline-flex;
     transform: rotate(135deg);
     transition: all 0.2s;
-    height: 5em;
-    width: 5em;
+    aspect-ratio: 1 / 1;
+    width: clamp(4em, 100%, 5em);
 
     svg {
         height: 100%;
         width: 100%;
-        padding: 1.25em;
+        padding: 25%;
         fill: var(--color-white);
     }
 
@@ -67,17 +80,4 @@
         outline-offset: 3px;
         transform: rotate(135deg) scale(0.95);
     }
-}
-
-.client-controls {
-    background-color: var(--color-dark-100);
-    border-radius: 3em 3em 0 0;
-    padding: 0.25em 1em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    left: 50vw;
-    bottom: 0;
-    animation: slide-up ease 0.5s 1 forwards;
 }

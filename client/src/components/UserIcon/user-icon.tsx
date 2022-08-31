@@ -1,7 +1,7 @@
 import { useRoomContext } from "@utils/hooks/useRoomContext";
-import styles from "./avatar.module.scss";
+import styles from "./user-icon.module.scss";
 
-export const Avatar = ({ username }: { username?: string }) => {
+export const UserIcon = ({ username }: { username?: string }) => {
   const { username: clientUsername } = useRoomContext();
   const initials = (username ? username : clientUsername)
     .split(" ")
@@ -10,8 +10,8 @@ export const Avatar = ({ username }: { username?: string }) => {
     .toUpperCase();
 
   return (
-    <div className={styles.avatarContainer}>
-      <div className={styles.avatar}>
+    <div className={styles.userIconContainer}>
+      <div className={styles.userIcon}>
         <p>{initials}</p>
       </div>
     </div>

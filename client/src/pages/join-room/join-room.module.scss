@@ -1,3 +1,5 @@
+@use '../../app/config';
+
 .join-room {
     height: 100vh;
     width: 100vw;
@@ -5,75 +7,22 @@
     place-items: center;
     overflow: hidden;
     color: var(--white);
-
-}
-
-@keyframes shake {
-
-    0% {
-        // transform: scale(0);
-        transform: translateY(calc(0vh - 100%));
-        opacity: 0;
-    }
-
-    10% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
-    14% {
-        transform: translateX(-0.5em);
-    }
-
-    18% {
-        transform: translateX(0.5em);
-    }
-
-    22% {
-        transform: translateX(-0.5em);
-    }
-
-    26% {
-        transform: translateX(0.5em);
-    }
-
-    30% {
-        transform: translateX(0);
-    }
-
-    90% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-        transform: translateY(calc(0vh - 100%));
-    }
+    background: url('../../assets/images/blob-scene-haikei.svg') center / cover;
 }
 
 .back-btn {
     background-color: transparent;
-    color: var(--color-white);
     font-size: 1.2em;
     border: none;
     padding: 0.75em 1em;
     cursor: pointer;
+    height: 2em;
+    width: 2em;
 
     & > svg {
-        height: 2em;
-        width: 2em;
-        fill: currentColor;
-    }
-}
-
-@keyframes scale-up {
-    from {
-        transform: scale(0.5);
-    }
-
-    to {
-        transform: scale(1);
+        height: 100%;
+        width: 100%;
+        color: var(--color-white);
     }
 }
 

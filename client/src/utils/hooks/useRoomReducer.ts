@@ -8,6 +8,7 @@ export const useRoomReducer = () => {
     isSharingScreen: false,
     isScreenShareAvailable: false,
     isRearCameraAvailable: false,
+    screenUid: null,
     facingMode: "user",
   };
 
@@ -24,6 +25,8 @@ export const useRoomReducer = () => {
         return { ...state, showExitModal: !state.showExitModal };
       case "TOGGLE_FACING_MODE":
         return { ...state, facingMode: state.facingMode === "user" ? "environment" : "user" };
+      case "SET_SCREEN_UID":
+        return { ...state, screenUid: payload };
       case "SET_SCREENSHARE_AVAILABILITY":
         return { ...state, isScreenShareAvailable: payload };
       case "SET_REAR_CAMERA_AVAILABILITY":

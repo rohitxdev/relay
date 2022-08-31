@@ -1,40 +1,4 @@
-.exit-modal {
-    background-color: var(--color-dark-100);
-    color: var(--color-white);
-    border-radius: 1em;
-    width: 25em;
-    place-items: center;
-
-    p {
-        margin: 1.5em 1.5em 0.5em 1.5em;
-        font-size: 1.2em;
-        font-variation-settings: "wght" 600;
-        text-align: center;
-    }
-
-    div {
-        display: flex;
-        justify-content: center;
-
-        button {
-
-            font-size: 1.2em;
-            font-variation-settings: "wght" 600;
-            border: none;
-            border-radius: 0.5em;
-            padding: 0.5em 1.75em;
-            margin: 1.5em;
-            display: flex;
-            justify-content: space-evenly;
-            cursor: pointer;
-            width: fit-content;
-        }
-
-    }
-
-}
-
-.exit-modal-parent {
+.exit-modal-container {
     display: grid;
     place-items: center;
     height: 100vh;
@@ -45,12 +9,45 @@
     z-index: 1000;
 }
 
-.stay-btn {
-    background-color: var(--color-white);
-    color: var(--color-dark-200);
-}
+.exit-modal {
+    background-color: var(--color-dark-100);
+    border-radius: 1em;
+    width: clamp(18em, 90%, 24em);
+    padding: 1em;
 
-.leave-btn {
-    background-color: var(--color-red);
-    color: white;
+    p {
+        color: var(--color-white);
+        font-size: 1.2em;
+        font-variation-settings: "wght" 600;
+        text-align: center;
+        margin-block: 0.5em 1em;
+    }
+
+    .options {
+        display: flex;
+        justify-content: space-evenly;
+        margin-block: 1em;
+
+        button {
+            font-size: 1.2em;
+            font-variation-settings: "wght" 600;
+            border: none;
+            border-radius: 0.5em;
+            padding: 0.5em 1.75em;
+            display: flex;
+            justify-content: space-evenly;
+            cursor: pointer;
+            width: fit-content;
+        }
+
+        .stay-btn {
+            background-color: var(--color-purple);
+            color: var(--color-white);
+        }
+
+        .leave-btn {
+            background-color: var(--color-red);
+            color: var(--color-white);
+        }
+    }
 }

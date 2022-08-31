@@ -7,7 +7,7 @@ import MicOffIcon from "@assets/icons/mic-off.svg";
 import FlipCameraIcon from "@assets/icons/flip-camera.svg";
 import ScreenShareOnIcon from "@assets/icons/screen-share.svg";
 import ScreenShareOffIcon from "@assets/icons/stop-screen-share.svg";
-import { useEffect } from "react";
+import { ExitModal } from "@components";
 
 export const Controls = ({
   state,
@@ -23,31 +23,8 @@ export const Controls = ({
     isScreenShareAvailable,
     isRearCameraAvailable,
     facingMode,
+    showExitModal,
   } = state;
-
-  const checkForRearCamera = async () => {
-    if (localStorage.getItem("rear-camera-availability")) {
-      dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
-      return;
-    }
-    try {
-      await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: "environment" } },
-      });
-      localStorage.setItem("rear-camera-availability", "available");
-      dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
-    } catch (error) {
-      if (error instanceof Error) {
-        console.error(error.message);
-      }
-    }
-  };
-
-  const checkForScreenShare = () => {
-    if ("getDisplayMedia" in navigator.mediaDevices) {
-      dispatch({ type: "SET_SCREENSHARE_AVAILABILITY", payload: true });
-    }
-  };
 
   const toggleExitModal = () => {
     dispatch({ type: "TOGGLE_EXIT_MODAL" });
@@ -69,47 +46,45 @@ export const Controls = ({
     dispatch({ type: "TOGGLE_FACING_MODE" });
   };
 
-  useEffect(() => {
-    checkForScreenShare();
-    checkForRearCamera();
-  }, []);
-
   return (
     <>
+      {showExitModal && <ExitModal dispatch={dispatch} />}
       <div className={styles.clientControls}>
-        <button
-          aria-label={isSharingScreen ? "Stop screenshare" : "Start screenshare"}
-          onClick={toggleScreenShare}
-          className={isSharingScreen ? styles.btnOn : styles.btnOff}
-          disabled={!isScreenShareAvailable}
-        >
-          {isSharingScreen ? <ScreenShareOnIcon /> : <ScreenShareOffIcon />}
-        </button>
-        <button
-          aria-label={isVideoOn ? "Turn off video" : "Turn on video"}
-          onClick={toggleVideo}
-          className={isVideoOn ? styles.btnOn : styles.btnOff}
-        >
-          {isVideoOn ? <VideoOnIcon /> : <VideoOffIcon />}
-        </button>
-        <button aria-label="Leave room" onClick={toggleExitModal} className={styles.exitBtn}>
-          <EndCallIcon />
-        </button>
-        <button
-          aria-label={isMicOn ? "Turn off mic" : "Turn on mic"}
-          onClick={toggleMic}
-          className={isMicOn ? styles.btnOn : styles.btnOff}
-        >
-          {isMicOn ? <MicOnIcon /> : <MicOffIcon />}
-        </button>
-        <button
-          aria-label="Flip camera"
-          onClick={toggleFacingMode}
-          className={facingMode === "environment" ? styles.btnOn : styles.btnOff}
-          disabled={!isRearCameraAvailable}
-        >
-          <FlipCameraIcon />
-        </button>
+        <div>
+          <button
+            aria-label={isSharingScreen ? "Stop screenshare" : "Start screenshare"}
+            onClick={toggleScreenShare}
+            className={isSharingScreen ? styles.btnOn : styles.btnOff}
+            disabled={!isScreenShareAvailable}
+          >
+            {isSharingScreen ? <ScreenShareOnIcon /> : <ScreenShareOffIcon />}
+          </button>
+          <button
+            aria-label={isVideoOn ? "Turn off video" : "Turn on video"}
+            onClick={toggleVideo}
+            className={isVideoOn ? styles.btnOn : styles.btnOff}
+          >
+            {isVideoOn ? <VideoOnIcon /> : <VideoOffIcon />}
+          </button>
+          <button aria-label="Leave room" onClick={toggleExitModal} className={styles.exitBtn}>
+            <EndCallIcon />
+          </button>
+          <button
+            aria-label={isMicOn ? "Turn off mic" : "Turn on mic"}
+            onClick={toggleMic}
+            className={isMicOn ? styles.btnOn : styles.btnOff}
+          >
+            {isMicOn ? <MicOnIcon /> : <MicOffIcon />}
+          </button>
+          <button
+            aria-label="Flip camera"
+            onClick={toggleFacingMode}
+            className={facingMode === "environment" ? styles.btnOn : styles.btnOff}
+            disabled={!isRearCameraAvailable}
+          >
+            <FlipCameraIcon />
+          </button>
+        </div>
       </div>
     </>
   );

@@ -16,9 +16,9 @@ export const CreateRoom = () => {
   const [canShare, setCanShare] = useState(false);
   const shareData: ShareData = {
     title: "Relay: Free video conferencing for everyone",
-    text: `You've been invited to join a room on Relay!\n
-    Room ID is ${roomId}.\n
-    Link:${window.location.hostname}/join-room?roomId=${roomId}`,
+    text: `You've been invited to join a room on Relay!
+    Room ID is ${roomId}.
+    Link: ${window.location.hostname}/join-room?roomId=${roomId}`,
   };
 
   const showError = (error: string) => {
@@ -84,7 +84,7 @@ export const CreateRoom = () => {
           <p id="error-msg">{error}</p>
         </div>
       )}
-      <main className={styles.mainContainer}>
+      <main className={styles.main}>
         {!isLoading && roomId ? (
           <div className={styles.roomIdContainer}>
             <div className={styles.roomId}>
@@ -98,18 +98,18 @@ export const CreateRoom = () => {
                 <CopyIcon />
               </button>
             </div>
-            {canShare && (
+            {/* {canShare && (
               <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
                 <ShareIcon />
               </button>
-            )}
+            )} */}
           </div>
         ) : (
           <div className={[styles.loaderContainer, !isLoading && styles.hide].join(" ")}>
             <LoaderIcon />
           </div>
         )}
-        <div style={{ display: "flex" }}>
+        <div className={styles.btnContainer}>
           <button aria-label="Get room ID" className={styles.btn} onClick={getRoomId}>
             Get Room ID
           </button>

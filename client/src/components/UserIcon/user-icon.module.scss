@@ -1,11 +1,11 @@
- .avatar-container {
+ .user-icon-container {
      height: 100%;
      width: 100%;
      display: grid;
      place-items: center;
      position: absolute;
 
-     .avatar {
+     .user-icon {
          border-radius: 50%;
          filter: drop-shadow(0 0 10px var(--color-purple));
          outline: var(--color-purple) solid 2px;
