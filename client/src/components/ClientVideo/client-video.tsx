@@ -18,7 +18,7 @@ export const ClientVideo = memo(
   }: {
     isVideoOn: boolean;
     isMicOn: boolean;
-    facingMode: "user" | { exact: "environment" };
+    facingMode: "user" | "environment";
   }) => {
     const { username, client } = useRoomContext();
     const clientVideoRef = useRef<HTMLDivElement | null>(null);
@@ -28,7 +28,7 @@ export const ClientVideo = memo(
     const getClientMediaTracks = async () => {
       const mediaTracks = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode,
+          facingMode: facingMode === "user" ? "user" : { exact: "environment" },
           frameRate: 25,
           latency: 20,
         },

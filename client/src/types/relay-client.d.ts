@@ -15,7 +15,7 @@ interface RoomState {
   showExitModal: boolean;
   isSharingScreen: boolean;
   screenUid: string | null;
-  facingMode: "user" | { exact: "environment" };
+  facingMode: "user" | "environment";
 }
 interface RoomAction {
   type: typeof roomActionType[number];

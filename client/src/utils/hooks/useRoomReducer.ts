@@ -24,7 +24,7 @@ export const useRoomReducer = () => {
       case "TOGGLE_FACING_MODE":
         return {
           ...state,
-          facingMode: state.facingMode === "user" ? { exact: "environment" } : "user",
+          facingMode: state.facingMode === "user" ? "environment" : "user",
         };
       case "SET_SCREEN_UID":
         return { ...state, screenUid: payload };
