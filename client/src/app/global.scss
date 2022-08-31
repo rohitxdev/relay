@@ -1,3 +1,5 @@
+@use './config';
+
 :root {
     * {
         margin: 0;
@@ -21,13 +23,20 @@
     --color-grey-opaque:hsla(0, 0%, 100%, 0.3);
 }
 
+@font-face {
+    font-family: "Inter";
+    src: url("../assets/fonts/inter-variable-font.woff2") format('woff2');
+
+}
+
 button {
     cursor: pointer;
     border: none;
 }
 
+
 polygon#elm4o3g09y01 {
-    fill: rebeccapurple !important;
+    fill: lightsalmon !important;
 }
 
 polygon#elohfi28orqjb {
@@ -35,17 +44,11 @@ polygon#elohfi28orqjb {
 }
 
 polygon#elf1m3yeay7yr {
-    fill: lightblue !important;
+    fill: lightpink !important;
 }
 
 polygon#elvzkpjystud9 {
-    fill: plum !important;
-}
-
-@font-face {
-    font-family: "Inter";
-    src: url("../assets/fonts/inter-variable-font.woff2") format('woff2');
-
+    fill: lightblue !important;
 }
 
 .router-link {

@@ -98,11 +98,11 @@ export const CreateRoom = () => {
                 <CopyIcon />
               </button>
             </div>
-            {/* {canShare && (
+            {canShare && (
               <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
                 <ShareIcon />
               </button>
-            )} */}
+            )}
           </div>
         ) : (
           <div className={[styles.loaderContainer, !isLoading && styles.hide].join(" ")}>

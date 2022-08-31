@@ -17,16 +17,15 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
     if (screenRef.current) {
       dispatch({ type: "SET_SCREEN_UID", payload: uid });
       await screenClient.join(appId, roomId, accessToken, uid);
-      if (/firefox/gi.test(navigator.userAgent)) {
-        screenVideoRef.current = (await AgoraRTC.createScreenVideoTrack({
-          encoderConfig: "1080p_2",
-          screenSourceType: "screen",
-        })) as ILocalVideoTrack;
-      } else {
-        screenVideoRef.current = (await AgoraRTC.createScreenVideoTrack({
-          encoderConfig: "1080p_2",
-        })) as ILocalVideoTrack;
-      }
+      const mediaTracks = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: false,
+      });
+      const screenVideoTrack = mediaTracks.getVideoTracks()[0];
+      screenVideoRef.current = AgoraRTC.createCustomVideoTrack({
+        mediaStreamTrack: screenVideoTrack,
+        optimizationMode: "detail",
+      });
       screenVideoRef.current.play(screenRef.current);
       await screenClient.publish(screenVideoRef.current);
     }

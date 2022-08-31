@@ -89,16 +89,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1em;
-    height: calc(2vw + 2em);
+    height: calc(2vw + 3em);
 
     p {
-      font-size: calc(1.5vw + 2em);
+      font-size: calc(1.5vw + 2.5em);
       font-variation-settings: "wght" 700;
     }
 
     img {
       height: 100%;
+      padding: 0.5em;
     }
   }
 
@@ -127,38 +127,5 @@
     width: 3.5em;
     fill: white;
     cursor: pointer;
-  }
-}
-
-@keyframes slide-from-left {
-  from {
-    transform: translateX(-50%);
-
-  }
-
-  to {
-    transform: translateX(0%);
-  }
-}
-
-@keyframes slide-from-right {
-  from {
-    transform: translateX(50%);
-
-  }
-
-  to {
-    transform: translateX(0%);
-  }
-}
-
-@keyframes slide-down {
-  from {
-    transform: translateY(-100%);
-
-  }
-
-  to {
-    transform: translateY(0%);
   }
 }

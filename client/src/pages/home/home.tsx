@@ -11,13 +11,13 @@ export const Home = () => {
     <div className={styles.home}>
       <div className={styles.banner} role="banner">
         <div className={styles.appName}>
-          <p>AstroConnect</p>
-          <img src="./logo.png" alt="Logo" />
+          <p>Relay</p>
+          <img src="./relay-logo.png" alt="Logo" />
         </div>
         <p className={styles.appDescription}>Free Video Conferencing for Everyone</p>
       </div>
       <div className={styles.illustrationWrapper}>
-        <div className={styles.illustration} data-attribute="https://storyset.com/online">
+        <div className={styles.illustration} data-attribution="https://storyset.com/online">
           <Illustration />
         </div>
         <div className={[styles.btnContainer, styles.animateBtns].join(" ")}>

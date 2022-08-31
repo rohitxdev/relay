@@ -3,6 +3,7 @@ import AgoraRTC, {
   IMicrophoneAudioTrack,
   ILocalVideoTrack,
   MicrophoneAudioTrackInitConfig,
+  ILocalAudioTrack,
 } from "agora-rtc-sdk-ng";
 import { memo, useEffect, useRef, useState } from "react";
 import styles from "./client-video.module.scss";
@@ -17,26 +18,42 @@ export const ClientVideo = memo(
   }: {
     isVideoOn: boolean;
     isMicOn: boolean;
-    facingMode: "user" | "environment";
+    facingMode: "user" | { exact: "environment" };
   }) => {
     const { username, client } = useRoomContext();
     const clientVideoRef = useRef<HTMLDivElement | null>(null);
-    const [clientAudioTrack, setClientAudioTrack] = useState<IMicrophoneAudioTrack | null>(null);
+    const [clientAudioTrack, setClientAudioTrack] = useState<ILocalAudioTrack | null>(null);
     const [clientVideoTrack, setClientVideoTrack] = useState<ILocalVideoTrack | null>(null);
-    const clientAudioConfig: MicrophoneAudioTrackInitConfig = {
-      ANS: true,
-      AEC: true,
-      AGC: true,
-      encoderConfig: { bitrate: 128 },
-    };
-    const clientVideoConfig: CameraVideoTrackInitConfig = {
-      encoderConfig: {
-        frameRate: { min: 20, ideal: 25, max: 30 },
+
+    const getClientMediaTracks = async () => {
+      const mediaTracks = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode,
+          frameRate: 25,
+          latency: 20,
+        },
+        audio: {
+          noiseSuppression: true,
+          autoGainControl: true,
+          suppressLocalAudioPlayback: true,
+          echoCancellation: true,
+          latency: 20,
+        },
+      });
+      const cameraTrack = mediaTracks.getVideoTracks()[0];
+      const microphoneTrack = mediaTracks.getAudioTracks()[0];
+      const customVideoTrack = AgoraRTC.createCustomVideoTrack({
+        mediaStreamTrack: cameraTrack,
+        optimizationMode: "motion",
         bitrateMin: 512,
         bitrateMax: 2048,
-      },
-      facingMode: facingMode,
-      optimizationMode: "motion",
+      });
+      const customAudioTrack = AgoraRTC.createCustomAudioTrack({
+        mediaStreamTrack: microphoneTrack,
+        encoderConfig: { bitrate: 128, stereo: true },
+      });
+      setClientVideoTrack(customVideoTrack);
+      setClientAudioTrack(customAudioTrack);
     };
 
     useEffect(() => {
@@ -62,18 +79,7 @@ export const ClientVideo = memo(
     }, [isMicOn]);
 
     useEffect(() => {
-      AgoraRTC.createMicrophoneAndCameraTracks(clientAudioConfig, clientVideoConfig).then(
-        (tracks) => {
-          if (clientVideoTrack) {
-            clientVideoTrack.close();
-          }
-          if (clientAudioTrack) {
-            clientAudioTrack.close();
-          }
-          setClientAudioTrack(tracks[0]);
-          setClientVideoTrack(tracks[1]);
-        }
-      );
+      getClientMediaTracks();
     }, [facingMode]);
 
     return (

@@ -1,5 +1,6 @@
 {
-  "name": "spark-vc",
+  "name": "relay",
+  "description": "A free video conferencing app made with react, typescript, express, redis and agora sdk.",
   "private": true,
   "version": "0.0.0",
   "type": "module",
