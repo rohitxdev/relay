@@ -8,6 +8,7 @@ import FlipCameraIcon from "@assets/icons/flip-camera.svg";
 import ScreenShareOnIcon from "@assets/icons/screen-share.svg";
 import ScreenShareOffIcon from "@assets/icons/stop-screen-share.svg";
 import { ExitModal } from "@components";
+import { useAppContext } from "@utils/hooks";
 
 export const Controls = ({
   state,
@@ -16,15 +17,8 @@ export const Controls = ({
   state: RoomState;
   dispatch: React.Dispatch<RoomAction>;
 }) => {
-  const {
-    isVideoOn,
-    isMicOn,
-    isSharingScreen,
-    isScreenShareAvailable,
-    isRearCameraAvailable,
-    facingMode,
-    showExitModal,
-  } = state;
+  const { isRearCameraAvailable, isScreenShareAvailable } = useAppContext();
+  const { isVideoOn, isMicOn, isSharingScreen, facingMode, showExitModal } = state;
 
   const toggleExitModal = () => {
     dispatch({ type: "TOGGLE_EXIT_MODAL" });

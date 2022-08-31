@@ -9,7 +9,7 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
   const screenRef = useRef<HTMLDivElement | null>(null);
   const screenVideoRef = useRef<ILocalVideoTrack | null>(null);
   const screenClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp9" });
-  const screenUsername = `${username}' screen`;
+  const screenUsername = `${username}'s screen`;
 
   const shareScreen = async () => {
     const response = await api.getAccessToken(roomId, screenUsername);

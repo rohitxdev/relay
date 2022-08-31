@@ -6,8 +6,6 @@ const roomActionType = [
   "TOGGLE_EXIT_MODAL",
   "TOGGLE_SCREENSHARE",
   "TOGGLE_FACING_MODE",
-  "SET_SCREENSHARE_AVAILABILITY",
-  "SET_REAR_CAMERA_AVAILABILITY",
   "SET_SCREEN_UID",
 ] as const;
 
@@ -16,8 +14,6 @@ interface RoomState {
   isMicOn: boolean;
   showExitModal: boolean;
   isSharingScreen: boolean;
-  isScreenShareAvailable: boolean;
-  isRearCameraAvailable: boolean;
   screenUid: string | null;
   facingMode: "user" | "environment";
 }
