@@ -11,7 +11,7 @@
          outline: var(--color-purple) solid 2px;
          display: grid;
          place-items: center;
-         height: 12em;
+         height: clamp(4em, 100%, 12em);
          aspect-ratio: 1 / 1;
          background-color: var(--color-dark-100);
 
