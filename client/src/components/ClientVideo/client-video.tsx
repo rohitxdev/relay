@@ -84,7 +84,10 @@ export const ClientVideo = memo(
     }, [facingMode]);
 
     return (
-      <div className={styles.client} ref={clientVideoRef}>
+      <div
+        className={[styles.client, facingMode === "user" && styles.mirrored].join(" ")}
+        ref={clientVideoRef}
+      >
         <p className={styles.clientUsername}>{username}</p>
         <UserIcon />
       </div>

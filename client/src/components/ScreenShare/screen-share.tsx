@@ -7,7 +7,7 @@ import styles from "./screen-share.module.scss";
 export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction> }) => {
   const { roomId, screenUsername } = useRoomContext();
   const screenRef = useRef<HTMLDivElement | null>(null);
-  const screenClient = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp9" }));
+  const screenClient = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
   const [screenVideoTrack, setScreenVideoTrack] = useState<ILocalVideoTrack | null>(null);
 
   const joinRoomAsUser = async () => {

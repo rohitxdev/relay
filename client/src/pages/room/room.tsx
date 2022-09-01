@@ -14,7 +14,7 @@ export const Room = () => {
   const roomId = sessionStorage.getItem("roomId");
   const username = sessionStorage.getItem("username");
   const screenUsername = `${username}'s screen`;
-  const { current: client } = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp9" }));
+  const { current: client } = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
 
   const checkForRearCamera = async () => {
     try {

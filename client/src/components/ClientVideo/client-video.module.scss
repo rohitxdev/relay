@@ -3,9 +3,13 @@
 .client {
     @include config.video-stream;
 
+    &.mirrored > video {
+        transform: scale(-1, 1) !important;
+        object-fit: contain !important;
+    }
+
     video {
         object-fit: contain !important;
-        transform: scale(-1, 1) !important;
     }
 }
 
