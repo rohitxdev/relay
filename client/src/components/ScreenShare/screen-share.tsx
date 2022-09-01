@@ -24,13 +24,6 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
         bitrateMin: 1024,
       });
       setIsTrackAcquired(true);
-    } catch (error) {
-      dispatch({ type: "TOGGLE_SCREENSHARE" });
-    }
-  };
-
-  const shareScreen = async () => {
-    try {
       if (
         screenRef.current &&
         screenVideoRef.current &&
@@ -44,6 +37,13 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
         screenVideoRef.current.play(screenRef.current);
       }
     } catch (error) {
+      dispatch({ type: "TOGGLE_SCREENSHARE" });
+    }
+  };
+
+  const shareScreen = async () => {
+    try {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -52,15 +52,14 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
     if (screenVideoRef.current) {
       screenVideoRef.current.close();
     }
-    await screenClient.current.leave();
+    if (screenClient.current.connectionState !== "CONNECTED") {
+      await screenClient.current.leave();
+    }
   };
 
   useEffect(() => {
     if (!isTrackAcquired) {
       acquireTrack();
-    }
-    if (isTrackAcquired) {
-      shareScreen();
     }
 
     return () => {
