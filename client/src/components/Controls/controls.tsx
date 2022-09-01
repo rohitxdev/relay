@@ -24,7 +24,7 @@ export const Controls = ({
   const checkForRearCamera = async () => {
     try {
       await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: "environment" } },
+        video: { facingMode: { ideal: "environment" } },
       });
       setRearCameraAvailability(true);
     } catch (error) {
