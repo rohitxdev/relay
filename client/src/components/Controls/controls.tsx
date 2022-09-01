@@ -22,15 +22,10 @@ export const Controls = ({
   const [isScreenShareAvailable, setScreenShareAvailability] = useState(false);
 
   const checkForRearCamera = async () => {
-    if (localStorage.getItem("is-rear-camera-available") === "true") {
-      setRearCameraAvailability(true);
-      return;
-    }
     try {
       await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { exact: "environment" } },
       });
-      localStorage.setItem("is-rear-camera-available", "true");
       setRearCameraAvailability(true);
     } catch (error) {
       console.warn("Rear camera is not available on this device.");
