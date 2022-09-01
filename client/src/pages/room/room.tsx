@@ -22,14 +22,9 @@ export const Room = () => {
         video: { facingMode: { exact: "environment" } },
         audio: false,
       });
-      tracks.getVideoTracks().forEach((track) => {
-        track.stop();
-      });
+      tracks.getVideoTracks()[0].stop();
       dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
     } catch (error) {
-      if (error instanceof Error) {
-        alert(error.message);
-      }
       console.warn("Rear camera is not available on this device.");
     }
   };
