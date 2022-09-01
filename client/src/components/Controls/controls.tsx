@@ -17,28 +17,15 @@ export const Controls = ({
   state: RoomState;
   dispatch: React.Dispatch<RoomAction>;
 }) => {
-  const { isVideoOn, isMicOn, isSharingScreen, facingMode, showExitModal } = state;
-  const [isRearCameraAvailable, setRearCameraAvailability] = useState(false);
-  const [isScreenShareAvailable, setScreenShareAvailability] = useState(false);
-
-  const checkForRearCamera = async () => {
-    try {
-      await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: "environment" } },
-      });
-      setRearCameraAvailability(true);
-    } catch (error) {
-      console.warn("Rear camera is not available on this device.");
-    }
-  };
-
-  const checkForScreenShare = () => {
-    if ("getDisplayMedia" in navigator.mediaDevices) {
-      setScreenShareAvailability(true);
-    } else {
-      console.warn("Screensharing is not available on this device.");
-    }
-  };
+  const {
+    isVideoOn,
+    isMicOn,
+    isSharingScreen,
+    isRearCameraAvailable,
+    isScreenshareAvailable,
+    facingMode,
+    showExitModal,
+  } = state;
 
   const toggleExitModal = () => {
     dispatch({ type: "TOGGLE_EXIT_MODAL" });
@@ -60,11 +47,6 @@ export const Controls = ({
     dispatch({ type: "TOGGLE_FACING_MODE" });
   };
 
-  useEffect(() => {
-    checkForScreenShare();
-    checkForRearCamera();
-  }, []);
-
   return (
     <>
       {showExitModal && <ExitModal dispatch={dispatch} />}
@@ -74,7 +56,7 @@ export const Controls = ({
             aria-label={isSharingScreen ? "Stop screenshare" : "Start screenshare"}
             onClick={toggleScreenShare}
             className={isSharingScreen ? styles.btnOn : styles.btnOff}
-            disabled={!isScreenShareAvailable}
+            disabled={!isScreenshareAvailable}
           >
             {isSharingScreen ? <ScreenShareOnIcon /> : <ScreenShareOffIcon />}
           </button>

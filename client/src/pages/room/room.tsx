@@ -16,14 +16,29 @@ export const Room = () => {
   const screenUsername = `${username}'s screen`;
   const { current: client } = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp9" }));
 
+  const checkForRearCamera = async () => {
+    try {
+      await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: "environment" } },
+      });
+      dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
+    } catch (error) {
+      console.warn("Rear camera is not available on this device.");
+    }
+  };
+
+  const checkForScreenShare = () => {
+    if ("getDisplayMedia" in navigator.mediaDevices) {
+      dispatch({ type: "SET_SCREENSHARE_AVAILABILITY", payload: true });
+    } else {
+      console.warn("Screensharing is not available on this device.");
+    }
+  };
+
   const enterRoom = async (roomId: string, username: string) => {
     const response = await api.getAccessToken(roomId, username);
     const { appId, uid, accessToken } = await response.json();
-    if (
-      client.connectionState !== "CONNECTED" &&
-      client.connectionState !== "CONNECTING" &&
-      client.connectionState !== "RECONNECTING"
-    ) {
+    if (client.connectionState === "DISCONNECTED") {
       await client.join(appId, roomId, accessToken, uid);
     }
   };
@@ -36,6 +51,8 @@ export const Room = () => {
 
   useEffect(() => {
     if (roomId && username) {
+      checkForRearCamera();
+      checkForScreenShare();
       enterRoom(roomId, username);
     } else {
       navigate("/", { replace: true });

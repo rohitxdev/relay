@@ -22,7 +22,7 @@ export const ClientVideo = memo(
     const getClientMediaTracks = async () => {
       const mediaTracks = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode,
+          facingMode: facingMode === "user" ? "user" : { exact: "environment" },
         },
         audio: {
           noiseSuppression: true,
@@ -70,14 +70,6 @@ export const ClientVideo = memo(
     }, [isMicOn]);
 
     useEffect(() => {
-      if (clientVideoTrack) {
-        client.unpublish(clientVideoTrack);
-        clientVideoTrack.close();
-      }
-      if (clientAudioTrack) {
-        client.unpublish(clientAudioTrack);
-        clientAudioTrack.close();
-      }
       getClientMediaTracks();
       return () => {
         if (clientVideoTrack) {
