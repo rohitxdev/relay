@@ -1,6 +1,6 @@
 import styles from "./room.module.scss";
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClientVideo, Controls, RemoteUsers, ScreenShare } from "@components";
 import { RoomContextProvider } from "@context";
@@ -22,7 +22,6 @@ export const Room = () => {
         video: { facingMode: { exact: "environment" } },
         audio: false,
       });
-      tracks.getVideoTracks()[0].stop();
       dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
     } catch (error) {
       console.warn("Rear camera is not available on this device.");
@@ -51,9 +50,17 @@ export const Room = () => {
     }
   };
 
+  useLayoutEffect(() => {
+    checkForRearCamera();
+    return () => {
+      navigator.mediaDevices.getUserMedia({ video: true }).then((tracks) => {
+        tracks.getVideoTracks()[0].stop();
+      });
+    };
+  }, []);
+
   useEffect(() => {
     if (roomId && username) {
-      checkForRearCamera();
       checkForScreenShare();
       enterRoom(roomId, username);
     } else {
