@@ -6,16 +6,12 @@ const CreateRoom = lazy(() => import("../pages/create-room"));
 const JoinRoom = lazy(() => import("../pages/join-room"));
 const Room = lazy(() => import("../pages/room"));
 
+const SuspenseFallback = () => {
+  return <div className="suspense-fallback"></div>;
+};
+
 const LazyPage = ({ children }: { children: ReactNode }) => {
-  return (
-    <Suspense
-      fallback={
-        <div style={{ background: "var(--color-dark-200)", height: "100vh", width: "100vw" }}></div>
-      }
-    >
-      {children}
-    </Suspense>
-  );
+  return <Suspense fallback={<SuspenseFallback />}>{children}</Suspense>;
 };
 
 export const App = () => {

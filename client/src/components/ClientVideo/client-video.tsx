@@ -22,7 +22,7 @@ export const ClientVideo = memo(
     const getClientMediaTracks = async () => {
       const mediaTracks = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: { ideal: facingMode },
+          facingMode: { exact: facingMode },
           frameRate: 25,
           latency: 20,
         },

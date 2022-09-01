@@ -16,10 +16,10 @@
 @mixin video-stream {
     position: relative;
     overflow: hidden;
-    outline: var(--color-grey-opaque) solid 2px;
+    outline: var(--color-grey) solid 1px;
     height: 100%;
     width: 100%;
-    border-radius: 0.5em;
+    border-radius: 0.75em;
 }
 
 @mixin error {

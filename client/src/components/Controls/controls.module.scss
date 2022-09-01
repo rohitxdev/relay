@@ -1,11 +1,8 @@
 @use '../../app/config';
 
 .client-controls {
-    position: sticky;
-    bottom: 0;
     display: grid;
     place-items: center;
-    padding: 1.5em 0.5em 0.5em 0.5em;
 
     & > div {
         border-radius: 1.5em;
@@ -15,7 +12,8 @@
         justify-content: center;
         align-items: center;
         background-color: var(--color-dark-100);
-        width: clamp(18em, 95%, 25em);
+        height: fit-content;
+        width: clamp(18em, 100%, 25em);
         filter: drop-shadow(0 0 1px var(--color-grey));
         animation: slide-up ease 0.5s 1 forwards;
     }

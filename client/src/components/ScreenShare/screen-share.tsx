@@ -13,18 +13,17 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
 
   const acquireTrack = async () => {
     try {
-      if (!isTrackAcquired) {
-        const mediaTracks = await navigator.mediaDevices.getDisplayMedia({
-          video: true,
-          audio: false,
-        });
-        const screenVideoTrack = mediaTracks.getVideoTracks()[0];
-        screenVideoRef.current = AgoraRTC.createCustomVideoTrack({
-          mediaStreamTrack: screenVideoTrack,
-          optimizationMode: "detail",
-        });
-        setIsTrackAcquired(true);
-      }
+      const mediaTracks = await navigator.mediaDevices.getDisplayMedia({
+        video: { frameRate: 24 },
+        audio: true,
+      });
+      const screenVideoTrack = mediaTracks.getVideoTracks()[0];
+      screenVideoRef.current = AgoraRTC.createCustomVideoTrack({
+        mediaStreamTrack: screenVideoTrack,
+        optimizationMode: "detail",
+        bitrateMin: 1024,
+      });
+      setIsTrackAcquired(true);
     } catch (error) {
       dispatch({ type: "TOGGLE_SCREENSHARE" });
     }
@@ -52,23 +51,22 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
   const cleanUp = async () => {
     if (screenVideoRef.current) {
       screenVideoRef.current.close();
-      screenVideoRef.current = null;
     }
     await screenClient.current.leave();
   };
 
   useEffect(() => {
+    if (!isTrackAcquired) {
+      acquireTrack();
+    }
     if (isTrackAcquired) {
       shareScreen();
     }
-  }, [isTrackAcquired]);
 
-  useEffect(() => {
-    acquireTrack();
     return () => {
       cleanUp();
     };
-  }, []);
+  }, [isTrackAcquired]);
 
   return (
     <>
