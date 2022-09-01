@@ -18,8 +18,12 @@ export const Room = () => {
 
   const checkForRearCamera = async () => {
     try {
-      await navigator.mediaDevices.getUserMedia({
+      const tracks = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { exact: "environment" } },
+        audio: false,
+      });
+      tracks.getVideoTracks().forEach((track) => {
+        track.stop();
       });
       dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
     } catch (error) {
