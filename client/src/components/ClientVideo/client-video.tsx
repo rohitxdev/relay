@@ -70,7 +70,25 @@ export const ClientVideo = memo(
     }, [isMicOn]);
 
     useEffect(() => {
+      if (clientVideoTrack) {
+        client.unpublish(clientVideoTrack);
+        clientVideoTrack.close();
+      }
+      if (clientAudioTrack) {
+        client.unpublish(clientAudioTrack);
+        clientAudioTrack.close();
+      }
       getClientMediaTracks();
+      return () => {
+        if (clientVideoTrack) {
+          client.unpublish(clientVideoTrack);
+          clientVideoTrack.close();
+        }
+        if (clientAudioTrack) {
+          client.unpublish(clientAudioTrack);
+          clientAudioTrack.close();
+        }
+      };
     }, [facingMode]);
 
     return (
