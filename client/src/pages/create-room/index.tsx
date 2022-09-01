@@ -7,7 +7,7 @@ import styles from "./create-room.module.scss";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../services/api-service";
 
-export const CreateRoom = () => {
+const CreateRoom = () => {
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -78,9 +78,9 @@ export const CreateRoom = () => {
   return (
     <div className={styles.createRoom}>
       {error && (
-        <div className={styles.error} role="error" aria-labelledby="error-msg">
-          <p id="error-msg">{error}</p>
-        </div>
+        <p className="error" role="error">
+          {error}
+        </p>
       )}
       <main className={styles.main}>
         {!isLoading && roomId ? (
@@ -123,3 +123,5 @@ export const CreateRoom = () => {
     </div>
   );
 };
+
+export default CreateRoom;

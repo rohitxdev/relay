@@ -1,51 +1,61 @@
 import "./global.scss";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home, CreateRoom, JoinRoom, Room } from "@pages";
-import { AppContextProvider } from "@context";
-import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { lazy, ReactNode, Suspense } from "react";
+const Home = lazy(() => import("../pages/home"));
+const CreateRoom = lazy(() => import("../pages/create-room"));
+const JoinRoom = lazy(() => import("../pages/join-room"));
+const Room = lazy(() => import("../pages/room"));
+
+const LazyPage = ({ children }: { children: ReactNode }) => {
+  return (
+    <Suspense
+      fallback={
+        <div style={{ background: "var(--color-dark-200)", height: "100vh", width: "100vw" }}></div>
+      }
+    >
+      {children}
+    </Suspense>
+  );
+};
 
 export const App = () => {
-  const [isRearCameraAvailable, setRearCameraAvailability] = useState(false);
-  const [isScreenShareAvailable, setScreenShareAvailability] = useState(false);
-  const checkForRearCamera = async () => {
-    if (localStorage.getItem("rear-camera")) {
-      setRearCameraAvailability(true);
-    } else {
-      try {
-        await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: { exact: "environment" } },
-        });
-        localStorage.setItem("rear-camera", "available");
-        setRearCameraAvailability(true);
-      } catch (error) {
-        console.warn("Rear camera is not available on this device.");
-      }
-    }
-  };
-
-  const checkForScreenShare = () => {
-    if ("getDisplayMedia" in navigator.mediaDevices) {
-      setScreenShareAvailability(true);
-    } else {
-      console.warn("Screensharing is not available on this device.");
-    }
-  };
-
-  useEffect(() => {
-    checkForScreenShare();
-    checkForRearCamera();
-  }, []);
-
   return (
-    <AppContextProvider value={{ isRearCameraAvailable, isScreenShareAvailable }}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/create-room" element={<CreateRoom />} />
-          <Route path="/join-room" element={<JoinRoom />} />
-          <Route path="/room" element={<Room />} />
-        </Routes>
-      </BrowserRouter>
-    </AppContextProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <LazyPage>
+              <Home />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="/create-room"
+          element={
+            <LazyPage>
+              <CreateRoom />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="/join-room"
+          element={
+            <LazyPage>
+              <JoinRoom />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="/room"
+          element={
+            <LazyPage>
+              <Room />
+            </LazyPage>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" state={{ error: "Error: Invalid route" }} />} />
+      </Routes>
+    </BrowserRouter>
   );
 };

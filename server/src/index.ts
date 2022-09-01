@@ -117,7 +117,15 @@ server.delete("/api/delete-username/:uid", async (req, res) => {
 });
 
 server.get("/api/get-og-image", async (req, res) => {
-  res.sendFile(`/assets/banner.jpg`, { root: "../" });
+  res.sendFile(`banner.jpg`, { root: "../../client/dist/" });
+});
+
+server.get("*", (req, res) => {
+  if (req.headers.accept?.includes("text/html")) {
+    res.sendFile("index.html", { root: "../../client/dist" });
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 server.listen(PORT, HOST, async () => {

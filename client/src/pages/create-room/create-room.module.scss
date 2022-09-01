@@ -54,17 +54,6 @@
     }
 }
 
-.error {
-    position: absolute;
-    padding: 0.6em 1.5em;
-    background-color: var(--color-red);
-    color: var(--color-white);
-    font-variation-settings: "wght" 500;
-    font-size: 0.9em;
-    border-radius: 0.4em;
-    animation: shake 2s linear 1 forwards;
-}
-
 .loader-container {
     margin-block: 2em;
     height: 3em;

@@ -51,6 +51,22 @@ polygon#elvzkpjystud9 {
     fill: lightblue !important;
 }
 
+.error {
+    @include config.error;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translate(0, -50%);
+        height: 1.25em;
+        width: 1.25em;
+        margin-inline: 0.5em;
+        background: url('../assets/icons/error.svg') center / cover no-repeat;
+    }
+}
+
 .router-link {
     text-decoration: none;
 }

@@ -13,27 +13,33 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
 
   const acquireTrack = async () => {
     try {
-      const mediaTracks = await navigator.mediaDevices.getDisplayMedia({
-        video: true,
-        audio: false,
-      });
-      const screenVideoTrack = mediaTracks.getVideoTracks()[0];
-      screenVideoRef.current = AgoraRTC.createCustomVideoTrack({
-        mediaStreamTrack: screenVideoTrack,
-        optimizationMode: "detail",
-      });
-      setIsTrackAcquired(true);
+      if (!isTrackAcquired) {
+        const mediaTracks = await navigator.mediaDevices.getDisplayMedia({
+          video: true,
+          audio: false,
+        });
+        const screenVideoTrack = mediaTracks.getVideoTracks()[0];
+        screenVideoRef.current = AgoraRTC.createCustomVideoTrack({
+          mediaStreamTrack: screenVideoTrack,
+          optimizationMode: "detail",
+        });
+        setIsTrackAcquired(true);
+      }
     } catch (error) {
-      // dispatch({ type: "TOGGLE_SCREENSHARE" });
+      dispatch({ type: "TOGGLE_SCREENSHARE" });
     }
   };
 
   const shareScreen = async () => {
     try {
-      const response = await api.getAccessToken(roomId, screenUsername);
-      const { appId, uid, accessToken } = await response.json();
-      // dispatch({ type: "SET_SCREEN_UID", payload: uid });
-      if (screenRef.current && screenVideoRef.current) {
+      if (
+        screenRef.current &&
+        screenVideoRef.current &&
+        screenClient.current.connectionState !== "CONNECTED"
+      ) {
+        const response = await api.getAccessToken(roomId, screenUsername);
+        const { appId, uid, accessToken } = await response.json();
+        // dispatch({ type: "SET_SCREEN_UID", payload: uid });
         await screenClient.current.join(appId, roomId, accessToken, uid);
         screenClient.current.publish(screenVideoRef.current);
         screenVideoRef.current.play(screenRef.current);
@@ -48,9 +54,7 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
       screenVideoRef.current.close();
       screenVideoRef.current = null;
     }
-    if (screenClient.current.connectionState !== "DISCONNECTED") {
-      await screenClient.current.leave();
-    }
+    await screenClient.current.leave();
   };
 
   useEffect(() => {

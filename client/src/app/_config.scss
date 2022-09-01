@@ -22,6 +22,18 @@
     border-radius: 0.5em;
 }
 
+@mixin error {
+    position: absolute;
+    top: -4em;
+    padding: 0.6em 1.5em 0.6em 2.25em;
+    background-color: var(--color-dark-100);
+    outline: var(--color-red) solid 1px;
+    color: var(--color-red);
+    font-variation-settings: "wght" 600;
+    border-radius: 0.4em;
+    animation: shake 2s linear 1 forwards;
+}
+
 @keyframes slide-from-left {
     from {
         transform: translateX(-50%);
@@ -58,44 +70,48 @@
 @keyframes shake {
 
     0% {
-        transform: translateY(calc(0vh - 100%));
+        transform: translateY(0);
         opacity: 0;
     }
 
     10% {
-        transform: translateY(0);
+        transform: translateY(400%);
         opacity: 1;
     }
 
     14% {
-        transform: translateX(-0.5em);
+        transform: translateX(-0.5em) translateY(400%);
     }
 
     18% {
-        transform: translateX(0.5em);
+        transform: translateX(0.5em) translateY(400%);
     }
 
     22% {
-        transform: translateX(-0.5em);
+        transform: translateX(-0.5em) translateY(400%);
     }
 
     26% {
-        transform: translateX(0.5em);
+        transform: translateX(0.5em) translateY(400%);
     }
 
     30% {
-        transform: translateX(0);
+        transform: translateX(-0.5em) translateY(400%);
+    }
+
+    34% {
+        transform: translateX(0) translateY(400%);
     }
 
     90% {
+        transform: translateX(0) translateY(400%);
+    }
+
+    100% {
         transform: translateY(0);
         opacity: 1;
     }
 
-    100% {
-        opacity: 0;
-        transform: translateY(calc(0vh - 100%));
-    }
 }
 
 @keyframes show-up {

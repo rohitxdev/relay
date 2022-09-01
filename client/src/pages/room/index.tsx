@@ -7,7 +7,7 @@ import { RoomContextProvider } from "@context";
 import { useRoomReducer } from "@utils/hooks";
 import { api } from "@services";
 
-export const Room = () => {
+const Room = () => {
   const [state, dispatch] = useRoomReducer();
   const { isVideoOn, isMicOn, isSharingScreen, facingMode } = state;
   const navigate = useNavigate();
@@ -67,3 +67,5 @@ export const Room = () => {
     </RoomContextProvider>
   );
 };
+
+export default Room;

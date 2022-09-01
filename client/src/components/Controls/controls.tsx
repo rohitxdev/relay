@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import EndCallIcon from "@assets/icons/call.svg";
 import styles from "./controls.module.scss";
 import VideoOnIcon from "@assets/icons/video-on.svg";
@@ -8,7 +9,6 @@ import FlipCameraIcon from "@assets/icons/flip-camera.svg";
 import ScreenShareOnIcon from "@assets/icons/screen-share.svg";
 import ScreenShareOffIcon from "@assets/icons/stop-screen-share.svg";
 import { ExitModal } from "@components";
-import { useAppContext } from "@utils/hooks";
 
 export const Controls = ({
   state,
@@ -17,8 +17,33 @@ export const Controls = ({
   state: RoomState;
   dispatch: React.Dispatch<RoomAction>;
 }) => {
-  const { isRearCameraAvailable, isScreenShareAvailable } = useAppContext();
   const { isVideoOn, isMicOn, isSharingScreen, facingMode, showExitModal } = state;
+  const [isRearCameraAvailable, setRearCameraAvailability] = useState(false);
+  const [isScreenShareAvailable, setScreenShareAvailability] = useState(false);
+
+  const checkForRearCamera = async () => {
+    if (localStorage.getItem("is-rear-camera-available") === "true") {
+      setRearCameraAvailability(true);
+      return;
+    }
+    try {
+      await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: "environment" } },
+      });
+      localStorage.setItem("is-rear-camera-available", "true");
+      setRearCameraAvailability(true);
+    } catch (error) {
+      console.warn("Rear camera is not available on this device.");
+    }
+  };
+
+  const checkForScreenShare = () => {
+    if ("getDisplayMedia" in navigator.mediaDevices) {
+      setScreenShareAvailability(true);
+    } else {
+      console.warn("Screensharing is not available on this device.");
+    }
+  };
 
   const toggleExitModal = () => {
     dispatch({ type: "TOGGLE_EXIT_MODAL" });
@@ -39,6 +64,11 @@ export const Controls = ({
   const toggleFacingMode = () => {
     dispatch({ type: "TOGGLE_FACING_MODE" });
   };
+
+  useEffect(() => {
+    checkForScreenShare();
+    checkForRearCamera();
+  }, []);
 
   return (
     <>

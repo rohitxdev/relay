@@ -5,7 +5,7 @@ import BackIcon from "@assets/icons/arrow-back.svg";
 import styles from "./join-room.module.scss";
 import { api } from "@services";
 
-export const JoinRoom = () => {
+const JoinRoom = () => {
   const navigate = useNavigate();
   const [searchParams, _] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
@@ -65,8 +65,12 @@ export const JoinRoom = () => {
 
   return (
     <div className={styles.joinRoom}>
+      {error && (
+        <p className="error" role="error">
+          {error}
+        </p>
+      )}
       <div className={styles.form}>
-        {error && <p className={styles.error}>{error}</p>}
         <div className={styles.enterRoomId}>
           <input type="text" maxLength={6} ref={roomIdRef} required />
           <span>Room ID</span>

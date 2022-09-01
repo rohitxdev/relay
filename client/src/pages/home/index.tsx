@@ -3,12 +3,25 @@ import PeopleIcon from "@assets/icons/people.svg";
 import GithubIcon from "@assets/icons/github.svg";
 import LinkedInIcon from "@assets/icons/linkedin.svg";
 import Illustration from "@assets/images/video-conference-illustration.svg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styles from "./home.module.scss";
+import { useEffect } from "react";
 
-export const Home = () => {
+const Home = () => {
+  const { state } = useLocation() as any;
+
+  useEffect(() => {
+    if (state?.error) {
+      history.replaceState({}, "");
+    }
+  }, []);
   return (
     <div className={styles.home}>
+      {state?.error && (
+        <p className="error" role="error">
+          {state?.error}
+        </p>
+      )}{" "}
       <div className={styles.banner} role="banner">
         <div className={styles.appName}>
           <p>Relay</p>
@@ -48,3 +61,5 @@ export const Home = () => {
     </div>
   );
 };
+
+export default Home;
