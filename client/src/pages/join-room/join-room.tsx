@@ -5,7 +5,7 @@ import BackIcon from "@assets/icons/arrow-back.svg";
 import styles from "./join-room.module.scss";
 import { api } from "@services";
 
-const JoinRoom = () => {
+export const JoinRoom = () => {
   const navigate = useNavigate();
   const [searchParams, _] = useSearchParams();
   const [error, setError] = useState<string | null>(null);
@@ -91,5 +91,3 @@ const JoinRoom = () => {
     </div>
   );
 };
-
-export default JoinRoom;

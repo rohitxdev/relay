@@ -112,7 +112,7 @@
 
 .tooltip {
     position: absolute;
-    font-variation-settings: "wght" 500;
+    font-variation-settings: "wght" 600;
     font-size: 0.9em;
     background-color: var(--color-white);
     color: var(--color-dark-200);
@@ -122,6 +122,7 @@
     left: 50%;
     transform: translateX(-50%);
     animation: show-up 1.9s ease 1 forwards;
+    box-shadow: 0 0 0 1px var(--color-white);
 
     &::before {
         --border-width: 0.4em;

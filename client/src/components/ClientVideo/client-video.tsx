@@ -22,16 +22,13 @@ export const ClientVideo = memo(
     const getClientMediaTracks = async () => {
       const mediaTracks = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: facingMode === "user" ? { ideal: "user" } : { exact: facingMode },
-          frameRate: 25,
-          latency: 20,
+          facingMode: facingMode === "user" ? "user" : { exact: "environment" },
         },
         audio: {
           noiseSuppression: true,
           autoGainControl: true,
           suppressLocalAudioPlayback: true,
           echoCancellation: true,
-          latency: 20,
         },
       });
       const cameraTrack = mediaTracks.getVideoTracks()[0];

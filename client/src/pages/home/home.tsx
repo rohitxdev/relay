@@ -7,7 +7,7 @@ import { Link, useLocation } from "react-router-dom";
 import styles from "./home.module.scss";
 import { useEffect } from "react";
 
-const Home = () => {
+export const Home = () => {
   const { state } = useLocation() as any;
 
   useEffect(() => {
@@ -61,5 +61,3 @@ const Home = () => {
     </div>
   );
 };
-
-export default Home;

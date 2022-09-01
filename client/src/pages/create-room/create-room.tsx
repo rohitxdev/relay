@@ -7,7 +7,7 @@ import styles from "./create-room.module.scss";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../services/api-service";
 
-const CreateRoom = () => {
+export const CreateRoom = () => {
   const navigate = useNavigate();
   const [roomId, setRoomId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -123,5 +123,3 @@ const CreateRoom = () => {
     </div>
   );
 };
-
-export default CreateRoom;

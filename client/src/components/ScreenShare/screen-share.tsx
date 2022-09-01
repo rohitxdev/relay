@@ -1,75 +1,58 @@
 import { api } from "@services";
 import { useRoomContext } from "@utils/hooks/useRoomContext";
-import AgoraRTC, { ILocalVideoTrack } from "agora-rtc-sdk-ng";
+import AgoraRTC, { ILocalAudioTrack, ILocalVideoTrack } from "agora-rtc-sdk-ng";
 import { useEffect, useRef, useState } from "react";
 import styles from "./screen-share.module.scss";
 
 export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction> }) => {
   const { roomId, screenUsername } = useRoomContext();
   const screenRef = useRef<HTMLDivElement | null>(null);
-  const screenVideoRef = useRef<ILocalVideoTrack | null>(null);
   const screenClient = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp9" }));
-  const [isTrackAcquired, setIsTrackAcquired] = useState(false);
+  const [screenVideoTrack, setScreenVideoTrack] = useState<ILocalVideoTrack | null>(null);
 
-  const acquireTrack = async () => {
+  const joinRoomAsUser = async () => {
+    if (screenVideoTrack && screenRef.current) {
+      const response = await api.getAccessToken(roomId, screenUsername);
+      const { appId, uid, accessToken } = await response.json();
+      await screenClient.current.join(appId, roomId, accessToken, uid);
+      await screenClient.current.publish(screenVideoTrack);
+      screenVideoTrack.play(screenRef.current);
+    }
+  };
+
+  const acquireTracks = async () => {
     try {
       const mediaTracks = await navigator.mediaDevices.getDisplayMedia({
-        video: { frameRate: 24 },
-        audio: true,
+        video: { frameRate: { ideal: 24 } },
+        audio: false,
       });
-      const screenVideoTrack = mediaTracks.getVideoTracks()[0];
-      screenVideoRef.current = AgoraRTC.createCustomVideoTrack({
-        mediaStreamTrack: screenVideoTrack,
+      const videoTrack = AgoraRTC.createCustomVideoTrack({
+        mediaStreamTrack: mediaTracks.getVideoTracks()[0],
         optimizationMode: "detail",
-        bitrateMin: 1024,
       });
-      setIsTrackAcquired(true);
-      if (
-        screenRef.current &&
-        screenVideoRef.current &&
-        screenClient.current.connectionState !== "CONNECTED"
-      ) {
-        const response = await api.getAccessToken(roomId, screenUsername);
-        const { appId, uid, accessToken } = await response.json();
-        // dispatch({ type: "SET_SCREEN_UID", payload: uid });
-        await screenClient.current.join(appId, roomId, accessToken, uid);
-        screenClient.current.publish(screenVideoRef.current);
-        screenVideoRef.current.play(screenRef.current);
-      }
+      setScreenVideoTrack(videoTrack);
     } catch (error) {
+      console.warn(error);
       dispatch({ type: "TOGGLE_SCREENSHARE" });
     }
   };
 
-  const shareScreen = async () => {
-    try {
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const cleanUp = async () => {
-    if (screenVideoRef.current) {
-      screenVideoRef.current.close();
-    }
-    if (screenClient.current.connectionState !== "CONNECTED") {
-      await screenClient.current.leave();
-    }
-  };
+  useEffect(() => {
+    joinRoomAsUser();
+    return () => {
+      screenClient.current.leave();
+    };
+  }, [screenVideoTrack]);
 
   useEffect(() => {
-    if (!isTrackAcquired) {
-      acquireTrack();
+    if (!screenVideoTrack) {
+      acquireTracks();
     }
-
-    return () => {
-      cleanUp();
-    };
-  }, [isTrackAcquired]);
+  }, []);
 
   return (
     <>
-      {isTrackAcquired && (
+      {screenVideoTrack && (
         <div className={styles.screenShare} ref={screenRef}>
           <p className={styles.screenUsername}>Your screen</p>
         </div>

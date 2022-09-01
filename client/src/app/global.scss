@@ -51,18 +51,6 @@ polygon#elvzkpjystud9 {
     fill: lightblue !important;
 }
 
-.suspense-fallback {
-    height: 100vh;
-    width: 100vw;
-    background: url('../../assets/images/blob-scene-haikei.svg') center / cover;
-    place-items: center;
-
-    svg {
-        height: 5em;
-        width: 5em;
-    }
-}
-
 .error {
     @include config.error;
 
