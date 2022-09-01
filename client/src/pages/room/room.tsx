@@ -23,6 +23,9 @@ export const Room = () => {
       });
       dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
     } catch (error) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
       console.warn("Rear camera is not available on this device.");
     }
   };
