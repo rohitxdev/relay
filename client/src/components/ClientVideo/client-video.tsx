@@ -16,6 +16,8 @@ export const ClientVideo = memo(
   }) => {
     const { username, client } = useRoomContext();
     const clientVideoRef = useRef<HTMLDivElement | null>(null);
+    const frontCamTrackRef = useRef<MediaStreamTrack | null>(null);
+    const rearCamTrackRef = useRef<MediaStreamTrack | null>(null);
     const [clientMicrophoneTrack, setClientMicrophoneTrack] = useState<ILocalAudioTrack | null>(
       null
     );
@@ -47,29 +49,24 @@ export const ClientVideo = memo(
     };
 
     const getCameraTrack = async () => {
-      navigator.mediaDevices
-        .getUserMedia({
-          video: {
-            facingMode: facingMode === "user" ? "user" : { exact: "environment" },
-          },
-          audio: false,
-        })
-        .then((tracks) => {
-          const cameraTrack = AgoraRTC.createCustomVideoTrack({
-            mediaStreamTrack: tracks.getVideoTracks()[0],
-            optimizationMode: "motion",
-            bitrateMin: 512,
-            bitrateMax: 2048,
-          });
-          setClientVideoTrack(cameraTrack);
-        })
-        .catch((error) => {
-          if (error instanceof Error) {
-            console.warn(error);
-          }
+      if (facingMode === "user" && frontCamTrackRef.current) {
+        const cameraTrack = AgoraRTC.createCustomVideoTrack({
+          mediaStreamTrack: frontCamTrackRef.current,
+          optimizationMode: "motion",
+          bitrateMin: 512,
+          bitrateMax: 2048,
         });
+      }
+      if (facingMode === "environment" && rearCamTrackRef.current) {
+        const cameraTrack = AgoraRTC.createCustomVideoTrack({
+          mediaStreamTrack: rearCamTrackRef.current,
+          optimizationMode: "motion",
+          bitrateMin: 512,
+          bitrateMax: 2048,
+        });
+        setClientVideoTrack(cameraTrack);
+      }
     };
-
     useEffect(() => {
       if (clientVideoRef.current && clientVideoTrack) {
         if (isVideoOn) {
@@ -97,17 +94,29 @@ export const ClientVideo = memo(
 
     useEffect(() => {
       getCameraTrack();
+    }, [facingMode]);
+
+    useEffect(() => {
+      navigator.mediaDevices
+        .getUserMedia({ video: { facingMode: "user" }, audio: false })
+        .then((tracks) => {
+          frontCamTrackRef.current = tracks.getVideoTracks()[0];
+        });
+      navigator.mediaDevices
+        .getUserMedia({ video: { facingMode: { exact: "environment" } }, audio: false })
+        .then((tracks) => {
+          rearCamTrackRef.current = tracks.getVideoTracks()[0];
+        });
+
       return () => {
-        if (clientVideoTrack) {
-          clientVideoTrack.close();
-          navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then((tracks) => {
-            tracks.getVideoTracks().forEach((track) => {
-              track.stop();
-            });
-          });
+        if (frontCamTrackRef.current) {
+          frontCamTrackRef.current.stop();
+        }
+        if (rearCamTrackRef.current) {
+          rearCamTrackRef.current.stop();
         }
       };
-    }, [facingMode]);
+    }, []);
 
     return (
       <div
