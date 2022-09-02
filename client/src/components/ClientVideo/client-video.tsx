@@ -16,14 +16,15 @@ export const ClientVideo = memo(
   }) => {
     const { username, client } = useRoomContext();
     const clientVideoRef = useRef<HTMLDivElement | null>(null);
-    const cameraIdRef = useRef<string | null>(null);
-    const [clientAudioTrack, setClientAudioTrack] = useState<ILocalAudioTrack | null>(null);
+    const [clientMicrophoneTrack, setClientMicrophoneTrack] = useState<ILocalAudioTrack | null>(
+      null
+    );
     const [clientVideoTrack, setClientVideoTrack] = useState<ILocalVideoTrack | null>(null);
 
     const getClientMediaTracks = async () => {
       const mediaTracks = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: { ideal: facingMode },
+          facingMode,
         },
         audio: {
           noiseSuppression: true,
@@ -32,21 +33,18 @@ export const ClientVideo = memo(
           echoCancellation: true,
         },
       });
-      const cameraTrack = mediaTracks.getVideoTracks()[0];
-      cameraIdRef.current = cameraTrack.id;
-      const microphoneTrack = mediaTracks.getAudioTracks()[0];
       const customVideoTrack = AgoraRTC.createCustomVideoTrack({
-        mediaStreamTrack: cameraTrack,
+        mediaStreamTrack: mediaTracks.getVideoTracks()[0],
         optimizationMode: "motion",
         bitrateMin: 512,
         bitrateMax: 2048,
       });
-      const customAudioTrack = AgoraRTC.createCustomAudioTrack({
-        mediaStreamTrack: microphoneTrack,
+      const customMicrophoneTrack = AgoraRTC.createCustomAudioTrack({
+        mediaStreamTrack: mediaTracks.getAudioTracks()[0],
         encoderConfig: { bitrate: 128, stereo: true },
       });
       setClientVideoTrack(customVideoTrack);
-      setClientAudioTrack(customAudioTrack);
+      setClientMicrophoneTrack(customMicrophoneTrack);
     };
 
     useEffect(() => {
@@ -62,11 +60,11 @@ export const ClientVideo = memo(
     }, [isVideoOn, clientVideoTrack]);
 
     useEffect(() => {
-      if (clientAudioTrack) {
+      if (clientMicrophoneTrack) {
         if (isMicOn) {
-          client.publish(clientAudioTrack);
+          client.publish(clientMicrophoneTrack);
         } else {
-          client.unpublish(clientAudioTrack);
+          client.unpublish(clientMicrophoneTrack);
         }
       }
     }, [isMicOn]);
@@ -75,20 +73,9 @@ export const ClientVideo = memo(
       getClientMediaTracks();
       return () => {
         if (clientVideoTrack) {
+          clientVideoTrack.stop();
           client.unpublish(clientVideoTrack);
-          clientVideoTrack.close();
         }
-        if (clientAudioTrack) {
-          client.unpublish(clientAudioTrack);
-          clientAudioTrack.close();
-        }
-        navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then((tracks) => {
-          tracks.getTracks().forEach((track) => {
-            if (track.id === cameraIdRef.current) {
-              track.stop();
-            }
-          });
-        });
       };
     }, [facingMode]);
 
