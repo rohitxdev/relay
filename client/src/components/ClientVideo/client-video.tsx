@@ -16,6 +16,7 @@ export const ClientVideo = memo(
   }) => {
     const { username, client } = useRoomContext();
     const clientVideoRef = useRef<HTMLDivElement | null>(null);
+    const cameraIdRef = useRef<string | null>(null);
     const [clientAudioTrack, setClientAudioTrack] = useState<ILocalAudioTrack | null>(null);
     const [clientVideoTrack, setClientVideoTrack] = useState<ILocalVideoTrack | null>(null);
 
@@ -32,6 +33,7 @@ export const ClientVideo = memo(
         },
       });
       const cameraTrack = mediaTracks.getVideoTracks()[0];
+      cameraIdRef.current = cameraTrack.id;
       const microphoneTrack = mediaTracks.getAudioTracks()[0];
       const customVideoTrack = AgoraRTC.createCustomVideoTrack({
         mediaStreamTrack: cameraTrack,
@@ -80,6 +82,13 @@ export const ClientVideo = memo(
           client.unpublish(clientAudioTrack);
           clientAudioTrack.close();
         }
+        navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then((tracks) => {
+          tracks.getTracks().forEach((track) => {
+            if (track.id === cameraIdRef.current) {
+              track.stop();
+            }
+          });
+        });
       };
     }, [facingMode]);
 

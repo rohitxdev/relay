@@ -22,6 +22,9 @@ export const Room = () => {
         video: { facingMode: { exact: "environment" } },
         audio: false,
       });
+      tracks.getVideoTracks().forEach((track) => {
+        track.stop();
+      });
       dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
     } catch (error) {
       console.warn("Rear camera is not available on this device.");
@@ -81,7 +84,7 @@ export const Room = () => {
   }
 
   return (
-    <RoomContextProvider value={{ roomId, username, screenUsername, client: client }}>
+    <RoomContextProvider value={{ roomId, username, screenUsername, client }}>
       <div className={styles.room}>
         <div className={styles.userGrid}>
           {isSharingScreen && <ScreenShare dispatch={dispatch} />}
