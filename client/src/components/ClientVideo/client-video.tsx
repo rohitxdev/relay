@@ -21,30 +21,53 @@ export const ClientVideo = memo(
     );
     const [clientVideoTrack, setClientVideoTrack] = useState<ILocalVideoTrack | null>(null);
 
-    const getClientMediaTracks = async () => {
-      const mediaTracks = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode,
-        },
-        audio: {
-          noiseSuppression: true,
-          autoGainControl: true,
-          suppressLocalAudioPlayback: true,
-          echoCancellation: true,
-        },
-      });
-      const customVideoTrack = AgoraRTC.createCustomVideoTrack({
-        mediaStreamTrack: mediaTracks.getVideoTracks()[0],
-        optimizationMode: "motion",
-        bitrateMin: 512,
-        bitrateMax: 2048,
-      });
-      const customMicrophoneTrack = AgoraRTC.createCustomAudioTrack({
-        mediaStreamTrack: mediaTracks.getAudioTracks()[0],
-        encoderConfig: { bitrate: 128, stereo: true },
-      });
-      setClientVideoTrack(customVideoTrack);
-      setClientMicrophoneTrack(customMicrophoneTrack);
+    const getMicrophoneTrack = async () => {
+      navigator.mediaDevices
+        .getUserMedia({
+          video: false,
+          audio: {
+            noiseSuppression: true,
+            autoGainControl: true,
+            suppressLocalAudioPlayback: true,
+            echoCancellation: true,
+          },
+        })
+        .then((tracks) => {
+          const microphoneTrack = AgoraRTC.createCustomAudioTrack({
+            mediaStreamTrack: tracks.getAudioTracks()[0],
+            encoderConfig: { bitrate: 128, stereo: true },
+          });
+          setClientMicrophoneTrack(microphoneTrack);
+        })
+        .catch((error) => {
+          if (error instanceof Error) {
+            console.warn(error);
+          }
+        });
+    };
+
+    const getCameraTrack = async () => {
+      navigator.mediaDevices
+        .getUserMedia({
+          video: {
+            facingMode,
+          },
+          audio: false,
+        })
+        .then((tracks) => {
+          const cameraTrack = AgoraRTC.createCustomVideoTrack({
+            mediaStreamTrack: tracks.getVideoTracks()[0],
+            optimizationMode: "motion",
+            bitrateMin: 512,
+            bitrateMax: 2048,
+          });
+          setClientVideoTrack(cameraTrack);
+        })
+        .catch((error) => {
+          if (error instanceof Error) {
+            console.warn(error);
+          }
+        });
     };
 
     useEffect(() => {
@@ -60,6 +83,9 @@ export const ClientVideo = memo(
     }, [isVideoOn, clientVideoTrack]);
 
     useEffect(() => {
+      if (!clientMicrophoneTrack) {
+        getMicrophoneTrack();
+      }
       if (clientMicrophoneTrack) {
         if (isMicOn) {
           client.publish(clientMicrophoneTrack);
@@ -70,11 +96,10 @@ export const ClientVideo = memo(
     }, [isMicOn]);
 
     useEffect(() => {
-      getClientMediaTracks();
+      getCameraTrack();
       return () => {
         if (clientVideoTrack) {
-          clientVideoTrack.stop();
-          client.unpublish(clientVideoTrack);
+          clientVideoTrack.close();
         }
       };
     }, [facingMode]);
