@@ -50,7 +50,7 @@ export const ClientVideo = memo(
       navigator.mediaDevices
         .getUserMedia({
           video: {
-            facingMode,
+            facingMode: facingMode === "user" ? "user" : { exact: "environment" },
           },
           audio: false,
         })
@@ -100,6 +100,11 @@ export const ClientVideo = memo(
       return () => {
         if (clientVideoTrack) {
           clientVideoTrack.close();
+          navigator.mediaDevices.getUserMedia({ video: true, audio: false }).then((tracks) => {
+            tracks.getVideoTracks().forEach((track) => {
+              track.stop();
+            });
+          });
         }
       };
     }, [facingMode]);
