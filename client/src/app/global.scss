@@ -51,6 +51,20 @@ polygon#elvzkpjystud9 {
     fill: lightblue !important;
 }
 
+.fullscreen-btn {
+    cursor: pointer;
+    position: absolute;
+    z-index: 10;
+    margin: 1em;
+    bottom: 0;
+    right: 0;
+    background-color: transparent;
+
+    svg {
+        fill: var(--color-white);
+    }
+}
+
 .error {
     @include config.error;
 
