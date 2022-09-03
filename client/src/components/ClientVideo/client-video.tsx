@@ -53,6 +53,8 @@ export const ClientVideo = memo(
     };
 
     const cleanUp = async () => {
+      setClientVideoTrack(null);
+      setClientMicrophoneTrack(null);
       navigator.mediaDevices.getUserMedia().then((tracks) => {
         tracks.getTracks().forEach((track) => {
           track.stop();
@@ -101,7 +103,7 @@ export const ClientVideo = memo(
         getMediaTracks();
       }
       return () => {
-        // cleanUp();
+        cleanUp();
       };
     }, [facingMode]);
 

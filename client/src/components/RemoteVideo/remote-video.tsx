@@ -17,7 +17,7 @@ export const RemoteVideo = memo(
     remoteVideoTrack?: IRemoteVideoTrack;
   }) => {
     const remoteUserRef = useRef<HTMLDivElement | null>(null);
-    const { isFullscreen, toggleFullscreen } = useToggleFullscreen(remoteUserRef.current);
+    const [isFullscreen, toggleFullscreen] = useToggleFullscreen(remoteUserRef.current);
 
     useEffect(() => {
       if (remoteUserRef.current && remoteVideoTrack) {
