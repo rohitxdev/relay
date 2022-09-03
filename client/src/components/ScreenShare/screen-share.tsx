@@ -16,17 +16,24 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
 
   const acquireTracks = async () => {
     try {
-      if (!screenVideoTrack) {
-        const videoTrack = await AgoraRTC.createScreenVideoTrack(
-          { optimizationMode: "detail", encoderConfig: "1080p_2" },
-          "disable"
-        );
-        setScreenVideoTrack(videoTrack);
-      }
+      const videoTrack = await AgoraRTC.createScreenVideoTrack(
+        { optimizationMode: "detail", encoderConfig: "1080p_2" },
+        "disable"
+      );
+      setScreenVideoTrack(videoTrack);
     } catch (err) {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    if (!screenVideoTrack) {
+      acquireTracks();
+    }
+    return () => {
+      screenVideoTrack?.close();
+    };
+  }, []);
 
   const joinRoomAsUser = async () => {
     try {
@@ -59,17 +66,12 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
         publishTracks();
       });
     }
-    return () => {};
-  }, [screenVideoTrack]);
-
-  if (!screenVideoTrack) {
-    acquireTracks();
-  }
-  useEffect(() => {
     return () => {
-      screenClient.current.leave();
+      if (screenVideoTrack && screenClient.current.connectionState === "CONNECTED") {
+        screenClient.current.leave();
+      }
     };
-  }, []);
+  }, [screenVideoTrack]);
 
   return (
     <>

@@ -24,42 +24,53 @@ export const ClientVideo = memo(
     const [clientMicrophoneTrack, setClientMicrophoneTrack] = useState<ILocalAudioTrack | null>(
       null
     );
-    const mediaTracksRef = useRef<MediaStream | null>(null);
-    const getMediaTracks = async () => {
+    const cameraTrackRef = useRef<MediaStream | null>(null);
+    const getMicrophoneTrack = async () => {
       try {
-        mediaTracksRef.current = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: facingMode === "user" ? "user" : { exact: "environment" } },
+        const microphoneTracks = await navigator.mediaDevices.getUserMedia({
           audio: {
             noiseSuppression: true,
             autoGainControl: true,
             suppressLocalAudioPlayback: true,
             echoCancellation: true,
           },
+          video: false,
+        });
+        const microphoneTrack = AgoraRTC.createCustomAudioTrack({
+          mediaStreamTrack: microphoneTracks.getAudioTracks()[0],
+          encoderConfig: { bitrate: 128, stereo: true },
+        });
+        setClientMicrophoneTrack(microphoneTrack);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const getCameraTrack = async () => {
+      try {
+        const cameraTracks = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: facingMode === "user" ? "user" : { exact: "environment" } },
+          audio: false,
         });
         const cameraTrack = AgoraRTC.createCustomVideoTrack({
-          mediaStreamTrack: mediaTracksRef.current.getVideoTracks()[0],
+          mediaStreamTrack: cameraTracks.getVideoTracks()[0],
           optimizationMode: "motion",
           bitrateMin: 512,
           bitrateMax: 2048,
         });
-        const microphoneTrack = AgoraRTC.createCustomAudioTrack({
-          mediaStreamTrack: mediaTracksRef.current.getAudioTracks()[0],
-          encoderConfig: { bitrate: 128, stereo: true },
-        });
-        setClientMicrophoneTrack(microphoneTrack);
         setClientVideoTrack(cameraTrack);
       } catch (error) {
         console.error(error);
       }
     };
 
-    const cleanUp = async () => {
-      setClientVideoTrack(null);
-      setClientMicrophoneTrack(null);
-      mediaTracksRef.current?.getTracks().forEach((track) => {
-        track.stop();
-      });
-    };
+    if (!clientVideoTrack) {
+      getCameraTrack();
+    }
+
+    if (!clientMicrophoneTrack) {
+      getMicrophoneTrack();
+    }
 
     useEffect(() => {
       if (clientRef.current && clientVideoTrack) {
@@ -90,20 +101,11 @@ export const ClientVideo = memo(
           client.unpublish(clientMicrophoneTrack);
         }
       }
-      return () => {
-        if (clientMicrophoneTrack && isMicOn) {
-          client.unpublish(clientMicrophoneTrack);
-        }
-      };
-    }, [isMicOn, clientMicrophoneTrack]);
+    }, [isMicOn]);
 
     useEffect(() => {
-      if (!clientVideoTrack) {
-        getMediaTracks();
-      }
-      return () => {
-        cleanUp();
-      };
+      clientVideoTrack?.close();
+      setClientVideoTrack(null);
     }, [facingMode]);
 
     return (
