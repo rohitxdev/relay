@@ -18,51 +18,52 @@ export const ClientVideo = memo(
     facingMode: "user" | "environment";
   }) => {
     const { username, client } = useRoomContext();
-    const clientVideoRef = useRef<HTMLDivElement | null>(null);
-    const { isFullscreen, toggleFullscreen } = useToggleFullscreen(clientVideoRef.current);
+    const clientRef = useRef<HTMLDivElement | null>(null);
+    const [isFullscreen, toggleFullscreen] = useToggleFullscreen(clientRef.current);
+    const [clientVideoTrack, setClientVideoTrack] = useState<ILocalVideoTrack | null>(null);
     const [clientMicrophoneTrack, setClientMicrophoneTrack] = useState<ILocalAudioTrack | null>(
       null
     );
-    const [clientVideoTrack, setClientVideoTrack] = useState<ILocalVideoTrack | null>(null);
     const getMediaTracks = async () => {
-      const mediaTracks = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: facingMode === "user" ? "user" : { exact: "environment" } },
-        audio: {
-          noiseSuppression: true,
-          autoGainControl: true,
-          suppressLocalAudioPlayback: true,
-          echoCancellation: true,
-        },
-      });
-      const cameraTrack = AgoraRTC.createCustomVideoTrack({
-        mediaStreamTrack: mediaTracks.getVideoTracks()[0],
-        optimizationMode: "motion",
-        bitrateMin: 512,
-        bitrateMax: 2048,
-      });
-      const microphoneTrack = AgoraRTC.createCustomAudioTrack({
-        mediaStreamTrack: mediaTracks.getAudioTracks()[0],
-        encoderConfig: { bitrate: 128, stereo: true },
-      });
-      setClientMicrophoneTrack(microphoneTrack);
-      setClientVideoTrack(cameraTrack);
+      try {
+        const mediaTracks = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: facingMode === "user" ? "user" : { exact: "environment" } },
+          audio: {
+            noiseSuppression: true,
+            autoGainControl: true,
+            suppressLocalAudioPlayback: true,
+            echoCancellation: true,
+          },
+        });
+        const cameraTrack = AgoraRTC.createCustomVideoTrack({
+          mediaStreamTrack: mediaTracks.getVideoTracks()[0],
+          optimizationMode: "motion",
+          bitrateMin: 512,
+          bitrateMax: 2048,
+        });
+        const microphoneTrack = AgoraRTC.createCustomAudioTrack({
+          mediaStreamTrack: mediaTracks.getAudioTracks()[0],
+          encoderConfig: { bitrate: 128, stereo: true },
+        });
+        setClientMicrophoneTrack(microphoneTrack);
+        setClientVideoTrack(cameraTrack);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     const cleanUp = async () => {
-      if (clientVideoTrack) {
-        clientVideoTrack.close();
-        setClientVideoTrack(null);
-      }
-      if (clientMicrophoneTrack) {
-        clientMicrophoneTrack.close();
-        setClientMicrophoneTrack(null);
-      }
+      navigator.mediaDevices.getUserMedia().then((tracks) => {
+        tracks.getTracks().forEach((track) => {
+          track.stop();
+        });
+      });
     };
 
     useEffect(() => {
-      if (clientVideoRef.current && clientVideoTrack) {
+      if (clientRef.current && clientVideoTrack) {
         if (isVideoOn) {
-          clientVideoTrack?.play(clientVideoRef.current);
+          clientVideoTrack?.play(clientRef.current);
           client.publish(clientVideoTrack);
         } else {
           clientVideoTrack?.stop();
@@ -71,17 +72,14 @@ export const ClientVideo = memo(
       }
 
       return () => {
-        if (clientVideoRef.current && clientVideoTrack) {
+        if (clientRef.current && clientVideoTrack) {
           if (isVideoOn) {
             client.unpublish(clientVideoTrack);
-            // clientVideoTrack?.stop();
-          } else {
-            client.publish(clientVideoTrack);
-            // clientVideoTrack?.play(clientVideoRef.current);
+            clientVideoTrack?.stop();
           }
         }
       };
-    }, [isVideoOn, facingMode]);
+    }, [isVideoOn, clientVideoTrack]);
 
     useEffect(() => {
       if (clientMicrophoneTrack) {
@@ -91,30 +89,28 @@ export const ClientVideo = memo(
           client.unpublish(clientMicrophoneTrack);
         }
       }
-    }, [isMicOn]);
+      return () => {
+        if (clientMicrophoneTrack && isMicOn) {
+          client.unpublish(clientMicrophoneTrack);
+        }
+      };
+    }, [isMicOn, clientMicrophoneTrack]);
 
     useEffect(() => {
-      if (!clientVideoTrack && !clientMicrophoneTrack) {
+      if (!clientVideoTrack) {
         getMediaTracks();
       }
       return () => {
-        cleanUp();
+        // cleanUp();
       };
     }, [facingMode]);
-
-    useEffect(() => {}, []);
 
     return (
       <div
         className={[styles.client, facingMode === "user" && styles.mirrored].join(" ")}
-        ref={clientVideoRef}
+        ref={clientRef}
       >
-        <button
-          className="fullscreen-btn"
-          onClick={() => {
-            toggleFullscreen();
-          }}
-        >
+        <button className="fullscreen-btn" onClick={toggleFullscreen}>
           {isFullscreen ? <ExitFullscreenIcon /> : <EnterFullscreenIcon />}
         </button>
         <p className={styles.clientUsername}>{username}</p>

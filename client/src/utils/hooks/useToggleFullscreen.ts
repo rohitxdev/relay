@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function useToggleFullscreen(element: HTMLElement | null) {
+export function useToggleFullscreen(element: HTMLElement | null): [boolean, () => void] {
   const [isFullscreen, setIsFullScreen] = useState(false);
   const toggleFullscreen = () => {
     setIsFullScreen((prevState) => !prevState);
@@ -17,5 +17,5 @@ export function useToggleFullscreen(element: HTMLElement | null) {
     }
   }, [isFullscreen]);
 
-  return { isFullscreen, toggleFullscreen };
+  return [isFullscreen, toggleFullscreen];
 }

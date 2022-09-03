@@ -20,6 +20,10 @@
     height: 100%;
     width: 100%;
     border-radius: 1.5em;
+
+    &:fullscreen {
+        border-radius: 0;
+    }
 }
 
 @mixin error {
