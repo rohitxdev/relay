@@ -52,16 +52,27 @@ polygon#elvzkpjystud9 {
 }
 
 .fullscreen-btn {
-    cursor: pointer;
     position: absolute;
     z-index: 10;
-    margin: 1em;
+    margin: 1.75em;
     bottom: 0;
     right: 0;
+    transform: translateY(300%);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
     background-color: transparent;
+    height: 1.5em;
+    width: 1.5em;
 
     svg {
+        height: 100%;
+        width: 100%;
         fill: var(--color-white);
+        stroke: var(--color-white) !important;
+    }
+
+    div:hover > & {
+        transform: translateY(0);
     }
 }
 
