@@ -68,6 +68,7 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
     }
     return () => {
       if (screenVideoTrack && screenClient.current.connectionState === "CONNECTED") {
+        screenVideoTrack.close();
         screenClient.current.leave();
       }
     };

@@ -79,20 +79,20 @@ export const Room = () => {
     };
   }, []);
 
-  if (!(roomId && username)) {
-    return <p>Error: No room ID or username found</p>;
-  }
-
   return (
-    <RoomContextProvider value={{ roomId, username, screenUsername, client }}>
-      <div className={styles.room}>
-        <div className={styles.userGrid}>
-          {isSharingScreen && <ScreenShare dispatch={dispatch} />}
-          <ClientVideo isVideoOn={isVideoOn} isMicOn={isMicOn} facingMode={facingMode} />
-          <RemoteUsers />
-        </div>
-        <Controls state={state} dispatch={dispatch} />
-      </div>
-    </RoomContextProvider>
+    <>
+      {roomId && username && (
+        <RoomContextProvider value={{ roomId, username, screenUsername, client }}>
+          <div className={styles.room}>
+            <div className={styles.userGrid}>
+              {isSharingScreen && <ScreenShare dispatch={dispatch} />}
+              <ClientVideo isVideoOn={isVideoOn} isMicOn={isMicOn} facingMode={facingMode} />
+              <RemoteUsers />
+            </div>
+            <Controls state={state} dispatch={dispatch} />
+          </div>
+        </RoomContextProvider>
+      )}
+    </>
   );
 };
