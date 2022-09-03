@@ -24,9 +24,10 @@ export const ClientVideo = memo(
     const [clientMicrophoneTrack, setClientMicrophoneTrack] = useState<ILocalAudioTrack | null>(
       null
     );
+    const mediaTracksRef = useRef<MediaStream | null>(null);
     const getMediaTracks = async () => {
       try {
-        const mediaTracks = await navigator.mediaDevices.getUserMedia({
+        mediaTracksRef.current = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: facingMode === "user" ? "user" : { exact: "environment" } },
           audio: {
             noiseSuppression: true,
@@ -36,13 +37,13 @@ export const ClientVideo = memo(
           },
         });
         const cameraTrack = AgoraRTC.createCustomVideoTrack({
-          mediaStreamTrack: mediaTracks.getVideoTracks()[0],
+          mediaStreamTrack: mediaTracksRef.current.getVideoTracks()[0],
           optimizationMode: "motion",
           bitrateMin: 512,
           bitrateMax: 2048,
         });
         const microphoneTrack = AgoraRTC.createCustomAudioTrack({
-          mediaStreamTrack: mediaTracks.getAudioTracks()[0],
+          mediaStreamTrack: mediaTracksRef.current.getAudioTracks()[0],
           encoderConfig: { bitrate: 128, stereo: true },
         });
         setClientMicrophoneTrack(microphoneTrack);
@@ -55,11 +56,9 @@ export const ClientVideo = memo(
     const cleanUp = async () => {
       setClientVideoTrack(null);
       setClientMicrophoneTrack(null);
-      // navigator.mediaDevices.getUserMedia().then((tracks) => {
-      //   tracks.getTracks().forEach((track) => {
-      //     track.stop();
-      //   });
-      // });
+      mediaTracksRef.current?.getTracks().forEach((track) => {
+        track.stop();
+      });
     };
 
     useEffect(() => {
