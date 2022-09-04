@@ -76,7 +76,7 @@ export const JoinRoom = () => {
           <span>Room ID</span>
         </div>
         <div className={styles.enterUsername}>
-          <input type="text" maxLength={24} ref={usernameRef} required />
+          <input type="text" maxLength={24} ref={usernameRef} autoComplete="name" required />
           <span>Name</span>
         </div>
         <div className={"btn-container"}>

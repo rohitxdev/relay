@@ -10,22 +10,10 @@ import ScreenShareOnIcon from "@assets/icons/screen-share.svg";
 import ScreenShareOffIcon from "@assets/icons/stop-screen-share.svg";
 import { ExitModal } from "@components";
 
-export const Controls = ({
-  state,
-  dispatch,
-}: {
-  state: RoomState;
-  dispatch: React.Dispatch<RoomAction>;
-}) => {
-  const {
-    isVideoOn,
-    isMicOn,
-    isSharingScreen,
-    isRearCameraAvailable,
-    isScreenshareAvailable,
-    facingMode,
-    showExitModal,
-  } = state;
+export const Controls = ({ state, dispatch }: { state: RoomState; dispatch: React.Dispatch<RoomAction> }) => {
+  const { isVideoOn, isMicOn, isSharingScreen, facingMode, showExitModal } = state;
+  const [isRearCameraAvailable, setIsRearCameraAvailable] = useState(false);
+  const [isScreenshareAvailable, setIsScreenshareAvailable] = useState(false);
 
   const toggleExitModal = () => {
     dispatch({ type: "TOGGLE_EXIT_MODAL" });
@@ -46,6 +34,31 @@ export const Controls = ({
   const toggleFacingMode = () => {
     dispatch({ type: "TOGGLE_FACING_MODE" });
   };
+
+  const checkForScreenShare = () => {
+    if ("getDisplayMedia" in navigator.mediaDevices) {
+      setIsScreenshareAvailable(true);
+    } else {
+      console.info("💻 Screensharing is not available on this device.");
+    }
+  };
+
+  const checkForRearCamera = async () => {
+    try {
+      const tracks = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: "environment" } },
+        audio: false,
+      });
+      setIsRearCameraAvailable(true);
+    } catch (error) {
+      console.info("📷 Rear camera is not available on this device.");
+    }
+  };
+
+  useEffect(() => {
+    checkForScreenShare();
+    checkForRearCamera();
+  }, []);
 
   return (
     <>
@@ -78,7 +91,7 @@ export const Controls = ({
             {isMicOn ? <MicOnIcon /> : <MicOffIcon />}
           </button>
           <button
-            aria-label="Flip camera"
+            aria-label={facingMode === "user" ? "Switch to rear camera" : "Switch to front camera"}
             onClick={toggleFacingMode}
             className={facingMode === "environment" ? styles.btnOn : styles.btnOff}
             disabled={!isRearCameraAvailable}

@@ -1,6 +1,6 @@
 import styles from "./room.module.scss";
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClientVideo, Controls, RemoteUsers, ScreenShare } from "@components";
 import { RoomContextProvider } from "@context";
@@ -16,29 +16,6 @@ export const Room = () => {
   const screenUsername = `${username}'s screen`;
   const { current: client } = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
 
-  const checkForRearCamera = async () => {
-    try {
-      const tracks = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: "environment" } },
-        audio: false,
-      });
-      tracks.getVideoTracks().forEach((track) => {
-        track.stop();
-      });
-      dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
-    } catch (error) {
-      console.warn("Rear camera is not available on this device.");
-    }
-  };
-
-  const checkForScreenShare = () => {
-    if ("getDisplayMedia" in navigator.mediaDevices) {
-      dispatch({ type: "SET_SCREENSHARE_AVAILABILITY", payload: true });
-    } else {
-      console.warn("Screensharing is not available on this device.");
-    }
-  };
-
   const enterRoom = async (roomId: string, username: string) => {
     const response = await api.getAccessToken(roomId, username);
     const { appId, uid, accessToken } = await response.json();
@@ -47,35 +24,25 @@ export const Room = () => {
     }
   };
 
-  const escapeListener = (e: globalThis.KeyboardEvent) => {
+  const escapeHandler = (e: globalThis.KeyboardEvent) => {
     if (e.key === "Escape") {
       dispatch({ type: "TOGGLE_EXIT_MODAL" });
     }
   };
 
-  useLayoutEffect(() => {
-    checkForRearCamera();
-    return () => {
-      navigator.mediaDevices.getUserMedia({ video: true }).then((tracks) => {
-        tracks.getVideoTracks()[0].stop();
-      });
-    };
-  }, []);
-
   useEffect(() => {
     if (roomId && username) {
-      checkForScreenShare();
       enterRoom(roomId, username);
     } else {
       navigate("/", { replace: true });
     }
-    window.addEventListener("keydown", escapeListener);
+    window.addEventListener("keydown", escapeHandler);
 
     return () => {
       if (client.connectionState === "CONNECTED") {
         client.leave();
       }
-      window.removeEventListener("keydown", escapeListener);
+      window.removeEventListener("keydown", escapeHandler);
     };
   }, []);
 

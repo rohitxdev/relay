@@ -6,14 +6,11 @@ export const useRoomReducer = () => {
     isMicOn: false,
     showExitModal: false,
     isSharingScreen: false,
-    isRearCameraAvailable: false,
-    isScreenshareAvailable: false,
     facingMode: "user",
   };
 
   const reducer = (state: RoomState, action: RoomAction): RoomState => {
-    const { type, payload } = action;
-    switch (type) {
+    switch (action.type) {
       case "TOGGLE_VIDEO":
         return { ...state, isVideoOn: !state.isVideoOn };
       case "TOGGLE_MIC":
@@ -27,10 +24,6 @@ export const useRoomReducer = () => {
           ...state,
           facingMode: state.facingMode === "user" ? "environment" : "user",
         };
-      case "SET_REAR_CAMERA_AVAILABILITY":
-        return { ...state, isRearCameraAvailable: payload };
-      case "SET_SCREENSHARE_AVAILABILITY":
-        return { ...state, isScreenshareAvailable: payload };
       default:
         return state;
     }
