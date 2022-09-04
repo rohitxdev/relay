@@ -4,8 +4,9 @@ import react from "@vitejs/plugin-react";
 import svgr from "vite-plugin-svgr";
 import postcssPresetEnv from "postcss-preset-env";
 import { Plugin } from "postcss";
+import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig(({ mode }) => ({
-  plugins: [react(), svgr({ exportAsDefault: true, svgrOptions: { icon: true } })],
+  plugins: [react(), svgr({ exportAsDefault: true, svgrOptions: { icon: true } }), VitePWA()],
   css: {
     modules: {
       localsConvention: "camelCase",

@@ -54,11 +54,12 @@ export const Controls = ({ state, dispatch }: { state: RoomState; dispatch: Reac
       });
       setIsRearCameraAvailable(true);
     } catch (error) {
+      alert(JSON.stringify(error));
       console.info("📷 Rear camera is not available on this device.");
     }
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     checkForScreenShare();
     checkForRearCamera();
   }, []);
