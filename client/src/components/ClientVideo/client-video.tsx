@@ -81,18 +81,14 @@ export const ClientVideo = memo(
 
     useEffect(() => {
       getCameraTrack();
-
       return () => {
-        if (clientVideoTrack) {
-          clientVideoTrack.close();
-          setClientVideoTrack(null);
-        }
+        clientVideoTrack?.close();
       };
     }, [facingMode]);
 
     useEffect(() => {
-      if (clientVideoTrack) {
-        if (isVideoOn && clientRef.current) {
+      if (clientVideoTrack && clientRef.current) {
+        if (isVideoOn) {
           clientVideoTrack.play(clientRef.current);
           client.publish(clientVideoTrack);
         } else {
@@ -103,7 +99,7 @@ export const ClientVideo = memo(
 
       return () => {
         if (clientVideoTrack && isVideoOn) {
-          clientVideoTrack.close();
+          clientVideoTrack.stop();
           client.unpublish(clientVideoTrack);
         }
       };
