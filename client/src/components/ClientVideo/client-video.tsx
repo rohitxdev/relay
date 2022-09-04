@@ -24,7 +24,6 @@ export const ClientVideo = memo(
     const [clientMicrophoneTrack, setClientMicrophoneTrack] = useState<ILocalAudioTrack | null>(
       null
     );
-    const cameraTrackRef = useRef<MediaStream | null>(null);
     const getMicrophoneTrack = async () => {
       try {
         const microphoneTracks = await navigator.mediaDevices.getUserMedia({
@@ -90,7 +89,6 @@ export const ClientVideo = memo(
         if (clientRef.current && clientVideoTrack) {
           if (isVideoOn) {
             client.unpublish(clientVideoTrack);
-            clientVideoTrack?.close();
           }
         }
       };
