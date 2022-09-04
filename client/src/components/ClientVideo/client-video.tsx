@@ -84,6 +84,7 @@ export const ClientVideo = memo(
       if (clientVideoTrack) {
         clientVideoTrack?.stop();
         clientVideoTrack.close();
+        setClientVideoTrack(null);
       }
       getCameraTrack();
       return () => {
