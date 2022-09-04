@@ -62,12 +62,14 @@ export const ClientVideo = memo(
       }
     };
 
-    if (!clientVideoTrack) {
-      getCameraTrack();
-    }
-    if (!clientMicrophoneTrack) {
-      getMicrophoneTrack();
-    }
+    useEffect(() => {
+      if (!clientVideoTrack) {
+        getCameraTrack();
+      }
+      if (!clientMicrophoneTrack) {
+        getMicrophoneTrack();
+      }
+    });
 
     useEffect(() => {
       if (clientMicrophoneTrack) {
