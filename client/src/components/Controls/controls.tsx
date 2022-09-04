@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import EndCallIcon from "@assets/icons/call.svg";
 import styles from "./controls.module.scss";
 import VideoOnIcon from "@assets/icons/video-on.svg";
@@ -58,7 +58,7 @@ export const Controls = ({ state, dispatch }: { state: RoomState; dispatch: Reac
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     checkForScreenShare();
     checkForRearCamera();
   }, []);
