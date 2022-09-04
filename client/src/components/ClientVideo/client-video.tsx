@@ -63,9 +63,25 @@ export const ClientVideo = memo(
       }
     };
 
-    if (!clientMicrophoneTrack) {
+    useEffect(() => {
       getMicrophoneTrack();
-    }
+      getCameraTrack();
+      return () => {
+        clientMicrophoneTrack?.close();
+        clientVideoTrack?.close();
+      };
+    }, []);
+
+    useEffect(() => {
+      if (clientMicrophoneTrack) {
+        if (isMicOn) {
+          client.publish(clientMicrophoneTrack);
+        } else {
+          client.unpublish(clientMicrophoneTrack);
+        }
+      }
+    }, [isMicOn]);
+
     useEffect(() => {
       if (!clientVideoTrack) {
         getCameraTrack();
@@ -79,10 +95,10 @@ export const ClientVideo = memo(
     useEffect(() => {
       if (clientRef.current && clientVideoTrack) {
         if (isVideoOn) {
-          clientVideoTrack?.play(clientRef.current);
+          clientVideoTrack.play(clientRef.current);
           client.publish(clientVideoTrack);
         } else {
-          clientVideoTrack?.stop();
+          clientVideoTrack.stop();
           client.unpublish(clientVideoTrack);
         }
       }
@@ -95,16 +111,6 @@ export const ClientVideo = memo(
         }
       };
     }, [isVideoOn, clientVideoTrack]);
-
-    useEffect(() => {
-      if (clientMicrophoneTrack) {
-        if (isMicOn) {
-          client.publish(clientMicrophoneTrack);
-        } else {
-          client.unpublish(clientMicrophoneTrack);
-        }
-      }
-    }, [isMicOn]);
 
     return (
       <div
