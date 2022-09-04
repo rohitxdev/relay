@@ -75,9 +75,11 @@ export const ClientVideo = memo(
     }, [isMicOn]);
 
     useEffect(() => {
-      if (clientVideoTrack && isVideoOn) {
-        client.unpublish(clientVideoTrack);
-        clientVideoTrack.stop();
+      if (clientVideoTrack) {
+        if (isVideoOn) {
+          client.unpublish(clientVideoTrack);
+          clientVideoTrack.stop();
+        }
         clientVideoTrack?.close();
       }
       setClientVideoTrack(null);
