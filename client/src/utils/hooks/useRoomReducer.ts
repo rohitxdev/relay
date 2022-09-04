@@ -6,6 +6,8 @@ export const useRoomReducer = () => {
     isMicOn: false,
     showExitModal: false,
     isSharingScreen: false,
+    isRearCameraAvailable: false,
+    isScreenshareAvailable: false,
     facingMode: "user",
   };
 
@@ -19,6 +21,10 @@ export const useRoomReducer = () => {
         return { ...state, isSharingScreen: !state.isSharingScreen };
       case "TOGGLE_EXIT_MODAL":
         return { ...state, showExitModal: !state.showExitModal };
+      case "SET_SCREENSHARE_AVAILABILITY":
+        return { ...state, isScreenshareAvailable: action.payload };
+      case "SET_REAR_CAMERA_AVAILABILITY":
+        return { ...state, isRearCameraAvailable: action.payload };
       case "TOGGLE_FACING_MODE":
         return {
           ...state,

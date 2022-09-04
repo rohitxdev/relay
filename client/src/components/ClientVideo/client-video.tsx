@@ -62,14 +62,12 @@ export const ClientVideo = memo(
       }
     };
 
-    useEffect(() => {
-      if (!clientVideoTrack) {
-        getCameraTrack();
-      }
-      if (!clientMicrophoneTrack) {
-        getMicrophoneTrack();
-      }
-    });
+    if (!clientVideoTrack) {
+      getCameraTrack();
+    }
+    if (!clientMicrophoneTrack) {
+      getMicrophoneTrack();
+    }
 
     useEffect(() => {
       if (clientMicrophoneTrack) {
@@ -82,6 +80,7 @@ export const ClientVideo = memo(
     }, [isMicOn]);
 
     useEffect(() => {
+      clientVideoTrack?.stop();
       clientVideoTrack?.close();
       setClientVideoTrack(null);
     }, [facingMode]);
