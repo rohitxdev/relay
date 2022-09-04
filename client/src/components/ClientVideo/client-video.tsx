@@ -75,21 +75,18 @@ export const ClientVideo = memo(
       return () => {
         if (clientMicrophoneTrack) {
           clientMicrophoneTrack?.close();
-          setClientMicrophoneTrack(null);
         }
       };
     }, [isMicOn]);
 
     useEffect(() => {
-      if (clientVideoTrack) {
-        clientVideoTrack?.stop();
-        clientVideoTrack.close();
-        setClientVideoTrack(null);
-      }
       getCameraTrack();
+
       return () => {
-        clientVideoTrack?.stop();
-        clientVideoTrack?.close();
+        if (clientVideoTrack) {
+          clientVideoTrack.close();
+          setClientVideoTrack(null);
+        }
       };
     }, [facingMode]);
 
@@ -102,8 +99,6 @@ export const ClientVideo = memo(
           clientVideoTrack.stop();
           client.unpublish(clientVideoTrack);
         }
-      } else {
-        getCameraTrack();
       }
 
       return () => {
