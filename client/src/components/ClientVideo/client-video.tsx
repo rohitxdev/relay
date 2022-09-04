@@ -103,7 +103,7 @@ export const ClientVideo = memo(
 
       return () => {
         if (clientVideoTrack && isVideoOn) {
-          clientVideoTrack.stop();
+          clientVideoTrack.close();
           client.unpublish(clientVideoTrack);
         }
       };

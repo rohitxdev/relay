@@ -49,7 +49,9 @@ export const Controls = ({ state, dispatch }: { state: RoomState; dispatch: Reac
         video: { facingMode: { exact: "environment" } },
         audio: false,
       });
-      tracks.getVideoTracks()[0].stop();
+      tracks.getVideoTracks().forEach((track) => {
+        track.stop();
+      });
       setIsRearCameraAvailable(true);
     } catch (error) {
       console.info("📷 Rear camera is not available on this device.");
