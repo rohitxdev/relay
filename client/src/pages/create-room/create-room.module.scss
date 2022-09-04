@@ -137,3 +137,26 @@
         border-top: var(--border-width) solid var(--color-white);
     }
 }
+
+.btn-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 3em;
+    height: 4em;
+    width: 100%;
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+
+    button {
+        border-radius: 0.5em;
+        background-color: var(--color-purple);
+        height: 3em;
+        width: 4em;
+        padding: 0.5em;
+
+        svg {
+            height: 100%;
+            width: 100%;
+        }
+    }
+}

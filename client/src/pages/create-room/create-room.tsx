@@ -87,20 +87,11 @@ export const CreateRoom = () => {
           <div className={styles.roomIdContainer}>
             <div className={styles.roomId}>
               <p>{roomId}</p>
-              <button
-                aria-label="Copy to clipboard"
-                className={styles.copyBtn}
-                onClick={copyToClipboard}
-              >
+              <button aria-label="Copy to clipboard" className={styles.copyBtn} onClick={copyToClipboard}>
                 {showTooltip && <span className={styles.tooltip}>Copied!</span>}
                 <CopyIcon />
               </button>
             </div>
-            {canShare && (
-              <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
-                <ShareIcon />
-              </button>
-            )}
           </div>
         ) : (
           <div className={[styles.loaderContainer, !isLoading && styles.hide].join(" ")}>
@@ -111,13 +102,28 @@ export const CreateRoom = () => {
           <button aria-label="Get room ID" className={styles.btn} onClick={getRoomId}>
             Get Room ID
           </button>
-          <button
-            aria-label="Go back to previous page"
-            className={styles.btn}
-            onClick={goToPreviousPage}
-          >
-            <BackIcon />
-          </button>
+          <div className={styles.btnWrapper}>
+            {roomId && (
+              <button aria-label="Go back to previous page" className={styles.shareBtn} onClick={goToPreviousPage}>
+                <BackIcon />
+              </button>
+            )}
+            {canShare && roomId && (
+              <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
+                <ShareIcon />
+              </button>
+            )}
+          </div>
+          {roomId && (
+            <button
+              className={styles.btn}
+              onClick={() => {
+                navigate(`/join-room?roomId=${roomId}`);
+              }}
+            >
+              Join Room
+            </button>
+          )}
         </div>
       </main>
     </div>

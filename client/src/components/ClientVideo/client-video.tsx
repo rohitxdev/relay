@@ -21,9 +21,8 @@ export const ClientVideo = memo(
     const clientRef = useRef<HTMLDivElement | null>(null);
     const [isFullscreen, toggleFullscreen] = useToggleFullscreen(clientRef.current);
     const [clientVideoTrack, setClientVideoTrack] = useState<ILocalVideoTrack | null>(null);
-    const [clientMicrophoneTrack, setClientMicrophoneTrack] = useState<ILocalAudioTrack | null>(
-      null
-    );
+    const [clientMicrophoneTrack, setClientMicrophoneTrack] = useState<ILocalAudioTrack | null>(null);
+
     const getMicrophoneTrack = async () => {
       try {
         const microphoneTracks = await navigator.mediaDevices.getUserMedia({
@@ -65,10 +64,8 @@ export const ClientVideo = memo(
 
     useEffect(() => {
       getMicrophoneTrack();
-      getCameraTrack();
       return () => {
         clientMicrophoneTrack?.close();
-        clientVideoTrack?.close();
       };
     }, []);
 
@@ -83,29 +80,30 @@ export const ClientVideo = memo(
     }, [isMicOn]);
 
     useEffect(() => {
-      if (!clientVideoTrack) {
-        getCameraTrack();
-      }
+      getCameraTrack();
       return () => {
+        clientVideoTrack?.stop();
         clientVideoTrack?.close();
         setClientVideoTrack(null);
       };
     }, [facingMode]);
 
     useEffect(() => {
-      if (clientRef.current && clientVideoTrack) {
-        if (isVideoOn) {
+      if (clientVideoTrack) {
+        if (isVideoOn && clientRef.current) {
           clientVideoTrack.play(clientRef.current);
           client.publish(clientVideoTrack);
         } else {
           clientVideoTrack.stop();
           client.unpublish(clientVideoTrack);
         }
+      } else {
+        getCameraTrack();
       }
 
       return () => {
-        if (clientRef.current && clientVideoTrack) {
-          if (isVideoOn) {
+        if (clientVideoTrack) {
+          if (isVideoOn && clientRef.current) {
             client.unpublish(clientVideoTrack);
           }
         }
@@ -113,10 +111,7 @@ export const ClientVideo = memo(
     }, [isVideoOn, clientVideoTrack]);
 
     return (
-      <div
-        className={[styles.client, facingMode === "user" && styles.mirrored].join(" ")}
-        ref={clientRef}
-      >
+      <div className={[styles.client, facingMode === "user" && styles.mirrored].join(" ")} ref={clientRef}>
         <button className="fullscreen-btn" onClick={toggleFullscreen}>
           {isFullscreen ? <ExitFullscreenIcon /> : <EnterFullscreenIcon />}
         </button>

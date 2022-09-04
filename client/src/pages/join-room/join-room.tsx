@@ -38,7 +38,7 @@ export const JoinRoom = () => {
   };
 
   const handleBack = () => {
-    navigate("/");
+    history.back();
   };
 
   const handleKeyPress = async (e: KeyboardEvent) => {
