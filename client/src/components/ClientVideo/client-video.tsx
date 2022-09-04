@@ -105,8 +105,10 @@ export const ClientVideo = memo(
     }, [isMicOn]);
 
     useEffect(() => {
-      clientVideoTrack?.close();
-      setClientVideoTrack(null);
+      return () => {
+        clientVideoTrack?.close();
+        setClientVideoTrack(null);
+      };
     }, [facingMode]);
 
     return (
