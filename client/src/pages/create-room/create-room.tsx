@@ -70,7 +70,7 @@ export const CreateRoom = () => {
   };
 
   useEffect(() => {
-    if (navigator.canShare(shareData)) {
+    if ("share" in navigator && navigator.canShare(shareData)) {
       setCanShare(true);
     }
   }, []);

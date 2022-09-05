@@ -31,15 +31,12 @@ export const Room = () => {
     }
   };
 
-  const checkForScreenShare = () => {
+  const checkDeviceCapabilities = async () => {
     if ("getDisplayMedia" in navigator.mediaDevices) {
       dispatch({ type: "SET_SCREENSHARE_AVAILABILITY", payload: true });
     } else {
       console.info("💻 Screensharing is not available on this device.");
     }
-  };
-
-  const checkForRearCamera = async () => {
     try {
       const tracks = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { exact: "environment" } },
@@ -49,21 +46,15 @@ export const Room = () => {
         track.stop();
       });
       dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
+      setIsChecked(true);
     } catch (error) {
       console.info("📷 Rear camera is not available on this device.");
     }
   };
 
-  // if (!isChecked) {
-  //   checkForScreenShare();
-  //   checkForRearCamera();
-  //   setIsChecked(true);
-  // }
-
-  useEffect(() => {
-    checkForScreenShare();
-    checkForRearCamera();
-  }, []);
+  if (!isChecked) {
+    checkDeviceCapabilities();
+  }
 
   useEffect(() => {
     if (roomId && username) {
