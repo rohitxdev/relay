@@ -93,8 +93,7 @@
     }
 }
 
-.copy-btn,
-.share-btn {
+.copy-btn {
     position: relative;
     display: flex;
     border: none;
@@ -108,6 +107,14 @@
         height: 100%;
         width: 100%;
     }
+}
+
+.share-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+    padding: 1em;
 }
 
 .tooltip {
@@ -141,6 +148,7 @@
 .btn-wrapper {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 3em;
     height: 4em;
     width: 100%;
@@ -151,8 +159,10 @@
         border-radius: 0.5em;
         background-color: var(--color-purple);
         height: 3em;
-        width: 4em;
+        width: fit-content;
         padding: 0.5em;
+        font-weight: 600;
+        color: var(--color-white);
 
         svg {
             height: 100%;

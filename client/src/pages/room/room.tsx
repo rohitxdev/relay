@@ -54,11 +54,16 @@ export const Room = () => {
     }
   };
 
-  if (!isChecked) {
+  // if (!isChecked) {
+  //   checkForScreenShare();
+  //   checkForRearCamera();
+  //   setIsChecked(true);
+  // }
+
+  useEffect(() => {
     checkForScreenShare();
     checkForRearCamera();
-    setIsChecked(true);
-  }
+  }, []);
 
   useEffect(() => {
     if (roomId && username) {
@@ -78,7 +83,7 @@ export const Room = () => {
 
   return (
     <>
-      {isChecked && roomId && username && (
+      {roomId && username && (
         <RoomContextProvider value={{ roomId, username, screenUsername, client }}>
           <div className={styles.room}>
             {showExitModal && <ExitModal dispatch={dispatch} />}

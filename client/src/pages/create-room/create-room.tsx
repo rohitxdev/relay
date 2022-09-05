@@ -110,6 +110,7 @@ export const CreateRoom = () => {
             )}
             {canShare && roomId && (
               <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
+                Share
                 <ShareIcon />
               </button>
             )}
