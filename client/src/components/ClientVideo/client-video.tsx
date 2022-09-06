@@ -92,16 +92,18 @@ export const ClientVideo = memo(
     }, [facingMode]);
 
     useEffect(() => {
-      if (clientVideoTrack && clientRef.current) {
-        if (isVideoOn) {
-          clientVideoTrack.play(clientRef.current);
-          client.publish(clientVideoTrack);
+      if (clientRef.current) {
+        if (clientVideoTrack) {
+          if (isVideoOn) {
+            clientVideoTrack.play(clientRef.current);
+            client.publish(clientVideoTrack);
+          } else {
+            clientVideoTrack.stop();
+            client.unpublish(clientVideoTrack);
+          }
         } else {
-          clientVideoTrack.stop();
-          client.unpublish(clientVideoTrack);
+          getCameraTrack();
         }
-      } else {
-        getCameraTrack();
       }
     }, [isVideoOn, clientVideoTrack]);
 

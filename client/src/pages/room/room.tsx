@@ -59,11 +59,9 @@ export const Room = () => {
     }
   };
 
-  useLayoutEffect(() => {
-    if (!isChecked) {
-      checkDeviceCapabilities();
-    }
-  }, []);
+  if (!isChecked) {
+    checkDeviceCapabilities();
+  }
 
   useEffect(() => {
     if (roomId && username) {
