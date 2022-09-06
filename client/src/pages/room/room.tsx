@@ -46,17 +46,17 @@ export const Room = () => {
         track.stop();
       });
       dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
-      setIsChecked(true);
     } catch (error) {
       console.info("📷 Rear camera is not available on this device.");
+    } finally {
+      setIsChecked(true);
     }
   };
 
-  if (!isChecked) {
-    checkDeviceCapabilities();
-  }
-
   useEffect(() => {
+    if (!isChecked) {
+      checkDeviceCapabilities();
+    }
     if (roomId && username) {
       enterRoom(roomId, username);
     } else {

@@ -15,18 +15,19 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
   const [isPublished, setIsPublished] = useState(false);
   const [screenVideoTrack, setScreenVideoTrack] = useState<ILocalVideoTrack | null>(null);
   const [screenAudioTrack, setScreenAudioTrack] = useState<ILocalAudioTrack | null>(null);
+  const mediaTracksRef = useRef<ILocalVideoTrack | [ILocalVideoTrack, ILocalAudioTrack] | null>(null);
 
   const acquireTracks = async () => {
     try {
-      const mediaTracks = await AgoraRTC.createScreenVideoTrack(
+      mediaTracksRef.current = await AgoraRTC.createScreenVideoTrack(
         { optimizationMode: "detail", encoderConfig: "1080p_2" },
         "auto"
       );
-      if (Array.isArray(mediaTracks)) {
-        setScreenVideoTrack(mediaTracks[0]);
-        setScreenAudioTrack(mediaTracks[1]);
+      if (Array.isArray(mediaTracksRef.current)) {
+        setScreenVideoTrack(mediaTracksRef.current[0]);
+        setScreenAudioTrack(mediaTracksRef.current[1]);
       } else {
-        setScreenVideoTrack(mediaTracks);
+        setScreenVideoTrack(mediaTracksRef.current);
       }
     } catch (err) {
       console.error(err);
@@ -78,6 +79,7 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
     if (screenVideoTrack && !isPublished) {
       joinRoomAsUser().then(publishTracks);
     }
+    return () => {};
   }, [screenVideoTrack]);
 
   return (

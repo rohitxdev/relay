@@ -1,7 +1,7 @@
 /// <reference lib="WebWorker" />
-declare const self: ServiceWorkerGlobalScope;
+// declare const self: ServiceWorkerGlobalScope;
 const serviceWorker = () => {
-  const addResourcesToCache = async (resources: RequestInfo[]) => {
+  const addResourcesToCache = async (resources) => {
     const cache = await caches.open("v1");
     await cache.addAll(resources);
   };

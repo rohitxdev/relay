@@ -1,62 +1,156 @@
+import styles from "./home.module.scss";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Key, useEffect, useState } from "react";
+import { api } from "../../services/api-service";
 import AddIcon from "@assets/icons/add.svg";
 import PeopleIcon from "@assets/icons/people.svg";
 import GithubIcon from "@assets/icons/github.svg";
-import LinkedInIcon from "@assets/icons/linkedin.svg";
+import ShareIcon from "@assets/icons/share.svg";
 import Illustration from "@assets/images/video-conference-illustration.svg";
-import { Link, useLocation } from "react-router-dom";
-import styles from "./home.module.scss";
-import { useEffect } from "react";
+import CopyIcon from "@assets/icons/copy.svg";
+import LoaderIcon from "@assets/icons/loader.svg";
 
 export const Home = () => {
-  const { state } = useLocation() as any;
+  const navigate = useNavigate();
+  const { state } = useLocation() as { state: { error?: string }; key?: Key };
+  const [canShare, setCanShare] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [roomId, setRoomId] = useState<string | null>(null);
+  const [isShowingTooltip, setIsShowingTooltip] = useState(false);
+
+  const shareData: ShareData = {
+    title: "Relay: Free video conferencing for everyone",
+    text: `You've been invited to join a room on Relay!\n\nRoom ID is ${roomId}.\n\nLink: ${window.location.hostname}/join-room?roomId=${roomId}`,
+  };
+
+  const shareRoomId = async () => {
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+      console.error(err);
+    }
+  };
+
+  const copyToClipboard = async () => {
+    try {
+      if (roomId && !isShowingTooltip) {
+        await navigator.clipboard.writeText(roomId);
+        setShowTooltip(true);
+        setIsShowingTooltip(true);
+        setTimeout(() => {
+          setShowTooltip(false);
+          setIsShowingTooltip(false);
+        }, 2000);
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+      console.error(err);
+    }
+  };
+
+  const getRoomId = async () => {
+    try {
+      setIsLoading(true);
+      const response = await api.getRoomID();
+      if (response.ok) {
+        const roomId = await response.text();
+        setTimeout(() => {
+          setRoomId(roomId);
+          setIsLoading(false);
+        }, 400);
+      } else {
+        throw new Error("Error: could not get room ID");
+      }
+    } catch (err) {
+      setIsLoading(false);
+      if (err instanceof Error) {
+        setError(err.message);
+      }
+      console.error(err);
+    }
+  };
+
+  const goToJoinRoom = () => {
+    navigate("/join-room");
+  };
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => {
+        setError(null);
+      }, 2000);
+    }
+  }, [error]);
 
   useEffect(() => {
     if (state?.error) {
+      setError(state.error);
       history.replaceState({}, "");
     }
+    if ("share" in navigator && navigator.canShare(shareData)) {
+      setCanShare(true);
+    }
   }, []);
+
   return (
     <div className={styles.home}>
-      {state?.error && (
+      <a
+        href="https://github.com/rohitman47"
+        target="_blank"
+        aria-label="Link to Github profile"
+        className={styles.githubLink}
+      >
+        <GithubIcon />
+      </a>
+      {error && (
         <p className="error" role="error">
-          {state?.error}
+          {error}
         </p>
-      )}{" "}
-      <div className={styles.banner} role="banner">
+      )}
+      <section className={styles.banner} role="banner" aria-label="Page banner">
         <div className={styles.appName}>
           <p>Relay</p>
           <img src="./relay-logo.png" alt="Logo" />
         </div>
         <p className={styles.appDescription}>Free Video Conferencing for Everyone</p>
-      </div>
-      <div className={styles.illustrationWrapper}>
+      </section>
+      <div className={styles.mainContainer}>
         <div className={styles.illustration} data-attribution="https://storyset.com/online">
-          <Illustration />
+          {/* <Illustration /> */}
         </div>
-        <div className={[styles.btnContainer, styles.animateBtns].join(" ")}>
-          <Link to={"/create-room"} className="router-link">
-            <button className={styles.btn}>
-              Create Room <AddIcon />
-            </button>
-          </Link>
-          <Link to={"/join-room"} className="router-link">
-            <button className={styles.btn}>
-              Join Room <PeopleIcon />
-            </button>
-          </Link>
-          <section aria-label="Links to my social media profiles" className={styles.links}>
-            <a href="https://github.com/rohitman47" target="_blank" title="Link to Github profile">
-              <GithubIcon />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/rohit-reddy-36256920a/"
-              target="_blank"
-              title="Link to LinkedIn Profile"
-            >
-              <LinkedInIcon />
-            </a>
-          </section>
-        </div>
+        <main className={[styles.btnContainer, styles.animateBtns].join(" ")}>
+          {!isLoading && roomId ? (
+            <div className={styles.roomIdContainer}>
+              <div className={styles.roomId}>
+                <p>{roomId}</p>
+                <button aria-label="Copy to clipboard" className={styles.copyBtn} onClick={copyToClipboard}>
+                  {showTooltip && <span className={styles.tooltip}>Copied!</span>}
+                  <CopyIcon />
+                </button>
+              </div>
+              {canShare && roomId && (
+                <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
+                  <ShareIcon />
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className={styles.loader}>{isLoading && <LoaderIcon />}</div>
+          )}
+          <button className={styles.btn} onClick={getRoomId}>
+            Create Room <AddIcon />
+          </button>
+          <button className={styles.btn} onClick={goToJoinRoom}>
+            Join Room <PeopleIcon />
+          </button>
+        </main>
       </div>
     </div>
   );

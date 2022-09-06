@@ -19,13 +19,19 @@ export const JoinRoom = () => {
   };
 
   const verifyRoomId = async (roomId: string) => {
-    const res = await api.verifyRoomId(roomId);
-    if (res.status === 200) {
-      sessionStorage.setItem("roomId", roomId);
-      sessionStorage.setItem("username", "" + usernameRef.current?.value);
-      navigate(`/room?room-id=${roomId}`);
-    } else {
-      showError("Invalid Room ID!");
+    try {
+      const response = await api.verifyRoomId(roomId);
+      if (response.ok) {
+        sessionStorage.setItem("roomId", roomId);
+        sessionStorage.setItem("username", usernameRef.current?.value ?? "");
+        navigate(`/room?room-id=${roomId}`);
+      } else {
+        throw new Error("Invalid Room ID!");
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        showError(err.message);
+      }
     }
   };
 
@@ -41,7 +47,7 @@ export const JoinRoom = () => {
     history.back();
   };
 
-  const handleKeyPress = async (e: KeyboardEvent) => {
+  const handleEnter = async (e: KeyboardEvent) => {
     if (e.key === "Enter") {
       if (roomIdRef.current?.value === "") {
         roomIdRef.current.focus();
@@ -57,9 +63,9 @@ export const JoinRoom = () => {
     if (roomIdRef.current) {
       roomIdRef.current.value = searchParams.get("roomId") ?? "";
     }
-    window.addEventListener("keydown", handleKeyPress);
+    window.addEventListener("keydown", handleEnter);
     return () => {
-      window.removeEventListener("keydown", handleKeyPress);
+      window.removeEventListener("keydown", handleEnter);
     };
   }, []);
 
@@ -76,14 +82,14 @@ export const JoinRoom = () => {
           <span>Room ID</span>
         </div>
         <div className={styles.enterUsername}>
-          <input type="text" maxLength={24} ref={usernameRef} autoComplete="name" required />
+          <input type="text" maxLength={24} ref={usernameRef} required />
           <span>Name</span>
         </div>
-        <div className={"btn-container"}>
-          <button className={"btn"} onClick={handleEnterRoom}>
+        <div className={styles.btnContainer}>
+          <button className={styles.btn} onClick={handleEnterRoom}>
             Enter Room <EnterIcon />
           </button>
-          <button className={"btn"} onClick={handleBack}>
+          <button className={styles.btn} onClick={handleBack}>
             <BackIcon />
           </button>
         </div>
