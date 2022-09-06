@@ -1,21 +1,21 @@
-import { api } from "@services";
-import { useRoomContext } from "@utils/hooks/useRoomContext";
+import styles from "./screen-share.module.scss";
 import AgoraRTC, { ILocalAudioTrack, ILocalVideoTrack } from "agora-rtc-sdk-ng";
 import { useEffect, useRef, useState } from "react";
-import styles from "./screen-share.module.scss";
+import { useToggleFullscreen, useRoomContext, useAppContext } from "@utils/hooks";
 import EnterFullscreenIcon from "@assets/icons/enter-fullscreen.svg";
 import ExitFullscreenIcon from "@assets/icons/exit-fullscreen.svg";
-import { useToggleFullscreen } from "@utils/hooks";
+import { api } from "@services";
 
-export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction> }) => {
-  const { roomId, screenUsername } = useRoomContext();
-  const screenRef = useRef<HTMLDivElement | null>(null);
-  const [isFullscreen, toggleFullscreen] = useToggleFullscreen(screenRef.current);
+export const ScreenShare = () => {
+  const { roomId, screenUsername, dispatch } = useRoomContext();
+  const { error, setError } = useAppContext();
+  const screenVideoRef = useRef<HTMLDivElement | null>(null);
   const screenClient = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
+  const mediaTracksRef = useRef<ILocalVideoTrack | [ILocalVideoTrack, ILocalAudioTrack] | null>(null);
   const [isPublished, setIsPublished] = useState(false);
   const [screenVideoTrack, setScreenVideoTrack] = useState<ILocalVideoTrack | null>(null);
   const [screenAudioTrack, setScreenAudioTrack] = useState<ILocalAudioTrack | null>(null);
-  const mediaTracksRef = useRef<ILocalVideoTrack | [ILocalVideoTrack, ILocalAudioTrack] | null>(null);
+  const [isFullscreen, toggleFullscreen] = useToggleFullscreen(screenVideoRef.current);
 
   const acquireTracks = async () => {
     try {
@@ -35,24 +35,11 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
     }
   };
 
-  useEffect(() => {
-    acquireTracks();
-    return () => {
-      screenVideoTrack?.close();
-      screenAudioTrack?.close();
-      if (screenClient.current.connectionState === "CONNECTED") {
-        screenClient.current.leave();
-      }
-    };
-  }, []);
-
   const joinRoomAsUser = async () => {
     try {
-      if (screenClient.current.connectionState !== "CONNECTED") {
-        const response = await api.getAccessToken(roomId, screenUsername);
-        const { appId, uid, accessToken } = await response.json();
-        await screenClient.current.join(appId, roomId, accessToken, uid);
-      }
+      const response = await api.getAccessToken(roomId, screenUsername);
+      const { appId, uid, accessToken } = await response.json();
+      await screenClient.current.join(appId, roomId, accessToken, uid);
     } catch (err) {
       console.error(err);
     }
@@ -62,8 +49,8 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
     try {
       if (screenVideoTrack) {
         await screenClient.current.publish(screenVideoTrack);
-        if (screenRef.current && !screenVideoTrack.isPlaying) {
-          screenVideoTrack.play(screenRef.current);
+        if (screenVideoRef.current && !screenVideoTrack.isPlaying) {
+          screenVideoTrack.play(screenVideoRef.current);
         }
       }
       if (screenAudioTrack) {
@@ -76,18 +63,37 @@ export const ScreenShare = ({ dispatch }: { dispatch: React.Dispatch<RoomAction>
   };
 
   useEffect(() => {
-    if (screenVideoTrack && !isPublished) {
+    acquireTracks();
+    return () => {
+      if (screenVideoTrack) {
+        screenVideoTrack.stop();
+        screenVideoTrack.close();
+      }
+      if (screenAudioTrack) {
+        screenAudioTrack.close();
+      }
+      if (screenClient.current.connectionState === "CONNECTED") {
+        screenClient.current.leave();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (screenVideoTrack && !isPublished && screenClient.current.connectionState !== "CONNECTED") {
       joinRoomAsUser().then(publishTracks);
     }
-    return () => {};
   }, [screenVideoTrack]);
 
   return (
     <>
       {screenVideoTrack && (
-        <div className={styles.screenShare} ref={screenRef}>
+        <div className={styles.screenShare} ref={screenVideoRef}>
           <p className={styles.screenUsername}>Your screen</p>
-          <button className="fullscreen-btn" onClick={toggleFullscreen}>
+          <button
+            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            className="fullscreen-btn"
+            onClick={toggleFullscreen}
+          >
             {isFullscreen ? <ExitFullscreenIcon /> : <EnterFullscreenIcon />}
           </button>
         </div>

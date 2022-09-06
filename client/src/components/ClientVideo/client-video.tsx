@@ -5,7 +5,7 @@ import { useRoomContext } from "@utils/hooks/useRoomContext";
 import { UserIcon } from "@components";
 import EnterFullscreenIcon from "@assets/icons/enter-fullscreen.svg";
 import ExitFullscreenIcon from "@assets/icons/exit-fullscreen.svg";
-import { useToggleFullscreen } from "@utils/hooks";
+import { useAppContext, useToggleFullscreen } from "@utils/hooks";
 
 export const ClientVideo = memo(
   ({
@@ -18,6 +18,7 @@ export const ClientVideo = memo(
     facingMode: "user" | "environment";
   }) => {
     const { username, client } = useRoomContext();
+    const { setError } = useAppContext();
     const clientRef = useRef<HTMLDivElement | null>(null);
     const [isFullscreen, toggleFullscreen] = useToggleFullscreen(clientRef.current);
     const [clientVideoTrack, setClientVideoTrack] = useState<ILocalVideoTrack | null>(null);
@@ -40,7 +41,10 @@ export const ClientVideo = memo(
         });
         setClientMicrophoneTrack(microphoneTrack);
       } catch (err) {
-        console.error(err);
+        if (err instanceof Error) {
+          console.error(err.message);
+          setError(err.message);
+        }
       }
     };
 
@@ -57,8 +61,11 @@ export const ClientVideo = memo(
           bitrateMax: 2048,
         });
         setClientVideoTrack(cameraTrack);
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error(err.message);
+          setError(err.message);
+        }
       }
     };
 
@@ -78,7 +85,6 @@ export const ClientVideo = memo(
       if (clientVideoTrack) {
         if (isVideoOn) {
           client.unpublish(clientVideoTrack);
-          clientVideoTrack.stop();
         }
         clientVideoTrack?.close();
       }

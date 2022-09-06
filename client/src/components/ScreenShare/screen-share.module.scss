@@ -1,12 +1,7 @@
 @use '../../app/config';
 
 .screen-share {
-    position: relative;
-    overflow: hidden;
-    border-radius: 0.5em;
-    outline: var(--color-grey-opaque) solid 2px;
-    height: 100%;
-    width: 100%;
+    @include config.video-stream;
 
     video {
         object-fit: contain !important;

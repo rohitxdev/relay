@@ -1,3 +1,4 @@
+import { useRoomContext } from "@utils/hooks";
 import EndCallIcon from "@assets/icons/call.svg";
 import styles from "./controls.module.scss";
 import VideoOnIcon from "@assets/icons/video-on.svg";
@@ -8,7 +9,8 @@ import FlipCameraIcon from "@assets/icons/flip-camera.svg";
 import ScreenShareOnIcon from "@assets/icons/screen-share.svg";
 import ScreenShareOffIcon from "@assets/icons/stop-screen-share.svg";
 
-export const Controls = ({ state, dispatch }: { state: RoomState; dispatch: React.Dispatch<RoomAction> }) => {
+export const Controls = () => {
+  const { state, dispatch } = useRoomContext();
   const { isVideoOn, isMicOn, isSharingScreen, facingMode, isRearCameraAvailable, isScreenshareAvailable } = state;
 
   const toggleExitModal = () => {
@@ -33,7 +35,7 @@ export const Controls = ({ state, dispatch }: { state: RoomState; dispatch: Reac
 
   return (
     <>
-      <div className={styles.clientControls}>
+      <section aria-label="Client controls" className={styles.clientControls}>
         <div>
           <button
             aria-label={isSharingScreen ? "Stop screenshare" : "Start screenshare"}
@@ -61,7 +63,7 @@ export const Controls = ({ state, dispatch }: { state: RoomState; dispatch: Reac
             {isMicOn ? <MicOnIcon /> : <MicOffIcon />}
           </button>
           <button
-            aria-label={facingMode === "user" ? "Switch to rear camera" : "Switch to front camera"}
+            aria-label={facingMode === "environment" ? "Switch to front camera" : "Switch to rear camera"}
             onClick={toggleFacingMode}
             className={facingMode === "environment" ? styles.btnOn : styles.btnOff}
             disabled={!isRearCameraAvailable}
@@ -69,7 +71,7 @@ export const Controls = ({ state, dispatch }: { state: RoomState; dispatch: Reac
             <FlipCameraIcon />
           </button>
         </div>
-      </div>
+      </section>
     </>
   );
 };

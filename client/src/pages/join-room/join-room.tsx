@@ -1,22 +1,17 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import EnterIcon from "@assets/icons/enter.svg";
 import BackIcon from "@assets/icons/arrow-back.svg";
 import styles from "./join-room.module.scss";
 import { api } from "@services";
+import { useAppContext } from "@utils/hooks";
 
 export const JoinRoom = () => {
   const navigate = useNavigate();
   const [searchParams, _] = useSearchParams();
-  const [error, setError] = useState<string | null>(null);
+  const { error, setError } = useAppContext();
   const roomIdRef = useRef<HTMLInputElement | null>(null);
   const usernameRef = useRef<HTMLInputElement | null>(null);
-  const showError = (error: string) => {
-    setError(error);
-    setTimeout(() => {
-      setError(null);
-    }, 2000);
-  };
 
   const verifyRoomId = async (roomId: string) => {
     try {
@@ -30,8 +25,9 @@ export const JoinRoom = () => {
       }
     } catch (err) {
       if (err instanceof Error) {
-        showError(err.message);
+        setError(err.message);
       }
+      console.error(err);
     }
   };
 
@@ -39,7 +35,7 @@ export const JoinRoom = () => {
     if (roomIdRef.current?.value && usernameRef.current?.value) {
       verifyRoomId(roomIdRef.current.value);
     } else {
-      showError("Room ID and Name cannot be empty!");
+      setError("Room ID and Name cannot be empty!");
     }
   };
 
@@ -66,6 +62,7 @@ export const JoinRoom = () => {
     window.addEventListener("keydown", handleEnter);
     return () => {
       window.removeEventListener("keydown", handleEnter);
+      setError(null);
     };
   }, []);
 
@@ -76,7 +73,7 @@ export const JoinRoom = () => {
           {error}
         </p>
       )}
-      <div className={styles.form}>
+      <div className={styles.enterInfo}>
         <div className={styles.enterRoomId}>
           <input type="text" maxLength={6} ref={roomIdRef} required />
           <span>Room ID</span>
@@ -86,11 +83,11 @@ export const JoinRoom = () => {
           <span>Name</span>
         </div>
         <div className={styles.btnContainer}>
-          <button className={styles.btn} onClick={handleEnterRoom}>
-            Enter Room <EnterIcon />
-          </button>
           <button className={styles.btn} onClick={handleBack}>
             <BackIcon />
+          </button>
+          <button className={styles.btn} onClick={handleEnterRoom}>
+            Enter Room <EnterIcon />
           </button>
         </div>
       </div>

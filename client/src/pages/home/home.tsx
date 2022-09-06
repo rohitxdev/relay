@@ -1,22 +1,22 @@
 import styles from "./home.module.scss";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Key, useEffect, useState } from "react";
 import { api } from "../../services/api-service";
 import AddIcon from "@assets/icons/add.svg";
 import PeopleIcon from "@assets/icons/people.svg";
 import GithubIcon from "@assets/icons/github.svg";
 import ShareIcon from "@assets/icons/share.svg";
-import Illustration from "@assets/images/video-conference-illustration.svg";
 import CopyIcon from "@assets/icons/copy.svg";
 import LoaderIcon from "@assets/icons/loader.svg";
+import { useAppContext } from "@utils/hooks";
 
 export const Home = () => {
   const navigate = useNavigate();
   const { state } = useLocation() as { state: { error?: string }; key?: Key };
+  const { error, setError } = useAppContext();
   const [canShare, setCanShare] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [roomId, setRoomId] = useState<string | null>(null);
   const [isShowingTooltip, setIsShowingTooltip] = useState(false);
 
@@ -82,14 +82,6 @@ export const Home = () => {
   };
 
   useEffect(() => {
-    if (error) {
-      setTimeout(() => {
-        setError(null);
-      }, 2000);
-    }
-  }, [error]);
-
-  useEffect(() => {
     if (state?.error) {
       setError(state.error);
       history.replaceState({}, "");
@@ -97,6 +89,10 @@ export const Home = () => {
     if ("share" in navigator && navigator.canShare(shareData)) {
       setCanShare(true);
     }
+
+    return () => {
+      setError(null);
+    };
   }, []);
 
   return (
@@ -122,9 +118,7 @@ export const Home = () => {
         <p className={styles.appDescription}>Free Video Conferencing for Everyone</p>
       </section>
       <div className={styles.mainContainer}>
-        <div className={styles.illustration} data-attribution="https://storyset.com/online">
-          {/* <Illustration /> */}
-        </div>
+        <div className={styles.illustration} data-attribution="https://storyset.com/online"></div>
         <main className={[styles.btnContainer, styles.animateBtns].join(" ")}>
           {!isLoading && roomId ? (
             <div className={styles.roomIdContainer}>

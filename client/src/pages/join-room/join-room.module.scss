@@ -10,26 +10,9 @@
     background: url('../../assets/images/blob-scene-haikei.svg') center / cover;
 }
 
-.back-btn {
-    background-color: transparent;
-    font-size: 1.2em;
-    border: none;
-    padding: 0.75em 1em;
-    cursor: pointer;
-    height: 2em;
-    width: 2em;
-
-    & > svg {
-        height: 100%;
-        width: 100%;
-        color: var(--color-white);
-    }
-}
-
-.form {
+.enter-info {
     display: grid;
     place-items: center;
-    position: relative;
 }
 
 .enter-room-id,
@@ -87,17 +70,18 @@
 }
 
 .btn-container {
-    display: grid;
-    place-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 2em;
-    width: 14em;
-    margin: 2em 1em;
+    margin: 1em 0;
+    width: max(80%, 12em);
 }
 
 .btn {
     background-color: var(--color-purple);
     color: var(--color-white);
-    font-size: 1.2em;
+    font-size: 1.25em;
     font-variation-settings: "wght" 700;
     border: none;
     border-radius: 0.75em;
@@ -105,8 +89,8 @@
     display: flex;
     justify-content: space-evenly;
     cursor: pointer;
-    width: 100%;
-    gap: 0.5em;
+    width: fit-content;
+    gap: 1em;
 
     &:active {
         filter: brightness(0.8);
@@ -116,5 +100,20 @@
         height: 1.25em;
         width: 1.25em;
 
+    }
+}
+
+@media screen and (max-width:380px) {
+    .btn-container {
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        gap: 2em;
+        margin: 1em 0;
+        width: max(80%, 12em);
+    }
+
+    .btn {
+        width: 12em;
     }
 }

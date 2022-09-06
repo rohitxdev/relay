@@ -10,10 +10,12 @@
     width: 100%;
     padding: 0.5em;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(max(200px, 20vw), 1fr));
+    grid-auto-rows: minmax(max(200px, 20vh), auto);
     gap: 0.5em;
     position: relative;
     top: 0em;
     left: 50%;
     transform: translate(-50%, 0);
+    overflow: auto;
 }

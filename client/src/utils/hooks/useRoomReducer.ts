@@ -1,6 +1,6 @@
 import { useReducer } from "react";
 
-export const useRoomReducer = () => {
+export function useRoomReducer() {
   const initialState: RoomState = {
     isVideoOn: false,
     isMicOn: false,
@@ -9,6 +9,7 @@ export const useRoomReducer = () => {
     isRearCameraAvailable: false,
     isScreenshareAvailable: false,
     facingMode: "user",
+    error: null,
   };
 
   const reducer = (state: RoomState, action: RoomAction): RoomState => {
@@ -30,10 +31,12 @@ export const useRoomReducer = () => {
           ...state,
           facingMode: state.facingMode === "user" ? "environment" : "user",
         };
+      case "SET_ERROR":
+        return { ...state, error: action.payload };
       default:
         return state;
     }
   };
 
   return useReducer(reducer, initialState);
-};
+}

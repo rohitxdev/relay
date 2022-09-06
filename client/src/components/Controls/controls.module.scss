@@ -3,6 +3,7 @@
 .client-controls {
     display: grid;
     place-items: center;
+    background-color: transparent;
 
     & > div {
         border-radius: 1.5em;
@@ -12,9 +13,8 @@
         justify-content: center;
         align-items: center;
         background-color: var(--color-dark-100);
-        height: fit-content;
         width: clamp(18em, calc(100% - 1em), 25em);
-        filter: drop-shadow(0 0 1px var(--color-grey));
+        outline: var(--color-grey-opaque) solid 1px;
         animation: slide-up ease 0.5s 1 forwards;
     }
 
@@ -31,9 +31,8 @@
 .btn-on,
 .btn-off {
     border-radius: 50%;
-    display: inline-flex;
+    display: flex;
     transition: all 0.1s linear;
-    aspect-ratio: 1 / 1;
     width: clamp(3.5em, 100%, 4em);
 
     svg {
@@ -45,7 +44,7 @@
     }
 
     &:active:not(:disabled) {
-        transform: scale(0.95);
+        transform: scale(0.97);
     }
 
     &:disabled {
@@ -63,7 +62,6 @@
     display: inline-flex;
     transform: rotate(135deg);
     transition: all 0.2s;
-    aspect-ratio: 1 / 1;
     width: clamp(4em, 100%, 5em);
 
     svg {
@@ -73,8 +71,7 @@
         fill: var(--color-white);
     }
 
-    &:where(:hover, :focus, :active) {
+    &:where(:hover, :focus) {
         outline-offset: 3px;
-        transform: rotate(135deg) scale(0.95);
     }
 }

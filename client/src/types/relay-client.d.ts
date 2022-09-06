@@ -8,6 +8,7 @@ const roomActionType = [
   "SET_SCREENSHARE_AVAILABILITY",
   "SET_REAR_CAMERA_AVAILABILITY",
   "TOGGLE_FACING_MODE",
+  "SET_ERROR",
 ] as const;
 
 interface RoomState {
@@ -18,6 +19,7 @@ interface RoomState {
   isRearCameraAvailable: boolean;
   isScreenshareAvailable: boolean;
   facingMode: "user" | "environment";
+  error: string | null;
 }
 interface RoomAction {
   type: typeof roomActionType[number];

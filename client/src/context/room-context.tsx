@@ -6,15 +6,11 @@ export interface RoomContext {
   username: string;
   screenUsername: string;
   client: IAgoraRTCClient;
+  state: RoomState;
+  dispatch: React.Dispatch<RoomAction>;
 }
 export const RoomContext = createContext<RoomContext | null>(null);
 
-export const RoomContextProvider = ({
-  value,
-  children,
-}: {
-  value: RoomContext;
-  children: ReactNode;
-}) => {
+export const RoomContextProvider = ({ value, children }: { value: RoomContext; children: ReactNode }) => {
   return <RoomContext.Provider value={value}>{children}</RoomContext.Provider>;
 };

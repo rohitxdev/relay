@@ -29,7 +29,7 @@
 }
 
 .banner {
-  margin: 3em 0;
+  margin: 2.5em 0;
   animation: slide-down 0.5s 1 forwards;
   color: var(--color-white);
 
@@ -62,7 +62,7 @@
 
 .illustration {
   margin: 1em 2em;
-  width: clamp(5em, 80%, 25em);
+  width: clamp(5em, 75%, 25em);
   aspect-ratio: 1 / 1;
   background: url('../../assets/images/video-conference-illustration.svg') center / cover no-repeat;
 
@@ -93,7 +93,6 @@
   height: 3em;
   display: flex;
   justify-content: center;
-  gap: 1em;
   align-items: center;
   padding: 0.25em 1em;
   text-align: center;
@@ -108,10 +107,7 @@
     font-family: monospace;
     letter-spacing: 0.25ch;
     user-select: text;
-  }
-
-  .share-btn + & {
-    gap: 0;
+    padding: 0 1.5em;
   }
 }
 
@@ -122,12 +118,11 @@
   background-color: var(--color-white);
   color: var(--color-dark-200);
   border-radius: 0.5em;
-  padding: 0.5em;
+  padding: 0.6em;
   top: -110%;
   left: 50%;
   transform: translateX(-50%);
-  animation: show-up 1.9s ease 1 forwards;
-  outline: var(--color-white) solid 1px;
+  animation: show-up 2s ease 1 forwards;
 
   &::before {
     --border-width: 0.4em;
@@ -151,8 +146,7 @@
   background-color: transparent;
   cursor: pointer;
   height: 100%;
-  width: 1.75em;
-
+  width: 2em;
 
 }
 
@@ -162,10 +156,10 @@
   color: var(--color-white);
   background-color: var(--color-purple);
   border-radius: 0.5em;
-  padding: 0.75em;
   cursor: pointer;
   height: 100%;
-  width: 4em;
+  width: 2em;
+  padding: 1em;
 }
 
 

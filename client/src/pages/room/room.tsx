@@ -1,27 +1,33 @@
 import styles from "./room.module.scss";
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClientVideo, Controls, ExitModal, RemoteUsers, ScreenShare } from "@components";
 import { RoomContextProvider } from "@context";
-import { useRoomReducer } from "@utils/hooks";
+import { useAppContext, useRoomReducer } from "@utils/hooks";
 import { api } from "@services";
 
 export const Room = () => {
-  const [state, dispatch] = useRoomReducer();
-  const { isVideoOn, isMicOn, isSharingScreen, facingMode, showExitModal } = state;
   const navigate = useNavigate();
+  const [state, dispatch] = useRoomReducer();
+  const { error, setError } = useAppContext();
   const roomId = sessionStorage.getItem("roomId");
   const username = sessionStorage.getItem("username");
   const screenUsername = `${username}'s screen`;
-  const { current: client } = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
   const [isChecked, setIsChecked] = useState(false);
+  const { isVideoOn, isMicOn, isSharingScreen, facingMode, showExitModal } = state;
+  const { current: client } = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
 
   const enterRoom = async (roomId: string, username: string) => {
-    const response = await api.getAccessToken(roomId, username);
-    const { appId, uid, accessToken } = await response.json();
-    if (client.connectionState === "DISCONNECTED") {
+    try {
+      const response = await api.getAccessToken(roomId, username);
+      const { appId, uid, accessToken } = await response.json();
       await client.join(appId, roomId, accessToken, uid);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(err.message);
+        dispatch({ type: "SET_ERROR", payload: err.message });
+      }
     }
   };
 
@@ -53,10 +59,13 @@ export const Room = () => {
     }
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!isChecked) {
       checkDeviceCapabilities();
     }
+  }, []);
+
+  useEffect(() => {
     if (roomId && username) {
       enterRoom(roomId, username);
     } else {
@@ -74,16 +83,21 @@ export const Room = () => {
 
   return (
     <>
+      {error && (
+        <p className="error" role="error">
+          {error}
+        </p>
+      )}
       {roomId && username && (
-        <RoomContextProvider value={{ roomId, username, screenUsername, client }}>
+        <RoomContextProvider value={{ roomId, username, screenUsername, client, state, dispatch }}>
+          {showExitModal && <ExitModal />}
           <div className={styles.room}>
-            {showExitModal && <ExitModal dispatch={dispatch} />}
             <div className={styles.userGrid}>
-              {isSharingScreen && <ScreenShare dispatch={dispatch} />}
+              {isSharingScreen && <ScreenShare />}
               <ClientVideo isVideoOn={isVideoOn} isMicOn={isMicOn} facingMode={facingMode} />
               <RemoteUsers />
             </div>
-            <Controls state={state} dispatch={dispatch} />
+            <Controls />
           </div>
         </RoomContextProvider>
       )}
