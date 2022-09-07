@@ -70,16 +70,18 @@ export const ClientVideo = memo(
     };
 
     useEffect(() => {
-      if (clientMicrophoneTrack) {
-        if (isMicOn) {
+      if (isMicOn) {
+        if (clientMicrophoneTrack) {
           client.publish(clientMicrophoneTrack);
         } else {
-          client.unpublish(clientMicrophoneTrack);
+          getMicrophoneTrack();
         }
       } else {
-        getMicrophoneTrack();
+        if (clientMicrophoneTrack) {
+          client.unpublish(clientMicrophoneTrack);
+        }
       }
-    }, [isMicOn]);
+    }, [isMicOn, clientMicrophoneTrack]);
 
     useEffect(() => {
       if (clientVideoTrack) {
@@ -93,16 +95,18 @@ export const ClientVideo = memo(
 
     useEffect(() => {
       if (clientRef.current) {
-        if (clientVideoTrack) {
-          if (isVideoOn) {
+        if (isVideoOn) {
+          if (clientVideoTrack) {
             clientVideoTrack.play(clientRef.current);
             client.publish(clientVideoTrack);
           } else {
+            getCameraTrack();
+          }
+        } else {
+          if (clientVideoTrack) {
             clientVideoTrack.stop();
             client.unpublish(clientVideoTrack);
           }
-        } else {
-          getCameraTrack();
         }
       }
     }, [isVideoOn, clientVideoTrack]);

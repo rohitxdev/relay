@@ -48,8 +48,8 @@ export const Room = () => {
         video: { facingMode: { exact: "environment" } },
         audio: false,
       });
+      alert("j");
       tracks.getVideoTracks().forEach((track) => {
-        console.warn(track.label);
         track.stop();
       });
       dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
