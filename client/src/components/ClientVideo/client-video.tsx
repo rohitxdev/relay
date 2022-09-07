@@ -17,8 +17,8 @@ export const ClientVideo = memo(
     isMicOn: boolean;
     facingMode: "user" | "environment";
   }) => {
-    const { username, client } = useRoomContext();
     const { setError } = useAppContext();
+    const { username, client } = useRoomContext();
     const clientRef = useRef<HTMLDivElement | null>(null);
     const [isFullscreen, toggleFullscreen] = useToggleFullscreen(clientRef.current);
     const [clientVideoTrack, setClientVideoTrack] = useState<ILocalVideoTrack | null>(null);

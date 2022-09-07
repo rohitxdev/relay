@@ -1,6 +1,6 @@
 import styles from "./room.module.scss";
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ClientVideo, Controls, ExitModal, RemoteUsers, ScreenShare } from "@components";
 import { RoomContextProvider } from "@context";
@@ -49,6 +49,7 @@ export const Room = () => {
         audio: false,
       });
       tracks.getVideoTracks().forEach((track) => {
+        console.warn(track.label);
         track.stop();
       });
       dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
@@ -59,11 +60,10 @@ export const Room = () => {
     }
   };
 
-  if (!isChecked) {
-    checkDeviceCapabilities();
-  }
-
   useEffect(() => {
+    if (!isChecked) {
+      checkDeviceCapabilities();
+    }
     if (roomId && username) {
       enterRoom(roomId, username);
     } else {

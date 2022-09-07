@@ -120,24 +120,26 @@ export const Home = () => {
       <div className={styles.mainContainer}>
         <div className={styles.illustration} data-attribution="https://storyset.com/online"></div>
         <main className={[styles.btnContainer, styles.animateBtns].join(" ")}>
-          {!isLoading && roomId ? (
-            <div className={styles.roomIdContainer}>
-              <div className={styles.roomId}>
-                <p>{roomId}</p>
-                <button aria-label="Copy to clipboard" className={styles.copyBtn} onClick={copyToClipboard}>
-                  {showTooltip && <span className={styles.tooltip}>Copied!</span>}
-                  <CopyIcon />
-                </button>
-              </div>
-              {canShare && roomId && (
-                <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
-                  <ShareIcon />
-                </button>
-              )}
-            </div>
-          ) : (
-            <div className={styles.loader}>{isLoading && <LoaderIcon />}</div>
-          )}
+          <div className={styles.roomIdContainer}>
+            {!isLoading && roomId ? (
+              <>
+                <div className={styles.roomId}>
+                  <p>{roomId}</p>
+                  <button aria-label="Copy to clipboard" className={styles.copyBtn} onClick={copyToClipboard}>
+                    {showTooltip && <span className={styles.tooltip}>Copied!</span>}
+                    <CopyIcon />
+                  </button>
+                </div>
+                {canShare && (
+                  <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
+                    <ShareIcon />
+                  </button>
+                )}
+              </>
+            ) : (
+              <div className={styles.loader}>{isLoading && <LoaderIcon />}</div>
+            )}
+          </div>
           <button className={styles.btn} onClick={getRoomId}>
             Create Room <AddIcon />
           </button>

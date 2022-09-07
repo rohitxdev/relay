@@ -1,8 +1,8 @@
 class ApiService {
-  #proxyUrl = import.meta.env.DEV ? "http://localhost:4000" : "";
+  #SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
   async #fetchApi(input: RequestInfo | URL, init?: RequestInit | undefined) {
-    return fetch(this.#proxyUrl + input, init);
+    return fetch(this.#SERVER_URL + input, init);
   }
 
   async getRoomID() {
