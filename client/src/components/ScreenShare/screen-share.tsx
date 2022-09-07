@@ -8,7 +8,7 @@ import { api } from "@services";
 
 export const ScreenShare = () => {
   const { roomId, screenUsername, dispatch } = useRoomContext();
-  const { error, setError } = useAppContext();
+  const { setError } = useAppContext();
   const screenVideoRef = useRef<HTMLDivElement | null>(null);
   const screenClient = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
   const mediaTracksRef = useRef<ILocalVideoTrack | [ILocalVideoTrack, ILocalAudioTrack] | null>(null);
@@ -30,7 +30,10 @@ export const ScreenShare = () => {
         setScreenVideoTrack(mediaTracksRef.current);
       }
     } catch (err) {
-      console.error(err);
+      if (err instanceof Error) {
+        console.error(err.message);
+        setError(err.message);
+      }
       dispatch({ type: "TOGGLE_SCREENSHARE" });
     }
   };
@@ -41,7 +44,10 @@ export const ScreenShare = () => {
       const { appId, uid, accessToken } = await response.json();
       await screenClient.current.join(appId, roomId, accessToken, uid);
     } catch (err) {
-      console.error(err);
+      if (err instanceof Error) {
+        console.error(err.message);
+        setError(err.message);
+      }
     }
   };
 
@@ -49,29 +55,41 @@ export const ScreenShare = () => {
     try {
       if (screenVideoTrack) {
         await screenClient.current.publish(screenVideoTrack);
-        if (screenVideoRef.current && !screenVideoTrack.isPlaying) {
-          screenVideoTrack.play(screenVideoRef.current);
-        }
       }
       if (screenAudioTrack) {
         await screenClient.current.publish(screenAudioTrack);
       }
       setIsPublished(true);
     } catch (err) {
-      console.error(err);
+      if (err instanceof Error) {
+        console.error(err.message);
+        setError(err.message);
+      }
+    }
+  };
+
+  const playVideoTrack = () => {
+    if (screenVideoTrack && screenVideoRef.current && !screenVideoTrack.isPlaying) {
+      screenVideoTrack.play(screenVideoRef.current);
+    }
+  };
+
+  const cleanUpTracks = () => {
+    if (screenVideoTrack) {
+      screenVideoTrack.stop();
+      screenVideoTrack.close();
+    }
+    if (screenAudioTrack) {
+      screenAudioTrack.close();
     }
   };
 
   useEffect(() => {
-    acquireTracks();
+    if (!screenVideoTrack) {
+      acquireTracks();
+    }
     return () => {
-      if (screenVideoTrack) {
-        screenVideoTrack.stop();
-        screenVideoTrack.close();
-      }
-      if (screenAudioTrack) {
-        screenAudioTrack.close();
-      }
+      cleanUpTracks();
       if (screenClient.current.connectionState === "CONNECTED") {
         screenClient.current.leave();
       }
@@ -79,8 +97,14 @@ export const ScreenShare = () => {
   }, []);
 
   useEffect(() => {
-    if (screenVideoTrack && !isPublished && screenClient.current.connectionState !== "CONNECTED") {
-      joinRoomAsUser().then(publishTracks);
+    if (screenVideoTrack && screenClient.current.connectionState !== "CONNECTED") {
+      joinRoomAsUser()
+        .then(() => {
+          if (!isPublished) {
+            publishTracks();
+          }
+        })
+        .then(playVideoTrack);
     }
   }, [screenVideoTrack]);
 

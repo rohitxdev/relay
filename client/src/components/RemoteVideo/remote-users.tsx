@@ -1,12 +1,14 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { RemoteVideo } from "./remote-video";
 import { api } from "@services";
 import { useRoomContext } from "@utils/hooks/useRoomContext";
 import callJoinTone from "@assets/audio/call-join.mp3";
 import callLeftTone from "@assets/audio/call-leave.mp3";
+import { UID } from "agora-rtc-sdk-ng";
 
 export const RemoteUsers = memo(() => {
   const [remoteUsers, setRemoteUsers] = useState<IRemoteUser[]>([]);
+  const screenUid = useRef<UID | null>(null);
   const { client, screenUsername } = useRoomContext();
   const userLeftTone = new Audio(callLeftTone);
   const userJoinedTone = new Audio(callJoinTone);
@@ -26,13 +28,19 @@ export const RemoteUsers = memo(() => {
           remoteVideoTrack: user.videoTrack,
         },
       ]);
-      await userJoinedTone.play();
+      if (username !== screenUsername) {
+        await userJoinedTone.play();
+      } else {
+        screenUid.current = user.uid;
+      }
     });
 
     client.on("user-left", async (user) => {
       setRemoteUsers((prevUsers) => prevUsers.filter((prevUser) => prevUser.uid !== user.uid));
       await api.deleteUsername(user.uid as string);
-      await userLeftTone.play();
+      if (user.uid !== screenUid.current) {
+        await userLeftTone.play();
+      }
     });
 
     client.on("user-published", async (user, mediaType) => {

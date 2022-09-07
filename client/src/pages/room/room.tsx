@@ -48,7 +48,6 @@ export const Room = () => {
         video: { facingMode: { exact: "environment" } },
         audio: false,
       });
-      alert("j");
       tracks.getVideoTracks().forEach((track) => {
         track.stop();
       });
@@ -64,7 +63,7 @@ export const Room = () => {
     if (!isChecked) {
       checkDeviceCapabilities();
     }
-    if (roomId && username) {
+    if (roomId && username && client.connectionState !== "CONNECTED") {
       enterRoom(roomId, username);
     } else {
       navigate("/", { replace: true });
