@@ -1,14 +1,12 @@
-@use '../../app/config';
-
 .error {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.5em;
     position: absolute;
-    top: -6em;
+    top: 0;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -100%);
     padding: 0.75em;
     border-radius: 0.5em;
     background-color: var(--color-dark-100);
@@ -25,5 +23,50 @@
 
     p {
         text-align: center;
+    }
+}
+
+@keyframes shake {
+
+    0% {
+        transform: translate(-50%, -100%);
+        opacity: 0;
+    }
+
+    10% {
+        transform: translate(-50%, 200%);
+        opacity: 1;
+    }
+
+    13% {
+        transform: translate(calc(-50% - 0.5em), 200%);
+    }
+
+    16% {
+        transform: translate(calc(-50% + 0.5em), 200%);
+    }
+
+    19% {
+        transform: translate(calc(-50% - 0.5em), 200%);
+    }
+
+    22% {
+        transform: translate(calc(-50% + 0.5em), 200%);
+    }
+
+    25% {
+        transform: translate(calc(-50% - 0.5em), 200%);
+    }
+
+    28% {
+        transform: translate(-50%, 200%);
+    }
+
+    90% {
+        transform: translate(-50%, 200%);
+    }
+
+    100% {
+        transform: translate(-50%, -100%);
     }
 }

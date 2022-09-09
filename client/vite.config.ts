@@ -6,6 +6,7 @@ import postcssPresetEnv from "postcss-preset-env";
 import { Plugin } from "postcss";
 
 export default defineConfig(({ mode }) => ({
+  envDir: "./src/config/",
   plugins: [react(), svgr({ exportAsDefault: true, svgrOptions: { icon: true } })],
   css: {
     modules: {

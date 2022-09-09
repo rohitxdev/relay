@@ -17,10 +17,11 @@
 
 
          p {
-             font-size: clamp(3em, calc(1vw + 1vh), 5em);
+             font-size: clamp(4em, calc(4vw + 4vh), 8em);
              font-variation-settings: 'wght' 700;
              color: var(--color-white);
              text-transform: uppercase;
+             letter-spacing: 0.1ch;
          }
      }
  }
