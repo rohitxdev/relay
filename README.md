@@ -4,7 +4,9 @@ A free video conferencing app made with React, Typescript, Express.js, Redis, an
 
 ![MIT License](https://img.shields.io/github/license/rohitman47/relay?style=for-the-badge)
 
-![GitHub release](https://img.shields.io/github/package-json/v/rohitman47/relay?color=gre&style=for-the-badge)
+![Version](https://img.shields.io/github/package-json/v/rohitman47/relay?color=gre&style=for-the-badge)
+
+![Github Release](https://img.shields.io/github/v/release/rohitman47/relay?style=for-the-badge)
 
 ## Environment Variables
 
@@ -12,7 +14,7 @@ To run this project, you will need to add the following environment variables to
 
 `AGORA_APP_ID`
 
-`ANOTHER_APP_CERTIFICATE`
+`AGORA_APP_CERTIFICATE`
 
 `REDIS_URL`
 
