@@ -2,11 +2,9 @@
 
 A free video conferencing app made with React, Typescript, Express.js, Redis, and Agora SDK which uses webRTC protocol under the hood.
 
-[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+![MIT License](https://img.shields.io/github/license/rohitman47/relay?style=for-the-badge)
 
-[![GitHub commits](https://badgen.net/github/commits/Naereen/Strapdown.js)](https://GitHub.com/Naereen/StrapDown.js/commit/)
-
-[![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://GitHub.com/Naereen/StrapDown.js/releases/)
+![GitHub release](https://img.shields.io/github/package-json/v/rohitman47/relay?color=gre&style=for-the-badge)
 
 ## Environment Variables
 
@@ -67,7 +65,7 @@ Get access token for the given room ID and also add username to database.
 | :-------- | :------- | :---------------------------- |
 | `uid`     | `string` | **Required**. UID of the user |
 
-Get username of the remote user with the given UID
+Get username of the remote user with the given UID.
 
 ### Delete username
 
@@ -87,9 +85,9 @@ Delete username of the client from database when leaving room.
 
 ## Tech Stack
 
-**Client:** React, Redux, SCSS, Typescript, Vite
+**Client:** React, Redux, SCSS, Typescript, Vite.
 
-**Server:** Node, Express, Typescript, Redis
+**Server:** Node, Express, Typescript, Redis.
 
 ## Features
 
