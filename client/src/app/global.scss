@@ -70,7 +70,7 @@ svg {
 
 .error {
     position: absolute;
-    top: -5em;
+    top: -6em;
     left: 50%;
     transform: translateX(-50%);
     padding: 0.6em 1.5em 0.6em 2.25em;
@@ -79,8 +79,6 @@ svg {
     color: var(--color-red);
     font-variation-settings: "wght" 600;
     border-radius: 0.4em;
-    text-align: center;
-    word-wrap: break-word;
     z-index: 10000;
     animation: shake 3s linear 1 forwards;
 
@@ -92,7 +90,7 @@ svg {
         transform: translate(0, -50%);
         height: 1.25em;
         width: 1.25em;
-        margin-inline: 0.5em;
+        padding-inline: 0.5em;
         background: url('../assets/icons/error.svg') center / cover no-repeat;
     }
 }
