@@ -5,7 +5,6 @@
     text-align: center;
     margin-block: 1em;
     font-size: 1em;
-    font-family: "Inter";
     font-variation-settings: 'wght' 700;
     z-index: 10;
     opacity: 0;
@@ -16,7 +15,7 @@
 @mixin video-stream {
     position: relative;
     overflow: hidden;
-    outline: var(--color-grey) solid 1px;
+    outline: var(--color-grey) solid 2px;
     height: 100%;
     width: 100%;
     border-radius: 2em;
@@ -62,45 +61,45 @@
 @keyframes shake {
 
     0% {
-        transform: translateY(0);
+        transform: translate(-50%, 0);
         opacity: 0;
     }
 
     10% {
-        transform: translateY(400%);
+        transform: translate(-50%, 400%);
         opacity: 1;
     }
 
-    14% {
-        transform: translateX(-0.5em) translateY(400%);
+    13% {
+        transform: translateX(calc(-50% - 0.5em)) translateY(400%);
     }
 
-    18% {
-        transform: translateX(0.5em) translateY(400%);
+    16% {
+        transform: translateX(calc(-50% + 0.5em)) translateY(400%);
+    }
+
+    19% {
+        transform: translateX(calc(-50% - 0.5em)) translateY(400%);
     }
 
     22% {
-        transform: translateX(-0.5em) translateY(400%);
+        transform: translateX(calc(-50% + 0.5em)) translateY(400%);
     }
 
-    26% {
-        transform: translateX(0.5em) translateY(400%);
+    25% {
+        transform: translateX(calc(-50% - 0.5em)) translateY(400%);
     }
 
-    30% {
-        transform: translateX(-0.5em) translateY(400%);
-    }
-
-    34% {
-        transform: translateX(0) translateY(400%);
+    28% {
+        transform: translate(-50%, 400%);
     }
 
     90% {
-        transform: translateX(0) translateY(400%);
+        transform: translate(-50%, 400%);
     }
 
     100% {
-        transform: translateY(0);
+        transform: translate(-50%, 0);
         opacity: 1;
     }
 

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { setError } from "@store";
 import { useAppDispatch, useAppSelector } from "./redux-hooks";
 
-export function useError(timer: number = 2000): [string | null, (err: string | null) => void] {
+export function useError(timer: number = 3000): [string | null, (err: string | null) => void] {
   const error = useAppSelector((state) => state.room.error);
   const dispatch = useAppDispatch();
 

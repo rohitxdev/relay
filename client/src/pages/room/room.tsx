@@ -5,7 +5,7 @@ import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { ClientVideo, Controls, RemoteUsers, ScreenShare } from "@components";
 import { RoomContextProvider } from "@context";
 import { useAppDispatch, useAppSelector, useError } from "@utils/hooks";
-import { rearCameraIsAvailable, screenSharingIsAvailable } from "@store";
+import { rearCameraIsAvailable, resetState, screenSharingIsAvailable } from "@store";
 import { api } from "@services";
 
 export const Room = () => {
@@ -66,7 +66,7 @@ export const Room = () => {
 
     return () => {
       client.leave();
-      setError(null);
+      dispatch(resetState());
     };
   }, []);
 

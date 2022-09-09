@@ -8,9 +8,6 @@
   align-items: center;
   overflow: hidden;
   color: var(--white);
-  background: url('../../assets/images/blob-scene-haikei.svg') center / cover;
-  background-color: rgb(0 0 0 / 0.2);
-  background-blend-mode: overlay;
 }
 
 .github-link {
@@ -20,13 +17,9 @@
   margin: 1em;
   height: 1.5em;
   width: 1.5em;
-
-  svg {
-    height: 100%;
-    width: 100%;
-    fill: white;
-  }
+  color: var(--color-white);
 }
+
 
 .banner {
   margin: 2.5em 0;
@@ -64,7 +57,6 @@
   margin: 1em 2em;
   width: clamp(5em, 75%, 25em);
   aspect-ratio: 1 / 1;
-  background: url('../../assets/images/video-conference-illustration.svg') center / cover no-repeat;
 }
 
 .main-container {
@@ -99,7 +91,6 @@
   flex-shrink: 1;
   font-size: 1.25em;
   font-weight: 600;
-  font-family: Georgia, 'Times New Roman', Times, serif;
 
   p {
     letter-spacing: 0.25ch;

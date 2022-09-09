@@ -1,6 +1,16 @@
 @use './config';
 
 :root {
+    --color-purple: hsl(253, 94%, 58%);
+    --color-lightblue: hsl(208, 97%, 87%);
+    --color-accent: hsl(18, 100%, 62%);
+    --color-red: hsl(4, 100%, 58%);
+    --color-dark-100: hsl(235, 21%, 14%);
+    --color-dark-200: hsl(208, 100%, 5%);
+    --color-white: hsl(0, 0%, 100%);
+    --color-grey: hsl(257, 12%, 65%);
+    --color-grey-opaque: hsla(0, 0%, 100%, 0.3);
+
     * {
         margin: 0;
         padding: 0;
@@ -11,16 +21,9 @@
     user-select: none;
     scroll-behavior:smooth;
     -webkit-tap-highlight-color: transparent;
-
-    --color-purple:hsl(253, 94%, 58%);
-    --color-lightblue:hsl(208, 97%, 87%);
-    --color-accent:hsl(18, 100%, 62%);
-    --color-red: hsl(4, 100%, 58%);
-    --color-dark-100:hsl(235, 21%, 16%);
-    --color-dark-200:hsl(208, 100%, 5%);
-    --color-white: hsl(0, 0%, 100%);
-    --color-grey:hsl(257, 12%, 65%);
-    --color-grey-opaque:hsla(0, 0%, 100%, 0.3);
+    background-image: linear-gradient(var(--color-purple), var(--color-dark-200));
+    background-color: var(--color-dark-200);
+    background-blend-mode: overlay;
 }
 
 @font-face {
@@ -67,8 +70,8 @@ svg {
 
 .error {
     position: absolute;
-    top: -4em;
-    left: 50vh;
+    top: -5em;
+    left: 50%;
     transform: translateX(-50%);
     padding: 0.6em 1.5em 0.6em 2.25em;
     background-color: var(--color-dark-100);
@@ -76,9 +79,10 @@ svg {
     color: var(--color-red);
     font-variation-settings: "wght" 600;
     border-radius: 0.4em;
-    animation: shake 2s linear 1 forwards;
     text-align: center;
     word-wrap: break-word;
+    z-index: 10000;
+    animation: shake 3s linear 1 forwards;
 
     &::before {
         content: '';

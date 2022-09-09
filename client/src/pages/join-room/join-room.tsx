@@ -69,7 +69,6 @@ export const JoinRoom = () => {
     window.addEventListener("keydown", enterKeyListener);
     return () => {
       window.removeEventListener("keydown", enterKeyListener);
-      setError(null);
     };
   }, []);
 

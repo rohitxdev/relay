@@ -33,6 +33,17 @@ const roomSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    resetState: (state) => {
+      return {
+        isVideoOn: false,
+        isMicOn: false,
+        isSharingScreen: false,
+        isRearCameraAvailable: false,
+        isScreenSharingAvailable: false,
+        facingMode: "user",
+        error: state.error,
+      };
+    },
   },
 });
 
@@ -46,5 +57,6 @@ export const {
     rearCameraIsAvailable,
     screenSharingIsAvailable,
     setError,
+    resetState,
   },
 } = roomSlice;

@@ -8,6 +8,7 @@ import GithubIcon from "@assets/icons/github.svg";
 import ShareIcon from "@assets/icons/share.svg";
 import CopyIcon from "@assets/icons/copy.svg";
 import LoaderIcon from "@assets/icons/loader.svg";
+import Illustration from "@assets/images/video-conference.svg";
 import { useError } from "@utils/hooks";
 
 export const Home = () => {
@@ -79,9 +80,6 @@ export const Home = () => {
     if ("share" in navigator && navigator.canShare(shareData)) {
       setCanShare(true);
     }
-    return () => {
-      setError(null);
-    };
   }, []);
 
   return (
@@ -107,7 +105,9 @@ export const Home = () => {
         <p className={styles.appDescription}>Free Video Conferencing for Everyone</p>
       </section>
       <div className={styles.mainContainer}>
-        <div className={styles.illustration} data-attribution="https://storyset.com/web"></div>
+        <div className={styles.illustration} data-attribution="https://storyset.com/web">
+          <Illustration />
+        </div>
         <main className={[styles.btnContainer, styles.animateBtns].join(" ")}>
           <div className={styles.roomIdContainer}>
             {!isLoading && roomId ? (
