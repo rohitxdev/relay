@@ -105,22 +105,18 @@
 
 @media screen and (max-width:600px) {
 
-    .enter-room-id,
-    .enter-username {
-        transform: scale(0.95);
-    }
-
     .btn-container {
         display: flex;
         flex-direction: column-reverse;
         justify-content: center;
         gap: 2em;
         margin: 1em 0;
-        width: 12em;
+        width: 15em;
+        transform: scale(0.95);
     }
 
     .btn {
-        font-size: 1em;
-        width: 12em;
+        font-size: 1.25em;
+        width: 100%;
     }
 }
