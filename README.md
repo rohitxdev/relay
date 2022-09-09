@@ -105,7 +105,7 @@ Delete username of the client from database when leaving room.
 
 ![App Screenshot 2](https://i.postimg.cc/jKLDczDg/Screenshot-2022-09-09-at-19-48-12-Free-Video-Conferencing-for-Everyone.png)
 
-![App Screenshot 3](https://i.postimg.cc/qrmt2mv6/Screenshot-2022-09-09-200036.png)
+![App Screenshot 3](https://i.postimg.cc/h4dPB1xK/Screenshot-2022-09-09-200036.png)
 
 ## Run Locally
 
