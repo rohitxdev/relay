@@ -1,19 +1,19 @@
 import { memo, useEffect, useRef, useState } from "react";
-import { RemoteVideo } from "./remote-video";
-import { api } from "@services";
+import { RemoteVideo } from "@components";
 import { useRoomContext } from "@utils/hooks/useRoomContext";
 import callJoinTone from "@assets/audio/call-join.mp3";
 import callLeftTone from "@assets/audio/call-leave.mp3";
 import { UID } from "agora-rtc-sdk-ng";
+import { api } from "@services";
 
 export const RemoteUsers = memo(() => {
-  const [remoteUsers, setRemoteUsers] = useState<IRemoteUser[]>([]);
   const screenUid = useRef<UID | null>(null);
   const { client, screenUsername } = useRoomContext();
+  const [remoteUsers, setRemoteUsers] = useState<IRemoteUser[]>([]);
   const userLeftTone = new Audio(callLeftTone);
   const userJoinedTone = new Audio(callJoinTone);
-  userJoinedTone.volume = 0.3;
-  userLeftTone.volume = 0.3;
+  userJoinedTone.volume = 0.4;
+  userLeftTone.volume = 0.4;
 
   useEffect(() => {
     client.on("user-joined", async (user) => {

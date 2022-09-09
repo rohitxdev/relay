@@ -1,5 +1,5 @@
 class ApiService {
-  #SERVER_URL = import.meta.env.VITE_SERVER_URL;
+  #SERVER_URL = import.meta.env.DEV ? import.meta.env.VITE_API_ENDPOINT : "";
 
   async #fetchApi(input: RequestInfo | URL, init?: RequestInit | undefined) {
     return fetch(this.#SERVER_URL + input, init);
@@ -18,7 +18,7 @@ class ApiService {
   }
 
   async verifyRoomId(roomId: string) {
-    return this.#fetchApi(`/api/verify-room-id/${roomId}`, { method: "POST" });
+    return this.#fetchApi(`/api/verify-room-id/${roomId}`);
   }
 
   async deleteUsername(uid: string) {

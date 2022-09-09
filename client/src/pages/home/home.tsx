@@ -1,6 +1,6 @@
 import styles from "./home.module.scss";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Key, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { api } from "../../services/api-service";
 import AddIcon from "@assets/icons/add.svg";
 import PeopleIcon from "@assets/icons/people.svg";
@@ -8,21 +8,20 @@ import GithubIcon from "@assets/icons/github.svg";
 import ShareIcon from "@assets/icons/share.svg";
 import CopyIcon from "@assets/icons/copy.svg";
 import LoaderIcon from "@assets/icons/loader.svg";
-import { useAppContext } from "@utils/hooks";
+import { useError } from "@utils/hooks";
 
 export const Home = () => {
   const navigate = useNavigate();
-  const { state } = useLocation() as { state: { error?: string }; key?: Key };
-  const { error, setError } = useAppContext();
+  const [error, setError] = useError();
   const [canShare, setCanShare] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [roomId, setRoomId] = useState<string | null>(null);
-  const [isShowingTooltip, setIsShowingTooltip] = useState(false);
 
   const shareData: ShareData = {
     title: "Relay: Free video conferencing for everyone",
     text: `You've been invited to join a room on Relay!\n\nRoom ID is ${roomId}.\n\nLink: ${window.location.hostname}/join-room?roomId=${roomId}`,
+    url: `${window.location.hostname}/join-room?roomId=${roomId}`,
   };
 
   const shareRoomId = async () => {
@@ -31,27 +30,25 @@ export const Home = () => {
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
+        console.error(err);
       }
-      console.error(err);
     }
   };
 
   const copyToClipboard = async () => {
     try {
-      if (roomId && !isShowingTooltip) {
+      if (roomId && !showTooltip) {
         await navigator.clipboard.writeText(roomId);
         setShowTooltip(true);
-        setIsShowingTooltip(true);
         setTimeout(() => {
           setShowTooltip(false);
-          setIsShowingTooltip(false);
         }, 2000);
       }
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
+        console.error(err);
       }
-      console.error(err);
     }
   };
 
@@ -59,21 +56,18 @@ export const Home = () => {
     try {
       setIsLoading(true);
       const response = await api.getRoomID();
-      if (response.ok) {
-        const roomId = await response.text();
-        setTimeout(() => {
-          setRoomId(roomId);
-          setIsLoading(false);
-        }, 400);
-      } else {
-        throw new Error("Error: could not get room ID");
-      }
+      if (!response.ok) throw new Error("Could not get room ID!");
+      const roomId = await response.text();
+      setTimeout(() => {
+        setRoomId(roomId);
+        setIsLoading(false);
+      }, 400);
     } catch (err) {
-      setIsLoading(false);
       if (err instanceof Error) {
+        setIsLoading(false);
         setError(err.message);
+        console.error(err);
       }
-      console.error(err);
     }
   };
 
@@ -82,14 +76,9 @@ export const Home = () => {
   };
 
   useEffect(() => {
-    if (state?.error) {
-      setError(state.error);
-      history.replaceState({}, "");
-    }
     if ("share" in navigator && navigator.canShare(shareData)) {
       setCanShare(true);
     }
-
     return () => {
       setError(null);
     };
@@ -97,19 +86,19 @@ export const Home = () => {
 
   return (
     <div className={styles.home}>
-      <a
-        href="https://github.com/rohitman47"
-        target="_blank"
-        aria-label="Link to Github profile"
-        className={styles.githubLink}
-      >
-        <GithubIcon />
-      </a>
       {error && (
         <p className="error" role="error">
           {error}
         </p>
       )}
+      <a
+        aria-label="Link to Github profile"
+        href="https://github.com/rohitman47"
+        target="_blank"
+        className={styles.githubLink}
+      >
+        <GithubIcon />
+      </a>
       <section className={styles.banner} role="banner" aria-label="Page banner">
         <div className={styles.appName}>
           <p>Relay</p>
@@ -118,14 +107,14 @@ export const Home = () => {
         <p className={styles.appDescription}>Free Video Conferencing for Everyone</p>
       </section>
       <div className={styles.mainContainer}>
-        <div className={styles.illustration} data-attribution="https://storyset.com/online"></div>
+        <div className={styles.illustration} data-attribution="https://storyset.com/web"></div>
         <main className={[styles.btnContainer, styles.animateBtns].join(" ")}>
           <div className={styles.roomIdContainer}>
             {!isLoading && roomId ? (
               <>
                 <div className={styles.roomId}>
                   <p>{roomId}</p>
-                  <button aria-label="Copy to clipboard" className={styles.copyBtn} onClick={copyToClipboard}>
+                  <button aria-label="Copy room ID to clipboard" className={styles.copyBtn} onClick={copyToClipboard}>
                     {showTooltip && <span className={styles.tooltip}>Copied!</span>}
                     <CopyIcon />
                   </button>

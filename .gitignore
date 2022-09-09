@@ -25,8 +25,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-*.env
-*.env.local
-*.env.development
-*.env.development.local
+*.env.*
 app.json

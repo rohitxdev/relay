@@ -39,16 +39,15 @@
             justify-content: space-evenly;
             cursor: pointer;
             width: fit-content;
+            color: var(--color-white);
         }
 
         .stay-btn {
             background-color: var(--color-purple);
-            color: var(--color-white);
         }
 
         .leave-btn {
             background-color: var(--color-red);
-            color: var(--color-white);
         }
     }
 }

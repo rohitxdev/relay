@@ -1,10 +1,10 @@
 import styles from "./remote-video.module.scss";
 import { IRemoteAudioTrack, IRemoteVideoTrack } from "agora-rtc-sdk-ng";
 import { useRef, useEffect, memo } from "react";
-import { UserIcon } from "@components";
 import EnterFullscreenIcon from "@assets/icons/enter-fullscreen.svg";
 import ExitFullscreenIcon from "@assets/icons/exit-fullscreen.svg";
 import { useToggleFullscreen } from "@utils/hooks";
+import { UserIcon } from "@components";
 
 export const RemoteVideo = memo(
   ({
@@ -24,6 +24,11 @@ export const RemoteVideo = memo(
         remoteVideoTrack.play(remoteUserRef.current);
       }
       remoteAudioTrack?.play();
+
+      return () => {
+        remoteVideoTrack?.stop();
+        remoteAudioTrack?.stop();
+      };
     });
 
     return (

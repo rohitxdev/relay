@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: auto;
+  overflow: hidden;
   color: var(--white);
   background: url('../../assets/images/blob-scene-haikei.svg') center / cover;
   background-color: rgb(0 0 0 / 0.2);
@@ -65,11 +65,6 @@
   width: clamp(5em, 75%, 25em);
   aspect-ratio: 1 / 1;
   background: url('../../assets/images/video-conference-illustration.svg') center / cover no-repeat;
-
-  svg {
-    height: auto;
-    width: clamp(5em, 90%, 25em);
-  }
 }
 
 .main-container {
@@ -86,13 +81,14 @@
   justify-content: center;
   align-items: center;
   gap: 1em;
-  width: 15em;
+  height: 3em;
+  width: 100%;
 }
 
 .room-id {
-  height: 3em;
+  height: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
   padding: 0.25em 0.5em;
   text-align: center;
@@ -100,14 +96,15 @@
   border-radius: 0.5em;
   background-color: rgb(0 0 0 / 0.5);
   outline: var(--color-grey) solid 1px;
-  width: 70%;
-  gap: 0.75em;
+  flex-grow: 0.5;
+  font-size: 1.25em;
+  font-weight: 600;
+  font-family: Georgia, 'Times New Roman', Times, serif;
 
   p {
-    font-size: 1.75em;
-    font-family: monospace;
     letter-spacing: 0.25ch;
     user-select: text;
+    padding-inline: 0.5em
   }
 }
 
@@ -119,7 +116,7 @@
   color: var(--color-dark-200);
   border-radius: 0.5em;
   padding: 0.6em;
-  top: -190%;
+  top: -220%;
   left: 50%;
   transform: translateX(-50%);
   animation: show-up 2s ease 1 forwards;
@@ -155,16 +152,17 @@
   display: flex;
   color: var(--color-white);
   background-color: var(--color-purple);
-  border-radius: 0.5em;
+  border-radius: 0.75em;
   cursor: pointer;
   height: 100%;
-  width: 3em;
-  padding: 0.5em;
+  aspect-ratio: 1 / 1;
+  padding: 0.5em 0.75em;
+  flex-shrink: 0;
 }
 
 
 .loader {
-  height: 3em;
+  height: 100%;
   width: 100%;
 }
 
@@ -202,8 +200,19 @@
 }
 
 @media screen and (max-width:600px) {
-  .illustration-wrapper {
+
+  .room-id {
+    height: 2.25em;
+  }
+
+
+  .btn-container {
+    width: 12em;
     animation: slide-up 0.5s 1 forwards;
+  }
+
+  .btn {
+    font-size: 1em;
   }
 }
 

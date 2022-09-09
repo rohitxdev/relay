@@ -1,21 +1,20 @@
 import "./global.scss";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Home, JoinRoom, Room } from "@pages";
-import { AppContextProvider } from "../context/app-context";
-import { useError } from "@utils/hooks";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Home, JoinRoom, PageNotFound, Room } from "@pages";
+import { Provider } from "react-redux";
+import { store } from "@store";
 
 export const App = () => {
-  const [error, setError] = useError();
   return (
-    <AppContextProvider value={{ error, setError }}>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/join-room" element={<JoinRoom />} />
           <Route path="/room" element={<Room />} />
-          <Route path="*" element={<Navigate to="/" state={{ error: "Error: Invalid route" }} />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
-    </AppContextProvider>
+    </Provider>
   );
 };

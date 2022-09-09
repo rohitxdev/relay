@@ -66,7 +66,19 @@ svg {
 }
 
 .error {
-    @include config.error;
+    position: absolute;
+    top: -4em;
+    left: 50vh;
+    transform: translateX(-50%);
+    padding: 0.6em 1.5em 0.6em 2.25em;
+    background-color: var(--color-dark-100);
+    outline: var(--color-red) solid 1px;
+    color: var(--color-red);
+    font-variation-settings: "wght" 600;
+    border-radius: 0.4em;
+    animation: shake 2s linear 1 forwards;
+    text-align: center;
+    word-wrap: break-word;
 
     &::before {
         content: '';

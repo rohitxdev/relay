@@ -7,7 +7,6 @@ const serviceWorker = () => {
   };
   self.addEventListener("install", (event) => {
     console.info("🤖 Service worker installed");
-    // event.waitUntil(addResourcesToCache(["/404.html"]));
   });
 
   self.addEventListener("activate", () => {
@@ -16,4 +15,5 @@ const serviceWorker = () => {
 
   self.addEventListener("fetch", (e) => {});
 };
-export default serviceWorker;
+
+serviceWorker();

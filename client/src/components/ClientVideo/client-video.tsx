@@ -1,23 +1,14 @@
+import styles from "./client-video.module.scss";
 import AgoraRTC, { ILocalVideoTrack, ILocalAudioTrack } from "agora-rtc-sdk-ng";
 import { memo, useEffect, useRef, useState } from "react";
-import styles from "./client-video.module.scss";
-import { useRoomContext } from "@utils/hooks/useRoomContext";
-import { UserIcon } from "@components";
+import { useError, useRoomContext, useToggleFullscreen } from "@utils/hooks";
 import EnterFullscreenIcon from "@assets/icons/enter-fullscreen.svg";
 import ExitFullscreenIcon from "@assets/icons/exit-fullscreen.svg";
-import { useAppContext, useToggleFullscreen } from "@utils/hooks";
+import { UserIcon } from "@components";
 
 export const ClientVideo = memo(
-  ({
-    isVideoOn,
-    isMicOn,
-    facingMode,
-  }: {
-    isVideoOn: boolean;
-    isMicOn: boolean;
-    facingMode: "user" | "environment";
-  }) => {
-    const { setError } = useAppContext();
+  ({ isVideoOn, isMicOn, facingMode }: { isVideoOn: boolean; isMicOn: boolean; facingMode: facingMode }) => {
+    const [error, setError] = useError();
     const { username, client } = useRoomContext();
     const clientRef = useRef<HTMLDivElement | null>(null);
     const [isFullscreen, toggleFullscreen] = useToggleFullscreen(clientRef.current);
@@ -84,16 +75,6 @@ export const ClientVideo = memo(
     }, [isMicOn, clientMicrophoneTrack]);
 
     useEffect(() => {
-      if (clientVideoTrack) {
-        if (isVideoOn) {
-          client.unpublish(clientVideoTrack);
-        }
-        clientVideoTrack?.close();
-      }
-      setClientVideoTrack(null);
-    }, [facingMode]);
-
-    useEffect(() => {
       if (clientRef.current) {
         if (isVideoOn) {
           if (clientVideoTrack) {
@@ -110,6 +91,27 @@ export const ClientVideo = memo(
         }
       }
     }, [isVideoOn, clientVideoTrack]);
+
+    useEffect(() => {
+      if (clientVideoTrack) {
+        if (isVideoOn) {
+          client.unpublish(clientVideoTrack);
+        }
+        clientVideoTrack?.close();
+      }
+      setClientVideoTrack(null);
+    }, [facingMode]);
+
+    useEffect(() => {
+      return () => {
+        if (clientVideoTrack) {
+          clientVideoTrack.close();
+        }
+        if (clientMicrophoneTrack) {
+          clientMicrophoneTrack.close();
+        }
+      };
+    });
 
     return (
       <div className={[styles.client, facingMode === "user" && styles.mirrored].join(" ")} ref={clientRef}>

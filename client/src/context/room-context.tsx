@@ -6,8 +6,6 @@ export interface RoomContext {
   username: string;
   screenUsername: string;
   client: IAgoraRTCClient;
-  state: RoomState;
-  dispatch: React.Dispatch<RoomAction>;
 }
 export const RoomContext = createContext<RoomContext | null>(null);
 

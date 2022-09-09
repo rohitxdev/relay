@@ -1,29 +1,16 @@
 /// <reference types="vite/client" />
 
-const roomActionType = [
-  "TOGGLE_VIDEO",
-  "TOGGLE_MIC",
-  "TOGGLE_EXIT_MODAL",
-  "TOGGLE_SCREENSHARE",
-  "SET_SCREENSHARE_AVAILABILITY",
-  "SET_REAR_CAMERA_AVAILABILITY",
-  "TOGGLE_FACING_MODE",
-  "SET_ERROR",
-] as const;
+type facingMode = "user" | "environment";
+type error = string | null;
 
 interface RoomState {
   isVideoOn: boolean;
   isMicOn: boolean;
-  showExitModal: boolean;
   isSharingScreen: boolean;
   isRearCameraAvailable: boolean;
-  isScreenshareAvailable: boolean;
-  facingMode: "user" | "environment";
-  error: string | null;
-}
-interface RoomAction {
-  type: typeof roomActionType[number];
-  payload?: any;
+  isScreenSharingAvailable: boolean;
+  facingMode: facingMode;
+  error: error;
 }
 
 interface IRemoteUser {
@@ -31,4 +18,9 @@ interface IRemoteUser {
   username: string;
   remoteVideoTrack?: IRemoteVideoTrack;
   remoteAudioTrack?: IRemoteAudioTrack;
+}
+
+interface RoomLocationState {
+  roomId: string | undefined;
+  username: string | undefined;
 }

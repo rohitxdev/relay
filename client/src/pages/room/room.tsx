@@ -1,45 +1,30 @@
 import styles from "./room.module.scss";
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ClientVideo, Controls, ExitModal, RemoteUsers, ScreenShare } from "@components";
+import { useEffect, useRef } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { ClientVideo, Controls, RemoteUsers, ScreenShare } from "@components";
 import { RoomContextProvider } from "@context";
-import { useAppContext, useRoomReducer } from "@utils/hooks";
+import { useAppDispatch, useAppSelector, useError } from "@utils/hooks";
+import { rearCameraIsAvailable, screenSharingIsAvailable } from "@store";
 import { api } from "@services";
 
 export const Room = () => {
+  const {
+    state: { roomId, username },
+  } = useLocation() as { state: RoomLocationState };
   const navigate = useNavigate();
-  const [state, dispatch] = useRoomReducer();
-  const { error, setError } = useAppContext();
-  const roomId = sessionStorage.getItem("roomId");
-  const username = sessionStorage.getItem("username");
   const screenUsername = `${username}'s screen`;
-  const [isChecked, setIsChecked] = useState(false);
-  const { isVideoOn, isMicOn, isSharingScreen, facingMode, showExitModal } = state;
+  const dispatch = useAppDispatch();
+  const [error, setError] = useError();
+  const isVideoOn = useAppSelector((state) => state.room.isVideoOn);
+  const isMicOn = useAppSelector((state) => state.room.isMicOn);
+  const isSharingScreen = useAppSelector((state) => state.room.isSharingScreen);
+  const facingMode = useAppSelector((state) => state.room.facingMode);
   const { current: client } = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
-
-  const enterRoom = async (roomId: string, username: string) => {
-    try {
-      const response = await api.getAccessToken(roomId, username);
-      const { appId, uid, accessToken } = await response.json();
-      await client.join(appId, roomId, accessToken, uid);
-    } catch (err) {
-      if (err instanceof Error) {
-        console.error(err.message);
-        dispatch({ type: "SET_ERROR", payload: err.message });
-      }
-    }
-  };
-
-  const escapeHandler = (e: globalThis.KeyboardEvent) => {
-    if (e.key === "Escape") {
-      dispatch({ type: "TOGGLE_EXIT_MODAL" });
-    }
-  };
 
   const checkDeviceCapabilities = async () => {
     if ("getDisplayMedia" in navigator.mediaDevices) {
-      dispatch({ type: "SET_SCREENSHARE_AVAILABILITY", payload: true });
+      dispatch(screenSharingIsAvailable());
     } else {
       console.info("💻 Screensharing is not available on this device.");
     }
@@ -51,53 +36,59 @@ export const Room = () => {
       tracks.getVideoTracks().forEach((track) => {
         track.stop();
       });
-      dispatch({ type: "SET_REAR_CAMERA_AVAILABILITY", payload: true });
-    } catch (error) {
+      dispatch(rearCameraIsAvailable());
+    } catch (err) {
       console.info("📷 Rear camera is not available on this device.");
-    } finally {
-      setIsChecked(true);
+    }
+  };
+
+  const enterRoom = async (roomId: string, username: string) => {
+    try {
+      const response = await api.getAccessToken(roomId, username);
+      const { appId, uid, accessToken } = await response.json();
+      await client.join(appId, roomId, accessToken, uid);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error(err);
+        setError(err.message);
+      }
     }
   };
 
   useEffect(() => {
-    if (!isChecked) {
-      checkDeviceCapabilities();
-    }
-    if (roomId && username && client.connectionState !== "CONNECTED") {
-      enterRoom(roomId, username);
+    if (roomId && username) {
+      checkDeviceCapabilities().finally(() => {
+        enterRoom(roomId, username);
+      });
     } else {
-      navigate("/", { replace: true });
+      navigate("/");
     }
-    window.addEventListener("keydown", escapeHandler);
 
     return () => {
-      if (client.connectionState === "CONNECTED") {
-        client.leave();
-      }
-      window.removeEventListener("keydown", escapeHandler);
+      client.leave();
+      setError(null);
     };
   }, []);
 
+  if (!roomId || !username) {
+    return <Navigate to="/" replace={true} state={null} />;
+  }
+
   return (
-    <>
-      {error && (
-        <p className="error" role="error">
-          {error}
-        </p>
-      )}
-      {roomId && username && (
-        <RoomContextProvider value={{ roomId, username, screenUsername, client, state, dispatch }}>
-          {showExitModal && <ExitModal />}
-          <div className={styles.room}>
-            <div className={styles.userGrid}>
-              {isSharingScreen && <ScreenShare />}
-              <ClientVideo isVideoOn={isVideoOn} isMicOn={isMicOn} facingMode={facingMode} />
-              <RemoteUsers />
-            </div>
-            <Controls />
-          </div>
-        </RoomContextProvider>
-      )}
-    </>
+    <RoomContextProvider value={{ roomId, username, screenUsername, client }}>
+      <div className={styles.room}>
+        {error && (
+          <p className="error" role="error">
+            {error}
+          </p>
+        )}
+        <div className={styles.userGrid}>
+          {isSharingScreen && <ScreenShare />}
+          <ClientVideo isVideoOn={isVideoOn} isMicOn={isMicOn} facingMode={facingMode} />
+          <RemoteUsers />
+        </div>
+        <Controls />
+      </div>
+    </RoomContextProvider>
   );
 };
