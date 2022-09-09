@@ -5,6 +5,7 @@ import BackIcon from "@assets/icons/arrow-back.svg";
 import styles from "./join-room.module.scss";
 import { useError } from "@utils/hooks";
 import { api } from "@services";
+import { ErrorAlert } from "@components";
 
 export const JoinRoom = () => {
   const navigate = useNavigate();
@@ -13,35 +14,27 @@ export const JoinRoom = () => {
   const roomIdRef = useRef<HTMLInputElement | null>(null);
   const usernameRef = useRef<HTMLInputElement | null>(null);
 
-  const verifyRoomId = async (roomId: string, username: string) => {
-    try {
-      const response = await api.verifyRoomId(roomId);
-      if (!response.ok) {
-        throw new Error("Invalid Room ID!");
-      }
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-        console.error(err);
-      }
+  const verifyRoomId = async (roomId: string) => {
+    const response = await api.verifyRoomId(roomId);
+    if (!response.ok) {
+      throw new Error("Invalid Room ID!");
     }
   };
 
   const handleEnterRoom = async () => {
     try {
       if (roomIdRef.current?.value && usernameRef.current?.value) {
-        await verifyRoomId(roomIdRef.current.value, usernameRef.current.value);
+        await verifyRoomId(roomIdRef.current.value);
         navigate(`/room?roomId=${roomIdRef.current?.value}`, {
           state: { roomId: roomIdRef.current?.value, username: usernameRef.current?.value },
         });
       } else {
-        setError("Room ID and Name cannot be empty!");
+        throw new Error("Room ID and Name cannot be empty!");
       }
     } catch (err) {
       if (err instanceof Error) {
-        navigate("/");
-        console.error(err);
         setError(err.message);
+        console.error(err);
       }
     }
   };
@@ -74,11 +67,7 @@ export const JoinRoom = () => {
 
   return (
     <div className={styles.joinRoom}>
-      {error && (
-        <p className="error" role="error">
-          {error}
-        </p>
-      )}
+      <ErrorAlert error={error} />
       <div className={styles.enterInfo}>
         <div className={styles.enterRoomId}>
           <input aria-label="Enter room ID" type="text" maxLength={6} ref={roomIdRef} required />

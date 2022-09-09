@@ -5,3 +5,4 @@ export * from "./ScreenShare/screen-share";
 export * from "./RemoteUsers/remote-users";
 export * from "./RemoteVideo/remote-video";
 export * from "./ExitModal/exit-modal";
+export * from "./ErrorAlert/error-alert";

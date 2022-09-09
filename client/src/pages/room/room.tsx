@@ -2,7 +2,7 @@ import styles from "./room.module.scss";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import { useEffect, useRef } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import { ClientVideo, Controls, RemoteUsers, ScreenShare } from "@components";
+import { ClientVideo, Controls, ErrorAlert, RemoteUsers, ScreenShare } from "@components";
 import { RoomContextProvider } from "@context";
 import { useAppDispatch, useAppSelector, useError } from "@utils/hooks";
 import { rearCameraIsAvailable, resetState, screenSharingIsAvailable } from "@store";
@@ -77,11 +77,7 @@ export const Room = () => {
   return (
     <RoomContextProvider value={{ roomId, username, screenUsername, client }}>
       <div className={styles.room}>
-        {error && (
-          <p className="error" role="error">
-            {error}
-          </p>
-        )}
+        <ErrorAlert error={error} />
         <div className={styles.userGrid}>
           {isSharingScreen && <ScreenShare />}
           <ClientVideo isVideoOn={isVideoOn} isMicOn={isMicOn} facingMode={facingMode} />

@@ -10,6 +10,7 @@ import CopyIcon from "@assets/icons/copy.svg";
 import LoaderIcon from "@assets/icons/loader.svg";
 import Illustration from "@assets/images/video-conference.svg";
 import { useError } from "@utils/hooks";
+import { ErrorAlert } from "@components";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -84,11 +85,7 @@ export const Home = () => {
 
   return (
     <div className={styles.home}>
-      {error && (
-        <p className="error" role="error">
-          {error}
-        </p>
-      )}
+      <ErrorAlert error={error} />
       <a
         aria-label="Link to Github profile"
         href="https://github.com/rohitman47"
