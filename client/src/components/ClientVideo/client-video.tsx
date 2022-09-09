@@ -111,7 +111,7 @@ export const ClientVideo = memo(
           clientMicrophoneTrack.close();
         }
       };
-    });
+    }, []);
 
     return (
       <div className={[styles.client, facingMode === "user" && styles.mirrored].join(" ")} ref={clientRef}>
