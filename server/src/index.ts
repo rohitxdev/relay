@@ -1,6 +1,5 @@
 import { HOST, PORT, NODE_ENV } from "./config/secrets.js";
 import cors from "cors";
-import helmet from "helmet";
 import express from "express";
 import {
   entryPointController,
@@ -13,7 +12,7 @@ import {
 } from "./controllers/index.js";
 
 const server = express();
-server.use(cors(), helmet(), express.static("../../client/dist/"));
+server.use(cors(), express.static("../../client/dist/"));
 
 server.get("/api", entryPointController);
 

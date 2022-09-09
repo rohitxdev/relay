@@ -21,7 +21,7 @@ export const Home = () => {
   const shareData: ShareData = {
     title: "Relay: Free video conferencing for everyone",
     text: `You've been invited to join a room on Relay!\n\nRoom ID is ${roomId}.\n\nLink: ${window.location.hostname}/join-room?roomId=${roomId}`,
-    url: `${window.location.hostname}/join-room?roomId=${roomId}`,
+    url: `${window.location.href}/join-room?roomId=${roomId}`,
   };
 
   const shareRoomId = async () => {
