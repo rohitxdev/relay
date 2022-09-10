@@ -1,5 +1,3 @@
-@use './config';
-
 :root {
     --color-purple: hsl(253, 94%, 58%);
     --color-lightblue: hsl(208, 97%, 87%);
@@ -26,6 +24,11 @@
     background-image: linear-gradient(var(--color-purple), var(--color-dark-200));
     background-color: var(--color-dark-200);
     background-blend-mode: overlay;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("../assets/fonts/inter-variable-font.woff2") format('woff2');
 }
 
 button {
