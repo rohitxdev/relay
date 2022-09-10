@@ -18,18 +18,14 @@
         font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
 
+    height: 100vh;
+    width: 100vw;
     user-select: none;
     scroll-behavior:smooth;
     -webkit-tap-highlight-color: transparent;
     background-image: linear-gradient(var(--color-purple), var(--color-dark-200));
     background-color: var(--color-dark-200);
     background-blend-mode: overlay;
-}
-
-@font-face {
-    font-family: "Inter";
-    src: url("../assets/fonts/inter-variable-font.woff2") format('woff2');
-
 }
 
 button {

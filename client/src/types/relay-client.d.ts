@@ -19,8 +19,3 @@ interface IRemoteUser {
   remoteVideoTrack?: IRemoteVideoTrack;
   remoteAudioTrack?: IRemoteAudioTrack;
 }
-
-interface RoomLocationState {
-  roomId: string | undefined;
-  username: string | undefined;
-}

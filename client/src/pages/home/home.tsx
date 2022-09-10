@@ -1,6 +1,6 @@
 import styles from "./home.module.scss";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { api } from "../../services/api-service";
 import AddIcon from "@assets/icons/add.svg";
 import PeopleIcon from "@assets/icons/people.svg";
@@ -10,11 +10,10 @@ import CopyIcon from "@assets/icons/copy.svg";
 import LoaderIcon from "@assets/icons/loader.svg";
 import Illustration from "@assets/images/video-conference.svg";
 import { useError } from "@utils/hooks";
-import { ErrorAlert } from "@components";
 
 export const Home = () => {
   const navigate = useNavigate();
-  const [error, setError] = useError();
+  const [_, setError] = useError();
   const [canShare, setCanShare] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -77,15 +76,15 @@ export const Home = () => {
     navigate("/join-room");
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if ("share" in navigator && navigator.canShare(shareData)) {
       setCanShare(true);
     }
+    sessionStorage.clear();
   }, []);
 
   return (
     <div className={styles.home}>
-      <ErrorAlert error={error} />
       <a
         aria-label="Link to Github profile"
         href="https://github.com/rohitman47"

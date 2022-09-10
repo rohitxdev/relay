@@ -1,16 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import EnterIcon from "@assets/icons/enter.svg";
 import BackIcon from "@assets/icons/arrow-back.svg";
 import styles from "./join-room.module.scss";
 import { useError } from "@utils/hooks";
 import { api } from "@services";
-import { ErrorAlert } from "@components";
 
 export const JoinRoom = () => {
   const navigate = useNavigate();
-  const [error, setError] = useError();
-  const [searchParams, _] = useSearchParams();
+  const [_, setError] = useError();
+  const [searchParams, _setSearchParams] = useSearchParams();
   const roomIdRef = useRef<HTMLInputElement | null>(null);
   const usernameRef = useRef<HTMLInputElement | null>(null);
 
@@ -25,9 +24,9 @@ export const JoinRoom = () => {
     try {
       if (roomIdRef.current?.value && usernameRef.current?.value) {
         await verifyRoomId(roomIdRef.current.value);
-        navigate(`/room?roomId=${roomIdRef.current?.value}`, {
-          state: { roomId: roomIdRef.current?.value, username: usernameRef.current?.value },
-        });
+        sessionStorage.setItem("roomId", roomIdRef.current.value);
+        sessionStorage.setItem("username", usernameRef.current.value);
+        navigate(`/room?roomId=${roomIdRef.current.value}`);
       } else {
         throw new Error("Room ID and Name cannot be empty!");
       }
@@ -40,7 +39,7 @@ export const JoinRoom = () => {
   };
 
   const handleBack = () => {
-    history.back();
+    navigate(-1);
   };
 
   const enterKeyListener = async (e: KeyboardEvent) => {
@@ -56,18 +55,23 @@ export const JoinRoom = () => {
   };
 
   useEffect(() => {
-    if (roomIdRef.current) {
-      roomIdRef.current.value = searchParams.get("roomId") ?? "";
-    }
     window.addEventListener("keydown", enterKeyListener);
     return () => {
       window.removeEventListener("keydown", enterKeyListener);
     };
+  });
+
+  useLayoutEffect(() => {
+    //Check for room ID in shared link
+    if (roomIdRef.current) {
+      roomIdRef.current.value = searchParams.get("roomId") ?? "";
+    }
+    //To prevent user from navigating back to room after leaving.
+    sessionStorage.clear();
   }, []);
 
   return (
     <div className={styles.joinRoom}>
-      <ErrorAlert error={error} />
       <div className={styles.enterInfo}>
         <div className={styles.enterRoomId}>
           <input aria-label="Enter room ID" type="text" maxLength={6} ref={roomIdRef} required />

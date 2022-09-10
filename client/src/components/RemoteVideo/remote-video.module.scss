@@ -1,7 +1,7 @@
-@use '../../app/config';
+@use '../../app/config' as *;
 
 .remote-video {
-    @include config.video-stream;
+    @include video-stream;
 
     video {
         object-fit: contain !important;
@@ -9,7 +9,7 @@
 }
 
 .remote-username {
-    @include config.username;
+    @include username;
 
     .remote-video:hover > & {
         opacity: 1;

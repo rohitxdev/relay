@@ -1,12 +1,12 @@
+@use '../../app/config' as *;
+
 .page {
-    height: 100vh;
-    width: 100vw;
+    @include page;
     background-color: var(--color-dark-200);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    overflow: hidden;
 }
 
 .illustration {

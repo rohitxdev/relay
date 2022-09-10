@@ -1,7 +1,7 @@
+@use '../../app/config' as *;
+
 .room {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    @include page;
 }
 
 .user-grid {

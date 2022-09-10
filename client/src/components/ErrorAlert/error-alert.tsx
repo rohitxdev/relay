@@ -1,7 +1,9 @@
 import styles from "./error-alert.module.scss";
 import ErrorIcon from "@assets/icons/error.svg";
+import { useError } from "@utils/hooks";
 
-export const ErrorAlert = ({ error }: { error: string | null }) => {
+export const ErrorAlert = () => {
+  const [error, _] = useError();
   return (
     <>
       {error && (

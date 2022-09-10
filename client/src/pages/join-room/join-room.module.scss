@@ -1,11 +1,9 @@
-@use '../../app/config';
+@use '../../app/config' as *;
 
 .join-room {
-    height: 100vh;
-    width: 100vw;
+    @include page;
     display: grid;
     place-items: center;
-    overflow: hidden;
     color: var(--white);
 }
 

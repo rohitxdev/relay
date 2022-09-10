@@ -1,7 +1,7 @@
-@use '../../app/config';
+@use '../../app/config' as *;
 
 .client {
-    @include config.video-stream;
+    @include video-stream;
 
     &.mirrored {
         video {
@@ -17,7 +17,7 @@
 
 
 .client-username {
-    @include config.username;
+    @include username;
 
     .client:hover > & {
         opacity: 1;
