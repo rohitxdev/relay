@@ -205,3 +205,9 @@
     animation: slide-from-right 0.5s 1 forwards;
   }
 }
+
+@media screen and (max-height:800px) {
+  .home {
+    overflow: auto;
+  }
+}

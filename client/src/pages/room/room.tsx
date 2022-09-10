@@ -1,11 +1,11 @@
 import styles from "./room.module.scss";
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { useEffect, useLayoutEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import { ClientVideo, Controls, RemoteUsers, ScreenShare } from "@components";
 import { RoomContextProvider } from "@context";
 import { useAppDispatch, useAppSelector, useError } from "@utils/hooks";
 import { rearCameraIsAvailable, resetState, screenSharingIsAvailable } from "@store";
+import { useNavigate } from "react-router-dom";
 import { api } from "@services";
 
 export const Room = () => {
@@ -56,28 +56,21 @@ export const Room = () => {
     }
   };
 
-  const askForConfirmation = () => false;
-
   useEffect(() => {
+    if (!roomId || !username) {
+      navigate(-1);
+    }
     checkDeviceCapabilities().then(() => {
       if (client.connectionState !== "CONNECTED" && client.connectionState !== "CONNECTING") {
         enterRoom();
       }
     });
-    window.addEventListener("beforeunload", askForConfirmation);
 
     return () => {
       client.leave();
       console.clear();
       dispatch(resetState());
-      window.removeEventListener("beforeunload", askForConfirmation);
     };
-  }, []);
-
-  useLayoutEffect(() => {
-    if (!roomId || !username) {
-      navigate(-1);
-    }
   }, []);
 
   return (

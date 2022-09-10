@@ -1,6 +1,6 @@
 import styles from "./home.module.scss";
 import { useNavigate } from "react-router-dom";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../services/api-service";
 import AddIcon from "@assets/icons/add.svg";
 import PeopleIcon from "@assets/icons/people.svg";
@@ -76,7 +76,7 @@ export const Home = () => {
     navigate("/join-room");
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if ("share" in navigator && navigator.canShare(shareData)) {
       setCanShare(true);
     }
