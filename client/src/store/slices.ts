@@ -9,6 +9,7 @@ const roomSlice = createSlice({
     isRearCameraAvailable: false,
     isScreenSharingAvailable: false,
     facingMode: "user",
+    users: 0,
     error: null,
   } as RoomState,
   reducers: {
@@ -30,6 +31,12 @@ const roomSlice = createSlice({
     screenSharingIsAvailable: (state) => {
       state.isScreenSharingAvailable = true;
     },
+    incrementUsers: (state) => {
+      state.users = state.users + 1;
+    },
+    decrementUsers: (state) => {
+      state.users = state.users - 1;
+    },
     setError: (state, action) => {
       state.error = action.payload;
     },
@@ -41,6 +48,7 @@ const roomSlice = createSlice({
         isRearCameraAvailable: false,
         isScreenSharingAvailable: false,
         facingMode: "user",
+        users: 0,
         error: state.error,
       };
     },
@@ -56,6 +64,8 @@ export const {
     toggleFacingMode,
     rearCameraIsAvailable,
     screenSharingIsAvailable,
+    incrementUsers,
+    decrementUsers,
     setError,
     resetState,
   },

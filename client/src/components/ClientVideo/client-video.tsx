@@ -1,13 +1,15 @@
 import styles from "./client-video.module.scss";
 import AgoraRTC, { ILocalVideoTrack, ILocalAudioTrack } from "agora-rtc-sdk-ng";
 import { memo, useEffect, useRef, useState } from "react";
-import { useError, useRoomContext, useToggleFullscreen } from "@utils/hooks";
+import { useAppDispatch, useError, useRoomContext, useToggleFullscreen } from "@utils/hooks";
 import EnterFullscreenIcon from "@assets/icons/enter-fullscreen.svg";
 import ExitFullscreenIcon from "@assets/icons/exit-fullscreen.svg";
 import { UserIcon } from "@components";
+import { decrementUsers, incrementUsers } from "@store";
 
 export const ClientVideo = memo(
   ({ isVideoOn, isMicOn, facingMode }: { isVideoOn: boolean; isMicOn: boolean; facingMode: facingMode }) => {
+    const dispatch = useAppDispatch();
     const [error, setError] = useError();
     const { username, client } = useRoomContext();
     const clientRef = useRef<HTMLDivElement | null>(null);
@@ -103,6 +105,7 @@ export const ClientVideo = memo(
     }, [facingMode]);
 
     useEffect(() => {
+      dispatch(incrementUsers());
       return () => {
         if (clientVideoTrack) {
           clientVideoTrack.close();
@@ -110,6 +113,7 @@ export const ClientVideo = memo(
         if (clientMicrophoneTrack) {
           clientMicrophoneTrack.close();
         }
+        dispatch(decrementUsers());
       };
     }, []);
 

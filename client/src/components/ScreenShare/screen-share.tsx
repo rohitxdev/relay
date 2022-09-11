@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { useToggleFullscreen, useRoomContext, useAppDispatch, useError } from "@utils/hooks";
 import EnterFullscreenIcon from "@assets/icons/enter-fullscreen.svg";
 import ExitFullscreenIcon from "@assets/icons/exit-fullscreen.svg";
-import { toggleScreenShare } from "@store";
+import { decrementUsers, incrementUsers, toggleScreenShare } from "@store";
 import { api } from "@services";
 
 export const ScreenShare = () => {
   const dispatch = useAppDispatch();
-  const [error, setError] = useError();
+  const [_, setError] = useError();
   const { roomId, screenUsername } = useRoomContext();
   const screenVideoRef = useRef<HTMLDivElement | null>(null);
   const screenClient = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
@@ -78,6 +78,7 @@ export const ScreenShare = () => {
 
   useEffect(() => {
     acquireTracks();
+    dispatch(incrementUsers());
 
     return () => {
       if (screenClient.current.connectionState === "CONNECTED") {
@@ -89,6 +90,7 @@ export const ScreenShare = () => {
       if (screenAudioTrack) {
         screenAudioTrack.close();
       }
+      dispatch(decrementUsers());
     };
   }, []);
 
