@@ -5,6 +5,8 @@ import EnterFullscreenIcon from "@assets/icons/enter-fullscreen.svg";
 import ExitFullscreenIcon from "@assets/icons/exit-fullscreen.svg";
 import { useToggleFullscreen } from "@utils/hooks";
 import { UserIcon } from "@components";
+import { useDispatch } from "react-redux";
+import { decrementUsers, incrementUsers } from "@store";
 
 export const RemoteVideo = memo(
   ({
@@ -16,6 +18,7 @@ export const RemoteVideo = memo(
     remoteAudioTrack?: IRemoteAudioTrack;
     remoteVideoTrack?: IRemoteVideoTrack;
   }) => {
+    const dispatch = useDispatch();
     const remoteUserRef = useRef<HTMLDivElement | null>(null);
     const [isFullscreen, toggleFullscreen] = useToggleFullscreen(remoteUserRef.current);
 
@@ -24,10 +27,12 @@ export const RemoteVideo = memo(
         remoteVideoTrack.play(remoteUserRef.current);
       }
       remoteAudioTrack?.play();
+      dispatch(incrementUsers());
 
       return () => {
         remoteVideoTrack?.stop();
         remoteAudioTrack?.stop();
+        dispatch(decrementUsers());
       };
     });
 

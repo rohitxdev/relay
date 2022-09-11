@@ -10,6 +10,7 @@ interface RoomState {
   isRearCameraAvailable: boolean;
   isScreenSharingAvailable: boolean;
   facingMode: facingMode;
+  users: number;
   error: error;
 }
 

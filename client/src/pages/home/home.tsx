@@ -96,7 +96,7 @@ export const Home = () => {
       <section className={styles.banner} role="banner" aria-label="Page banner">
         <div className={styles.appName}>
           <p>Relay</p>
-          <img src="./relay-logo.png" alt="Logo" />
+          <img src="./relay-256x256.png" alt="Logo" />
         </div>
         <p className={styles.appDescription}>Free Video Conferencing for Everyone</p>
       </section>

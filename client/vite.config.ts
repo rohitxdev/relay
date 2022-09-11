@@ -6,17 +6,32 @@ import postcssPresetEnv from "postcss-preset-env";
 import { Plugin } from "postcss";
 
 export default defineConfig(({ mode }) => ({
-  envDir: "./src/config/",
-  plugins: [react(), svgr({ exportAsDefault: true, svgrOptions: { icon: true } })],
+  build: {
+    chunkSizeWarningLimit: undefined,
+    rollupOptions: {
+      input: {
+        index: "./index.html",
+        "service-worker": "./src/app/service-worker.ts",
+      },
+      output: {
+        entryFileNames: `[name].js`,
+        chunkFileNames: `[name].js`,
+        assetFileNames: `[name].[ext]`,
+      },
+    },
+  },
   css: {
     modules: {
       localsConvention: "camelCase",
-      generateScopedName: mode === "development" ? "[local]__[hash:base64:4]" : "[hash:base64:6]",
+      generateScopedName: mode === "development" ? "[local]__[hash:base64:4]" : "[hash:base64:8]",
     },
     postcss: {
       plugins: [postcssPresetEnv({ stage: 1 }) as Plugin],
     },
   },
+  envDir: "./src/config/",
+  publicDir: "./src/public/",
+  plugins: [react(), svgr({ exportAsDefault: true, svgrOptions: { icon: true } })],
   resolve: {
     alias: {
       "@assets": resolve(__dirname, "./src/assets"),
