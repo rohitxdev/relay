@@ -1,14 +1,37 @@
 @use '../../app/config' as *;
 
+.float {
+    @include video-stream;
+    position: absolute;
+    height: max(150px, 20vh);
+    width: max(150px, 20vw);
+    top: 0;
+    left: 0;
+    margin: 0.75em;
+    z-index: 1000;
+    background-color: var(--color-dark-200);
+
+    &:hover {
+        cursor: grab;
+    }
+
+    &:active {
+        cursor: grabbing;
+    }
+}
+
+
+.mirrored {
+    video {
+        transform: scale(-1, 1) !important;
+        object-fit: contain !important;
+    }
+}
+
 .client {
     @include video-stream;
 
-    &.mirrored {
-        video {
-            transform: scale(-1, 1) !important;
-            object-fit: contain !important;
-        }
-    }
+
 
     video {
         object-fit: contain !important;
@@ -19,7 +42,7 @@
 .client-username {
     @include username;
 
-    .client:hover > & {
+    div:hover > & {
         opacity: 1;
         transform: translateY(0);
 

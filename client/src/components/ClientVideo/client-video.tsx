@@ -1,7 +1,7 @@
 import styles from "./client-video.module.scss";
 import AgoraRTC, { ILocalVideoTrack, ILocalAudioTrack } from "agora-rtc-sdk-ng";
 import { memo, useEffect, useRef, useState } from "react";
-import { useAppDispatch, useError, useRoomContext, useToggleFullscreen } from "@utils/hooks";
+import { useAppDispatch, useAppSelector, useError, useRoomContext, useToggleFullscreen } from "@utils/hooks";
 import EnterFullscreenIcon from "@assets/icons/enter-fullscreen.svg";
 import ExitFullscreenIcon from "@assets/icons/exit-fullscreen.svg";
 import { UserIcon } from "@components";
@@ -10,7 +10,8 @@ import { decrementUsers, incrementUsers } from "@store";
 export const ClientVideo = memo(
   ({ isVideoOn, isMicOn, facingMode }: { isVideoOn: boolean; isMicOn: boolean; facingMode: facingMode }) => {
     const dispatch = useAppDispatch();
-    const [error, setError] = useError();
+    const users = useAppSelector((state) => state.room.users);
+    const [_, setError] = useError();
     const { username, client } = useRoomContext();
     const clientRef = useRef<HTMLDivElement | null>(null);
     const [isFullscreen, toggleFullscreen] = useToggleFullscreen(clientRef.current);
@@ -117,8 +118,55 @@ export const ClientVideo = memo(
       };
     }, []);
 
+    useEffect(() => {
+      if (users === 2 && clientRef.current) {
+        clientRef.current.onpointerdown = (event) => {
+          if (clientRef.current) {
+            const clientRect = clientRef.current.getBoundingClientRect();
+            const shiftX = event.clientX - clientRect.left;
+            const shiftY = event.clientY - clientRect.top;
+            clientRef.current.style.transform = "scale(0.97)";
+
+            window.onpointermove = (e) => {
+              if (clientRef.current && clientRef.current.parentElement) {
+                if (
+                  clientRef.current.offsetWidth - shiftX + e.clientX <
+                    clientRef.current.parentElement.offsetWidth - 24 &&
+                  e.clientX > shiftX
+                ) {
+                  clientRef.current.style.left = e.clientX - shiftX + "px";
+                }
+                if (
+                  clientRef.current.offsetHeight - shiftY + e.clientY <
+                    clientRef.current.parentElement.offsetHeight - 24 &&
+                  e.clientY > shiftY
+                ) {
+                  clientRef.current.style.top = e.clientY - shiftY + "px";
+                }
+              }
+            };
+          }
+        };
+        window.onpointerup = (event) => {
+          if (clientRef.current) {
+            clientRef.current.style.transform = "scale(1)";
+          }
+          window.onpointermove = null;
+        };
+      }
+      return () => {
+        if (clientRef.current) {
+          clientRef.current.onpointerdown = null;
+          window.onpointermove = null;
+        }
+      };
+    }, [users]);
+
     return (
-      <div className={[styles.client, facingMode === "user" && styles.mirrored].join(" ")} ref={clientRef}>
+      <div
+        className={[users !== 2 ? styles.client : styles.float, facingMode === "user" && styles.mirrored].join(" ")}
+        ref={clientRef}
+      >
         <button className="fullscreen-btn" onClick={toggleFullscreen}>
           {isFullscreen ? <ExitFullscreenIcon /> : <EnterFullscreenIcon />}
         </button>

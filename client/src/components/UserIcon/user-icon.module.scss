@@ -11,13 +11,13 @@
          outline: var(--color-purple) solid 2px;
          display: grid;
          place-items: center;
-         height: clamp(4em, 50%, 12em);
+         height: clamp(2em, 50%, 12em);
          aspect-ratio: 1 / 1;
          background-color: var(--color-dark-100);
-
+         overflow: hidden;
 
          p {
-             font-size: clamp(4em, calc(4vw + 4vh), 8em);
+             font-size: 3em;
              font-variation-settings: 'wght' 700;
              color: var(--color-white);
              text-transform: uppercase;

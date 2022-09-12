@@ -7,7 +7,9 @@ export function useError(timer: number = 3000): [string | null, (err: string | n
   const dispatch = useAppDispatch();
 
   const setErrorMessage = (err: string | null) => {
-    dispatch(setError(err));
+    if (!error) {
+      dispatch(setError(err));
+    }
   };
 
   useEffect(() => {
