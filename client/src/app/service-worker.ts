@@ -18,7 +18,7 @@ export const serviceWorker = () => {
   });
 
   self.addEventListener("fetch", async (e) => {
-    if (!e.request.url.includes("api")) {
+    if (!e.request.url.includes("api") && e.request.method === "GET") {
       const res = caches.match(e.request).then(
         (cacheRes) =>
           cacheRes ??
