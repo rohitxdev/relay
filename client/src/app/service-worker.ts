@@ -1,50 +1,32 @@
 declare const self: ServiceWorkerGlobalScope;
 
 export const serviceWorker = () => {
-  const CACHE_NAME = `relay_cache::`;
-  const CACHE_VERSION = "v1.0.0";
+  const cacheVersion = "v1.0.0";
+  const cacheName = `relay-cache-${cacheVersion}`;
 
-  const addResourcesToCache = async (resources: string | string[]) => {
-    try {
-      const cache = await caches.open(CACHE_NAME + CACHE_VERSION);
-      await cache.addAll(resources);
-    } catch (err) {
-      console.error(err);
-    }
+  const cacheDynamicResource = async (req: Request, res: Response) => {
+    caches.open(cacheName).then((cache) => cache.put(req, res));
   };
-  self.addEventListener("install", (e) => {
-    console.info("🤖 Service worker installed");
-    e.waitUntil(
-      addResourcesToCache([
-        "index.html",
-        "index.css",
-        "index.js",
-        "inter-variable-font.woff2",
-        "call-join.mp3",
-        "call-leave.mp3",
-        "relay-128x128.png",
-        "relay-256x256.png",
-      ])
-    );
-  });
 
   self.addEventListener("activate", () => {
-    console.info("💪 Service worker activated");
+    caches
+      .keys()
+      .then((keys) => keys.map((key) => key !== cacheName && caches.delete(key)))
+      .catch((err) => {
+        console.error(err);
+      });
   });
 
-  self.addEventListener("offline", () => {
-    console.log("client offline");
-  });
-
-  self.addEventListener("fetch", (e) => {
-    e.respondWith(
-      caches.match(e.request).then((cacheRes) => {
-        if (cacheRes) {
-          console.log("cache matched");
-        }
-        return cacheRes || fetch(e.request);
-      })
+  self.addEventListener("fetch", async (e) => {
+    const res = caches.match(e.request).then(
+      (cacheRes) =>
+        cacheRes ??
+        fetch(e.request).then((res) => {
+          cacheDynamicResource(e.request, res.clone());
+          return res;
+        })
     );
+    e.respondWith(res);
   });
 };
 

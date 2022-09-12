@@ -14,9 +14,8 @@ export default defineConfig(({ mode }) => ({
         "service-worker": "./src/app/service-worker.ts",
       },
       output: {
-        entryFileNames: `[name].js`,
-        chunkFileNames: `[name].js`,
-        assetFileNames: `[name].[ext]`,
+        entryFileNames: (chunkInfo) => (chunkInfo.name === "service-worker" ? "[name].js" : "[name].[hash].js"),
+        assetFileNames: "[name].[hash].[ext]",
       },
     },
   },
