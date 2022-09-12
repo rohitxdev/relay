@@ -18,15 +18,17 @@ export const serviceWorker = () => {
   });
 
   self.addEventListener("fetch", async (e) => {
-    const res = caches.match(e.request).then(
-      (cacheRes) =>
-        cacheRes ??
-        fetch(e.request).then((res) => {
-          cacheDynamicResource(e.request, res.clone());
-          return res;
-        })
-    );
-    e.respondWith(res);
+    if (!e.request.url.includes("api")) {
+      const res = caches.match(e.request).then(
+        (cacheRes) =>
+          cacheRes ??
+          fetch(e.request).then((res) => {
+            cacheDynamicResource(e.request, res.clone());
+            return res;
+          })
+      );
+      e.respondWith(res);
+    }
   });
 };
 
