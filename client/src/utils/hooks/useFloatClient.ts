@@ -6,14 +6,17 @@ export const useFloatClient = (clientElement: HTMLDivElement | null) => {
 
   useEffect(() => {
     if (floatClient && clientElement) {
-      clientElement.onmousedown = (event) => {
+      clientElement.onpointerdown = (event) => {
         if (clientElement) {
+          if (clientElement.hasPointerCapture(event.pointerId)) {
+            clientElement.releasePointerCapture(event.pointerId);
+          }
           const clientRect = clientElement.getBoundingClientRect();
           const shiftX = event.clientX - clientRect.left;
           const shiftY = event.clientY - clientRect.top;
           clientElement.style.transform = "scale(0.97)";
 
-          window.onmousemove = (e) => {
+          window.onpointermove = (e) => {
             if (clientElement && clientElement.parentElement) {
               if (
                 clientRect.width - shiftX + e.clientX <=
@@ -33,17 +36,17 @@ export const useFloatClient = (clientElement: HTMLDivElement | null) => {
           };
         }
       };
-      window.onmouseup = () => {
+      window.onpointerup = () => {
         if (clientElement) {
           clientElement.style.transform = "scale(1)";
         }
-        window.onmousemove = null;
+        window.onpointermove = null;
       };
     }
     return () => {
       if (clientElement) {
-        clientElement.onmousedown = null;
-        window.onmousemove = null;
+        clientElement.onpointerdown = null;
+        window.onpointermove = null;
       }
     };
   }, [floatClient]);

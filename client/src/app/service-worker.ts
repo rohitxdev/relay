@@ -1,7 +1,7 @@
 declare const self: ServiceWorkerGlobalScope;
 
 export const serviceWorker = () => {
-  const cacheVersion = "v1.0.2";
+  const cacheVersion = "v1.0.3";
   const cacheName = `relay-cache-${cacheVersion}`;
 
   const cacheDynamicResource = async (req: Request, res: Response) => {
