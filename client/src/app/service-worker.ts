@@ -1,12 +1,16 @@
 declare const self: ServiceWorkerGlobalScope;
 
 export const serviceWorker = () => {
-  const cacheVersion = "v1.0.1";
+  const cacheVersion = "v1.0.2";
   const cacheName = `relay-cache-${cacheVersion}`;
 
   const cacheDynamicResource = async (req: Request, res: Response) => {
     caches.open(cacheName).then((cache) => cache.put(req, res));
   };
+
+  self.addEventListener("install", () => {
+    self.skipWaiting();
+  });
 
   self.addEventListener("activate", () => {
     caches
