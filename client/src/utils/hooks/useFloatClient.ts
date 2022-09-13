@@ -8,9 +8,6 @@ export const useFloatClient = (clientElement: HTMLDivElement | null) => {
     if (floatClient && clientElement) {
       clientElement.onpointerdown = (event) => {
         if (clientElement) {
-          if (clientElement.hasPointerCapture(event.pointerId)) {
-            clientElement.releasePointerCapture(event.pointerId);
-          }
           const clientRect = clientElement.getBoundingClientRect();
           const shiftX = event.clientX - clientRect.left;
           const shiftY = event.clientY - clientRect.top;

@@ -9,6 +9,7 @@
     margin: 0.75em;
     z-index: 1000;
     border-radius: 2em;
+    touch-action: none;
 
     &:not(:fullscreen) {
         &:hover {
