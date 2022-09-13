@@ -1,5 +1,5 @@
 import styles from "./home.module.scss";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api-service";
 import AddIcon from "@assets/icons/add.svg";
@@ -12,8 +12,9 @@ import Illustration from "@assets/images/video-conference.svg";
 import { useError } from "@utils/hooks";
 
 export const Home = () => {
-  const navigate = useNavigate();
   const [_, setError] = useError();
+  const navigate = useNavigate();
+  const { state } = useLocation() as { state: { error?: string } };
   const [canShare, setCanShare] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
@@ -77,6 +78,10 @@ export const Home = () => {
   };
 
   useEffect(() => {
+    if (state?.error) {
+      setError(state.error);
+      history.replaceState({}, document.title);
+    }
     if ("share" in navigator && navigator.canShare(shareData)) {
       setCanShare(true);
     }

@@ -1,7 +1,7 @@
 import styles from "./room.module.scss";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import { useEffect, useRef } from "react";
-import { ClientVideo, Controls, RemoteUsers, ScreenShare } from "@components";
+import { ClientUser, Controls, RemoteUsers, ScreenShare } from "@components";
 import { RoomContextProvider } from "@context";
 import { useAppDispatch, useAppSelector, useError } from "@utils/hooks";
 import { rearCameraIsAvailable, resetState, screenSharingIsAvailable } from "@store";
@@ -19,6 +19,7 @@ export const Room = () => {
   const isMicOn = useAppSelector((state) => state.room.isMicOn);
   const isSharingScreen = useAppSelector((state) => state.room.isSharingScreen);
   const facingMode = useAppSelector((state) => state.room.facingMode);
+  const floatClient = useAppSelector((state) => state.room.floatClient);
   const { current: client } = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
 
   const checkDeviceCapabilities = async () => {
@@ -76,11 +77,11 @@ export const Room = () => {
   return (
     <>
       {roomId && username && (
-        <RoomContextProvider value={{ roomId, username, screenUsername, client }}>
+        <RoomContextProvider value={{ username, screenUsername, client, roomId }}>
           <div className={styles.room}>
-            <div className={styles.userGrid}>
+            <div className={[styles.userGrid, floatClient && styles.floatingClient].join(" ")}>
               {isSharingScreen && <ScreenShare />}
-              <ClientVideo isVideoOn={isVideoOn} isMicOn={isMicOn} facingMode={facingMode} />
+              <ClientUser isVideoOn={isVideoOn} isMicOn={isMicOn} facingMode={facingMode} />
               <RemoteUsers />
             </div>
             <Controls />

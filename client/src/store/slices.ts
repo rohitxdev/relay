@@ -1,17 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState: RoomState = {
+  isVideoOn: false,
+  isMicOn: false,
+  isSharingScreen: false,
+  isRearCameraAvailable: false,
+  isScreenSharingAvailable: false,
+  facingMode: "user",
+  floatClient: false,
+  error: null,
+};
+
 const roomSlice = createSlice({
   name: "room",
-  initialState: {
-    isVideoOn: false,
-    isMicOn: false,
-    isSharingScreen: false,
-    isRearCameraAvailable: false,
-    isScreenSharingAvailable: false,
-    facingMode: "user",
-    users: 0,
-    error: null,
-  } as RoomState,
+  initialState,
   reducers: {
     toggleVideo: (state) => {
       state.isVideoOn = !state.isVideoOn;
@@ -31,26 +33,14 @@ const roomSlice = createSlice({
     screenSharingIsAvailable: (state) => {
       state.isScreenSharingAvailable = true;
     },
-    incrementUsers: (state) => {
-      state.users = state.users + 1;
-    },
-    decrementUsers: (state) => {
-      state.users = state.users - 1;
+    setFloatClient: (state, action) => {
+      state.floatClient = action.payload;
     },
     setError: (state, action) => {
       state.error = action.payload;
     },
     resetState: (state) => {
-      return {
-        isVideoOn: false,
-        isMicOn: false,
-        isSharingScreen: false,
-        isRearCameraAvailable: false,
-        isScreenSharingAvailable: false,
-        facingMode: "user",
-        users: 0,
-        error: state.error,
-      };
+      return { ...initialState, error: state.error };
     },
   },
 });
@@ -64,8 +54,7 @@ export const {
     toggleFacingMode,
     rearCameraIsAvailable,
     screenSharingIsAvailable,
-    incrementUsers,
-    decrementUsers,
+    setFloatClient,
     setError,
     resetState,
   },

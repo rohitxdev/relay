@@ -1,0 +1,89 @@
+@use '../../app/config' as *;
+
+.user {
+    position: relative;
+    overflow: hidden;
+    outline: var(--color-purple) solid 2px;
+    height: 100%;
+    width: 100%;
+    border-radius: 2em;
+    background-color: var(--color-dark-100);
+
+    &:fullscreen {
+        border-radius: 0;
+    }
+
+    video {
+        z-index: 20;
+        object-fit: contain !important;
+    }
+}
+
+.user-icon-container {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    position: absolute;
+    z-index: 10;
+
+    .user-icon {
+        border-radius: 50%;
+        height: clamp(2em, 50%, 12em);
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        user-select: none;
+
+        svg {
+            background-color: var(--color-purple);
+
+            text {
+                font-size: 0.5px;
+                font-variation-settings: 'wght' 600;
+                fill: var(--color-white);
+            }
+        }
+    }
+}
+
+.user-info {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5em;
+    opacity: 0;
+    z-index: 10;
+    transform: translateY(200%);
+    transition: all 0.4s ease-in-out;
+
+    div:hover > & {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.username {
+    background-color: var(--color-dark-200);
+    border-radius: 0.5em;
+    padding: 0.5em 0.75em;
+    color: var(--color-white);
+    font-size: 1em;
+    opacity: 0.7;
+    font-variation-settings: 'wght' 700;
+}
+
+.fullscreen-btn {
+    height: 1.5em;
+    width: 1.5em;
+    background-color: transparent;
+
+    svg {
+        height: 100%;
+        width: 100%;
+        fill: var(--color-white);
+        stroke: var(--color-white) !important;
+    }
+}

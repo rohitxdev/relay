@@ -10,13 +10,6 @@ interface RoomState {
   isRearCameraAvailable: boolean;
   isScreenSharingAvailable: boolean;
   facingMode: facingMode;
-  users: number;
+  floatClient: boolean;
   error: error;
-}
-
-interface IRemoteUser {
-  uid: UID;
-  username: string;
-  remoteVideoTrack?: IRemoteVideoTrack;
-  remoteAudioTrack?: IRemoteAudioTrack;
 }

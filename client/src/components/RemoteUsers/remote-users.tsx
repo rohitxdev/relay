@@ -1,12 +1,23 @@
 import { memo, useEffect, useRef, useState } from "react";
-import { RemoteVideo } from "@components";
+import { User } from "@components";
 import { useRoomContext } from "@utils/hooks/useRoomContext";
 import callJoinTone from "@assets/audio/call-join.mp3";
 import callLeftTone from "@assets/audio/call-leave.mp3";
-import { UID } from "agora-rtc-sdk-ng";
+import { IRemoteAudioTrack, IRemoteVideoTrack, UID } from "agora-rtc-sdk-ng";
 import { api } from "@services";
+import { setFloatClient } from "@store";
+import { useAppDispatch, useAppSelector } from "@utils/hooks";
+
+interface IRemoteUser {
+  uid: UID;
+  username: string;
+  remoteVideoTrack: IRemoteVideoTrack | null;
+  remoteAudioTrack: IRemoteAudioTrack | null;
+}
 
 export const RemoteUsers = memo(() => {
+  const dispatch = useAppDispatch();
+  const floatClient = useAppSelector((state) => state.room.floatClient);
   const screenUid = useRef<UID | null>(null);
   const { client, screenUsername } = useRoomContext();
   const [remoteUsers, setRemoteUsers] = useState<IRemoteUser[]>([]);
@@ -23,9 +34,9 @@ export const RemoteUsers = memo(() => {
         ...prevUsers,
         {
           uid: user.uid,
-          username: username,
-          remoteAudioTrack: user.audioTrack,
-          remoteVideoTrack: user.videoTrack,
+          username,
+          remoteAudioTrack: user.audioTrack ? user.audioTrack : null,
+          remoteVideoTrack: user.videoTrack ? user.videoTrack : null,
         },
       ]);
       if (username !== screenUsername) {
@@ -49,7 +60,7 @@ export const RemoteUsers = memo(() => {
         setRemoteUsers((prevUsers) =>
           prevUsers.map((prevUser) => {
             if (prevUser.uid === user.uid) {
-              prevUser.remoteAudioTrack = user.audioTrack;
+              prevUser.remoteAudioTrack = user.audioTrack ? user.audioTrack : null;
             }
             return prevUser;
           })
@@ -59,7 +70,7 @@ export const RemoteUsers = memo(() => {
         setRemoteUsers((prevUsers) =>
           prevUsers.map((prevUser) => {
             if (prevUser.uid === user.uid) {
-              prevUser.remoteVideoTrack = user.videoTrack;
+              prevUser.remoteVideoTrack = user.videoTrack ? user.videoTrack : null;
             }
             return prevUser;
           })
@@ -71,7 +82,7 @@ export const RemoteUsers = memo(() => {
         setRemoteUsers((prevUsers) =>
           prevUsers.map((prevUser) => {
             if (prevUser.uid === user.uid) {
-              delete prevUser.remoteAudioTrack;
+              prevUser.remoteAudioTrack = null;
             }
             return prevUser;
           })
@@ -81,7 +92,7 @@ export const RemoteUsers = memo(() => {
         setRemoteUsers((prevUsers) =>
           prevUsers.map((prevUser) => {
             if (prevUser.uid === user.uid) {
-              delete prevUser.remoteVideoTrack;
+              prevUser.remoteVideoTrack = null;
             }
             return prevUser;
           })
@@ -94,18 +105,20 @@ export const RemoteUsers = memo(() => {
     };
   }, []);
 
+  useEffect(() => {
+    if (remoteUsers.length === 1) {
+      dispatch(setFloatClient(true));
+    } else {
+      if (floatClient) {
+        dispatch(setFloatClient(false));
+      }
+    }
+  }, [remoteUsers]);
   return (
     <>
-      {remoteUsers.map((remoteUser) => {
-        if (remoteUser.username === screenUsername) return null;
-        return (
-          <RemoteVideo
-            remoteAudioTrack={remoteUser.remoteAudioTrack}
-            remoteVideoTrack={remoteUser.remoteVideoTrack}
-            username={remoteUser.username}
-            key={remoteUser.uid}
-          />
-        );
+      {remoteUsers.map(({ uid, username, remoteAudioTrack, remoteVideoTrack }) => {
+        if (username === screenUsername) return null;
+        return <User key={uid} username={username} audioTrack={remoteAudioTrack} videoTrack={remoteVideoTrack} />;
       })}
     </>
   );
