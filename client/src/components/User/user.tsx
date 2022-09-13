@@ -65,7 +65,11 @@ export const User = memo(
         </div>
         <div className={styles.userInfo}>
           <p className={styles.username}>{username}</p>
-          <button className={styles.fullscreenBtn} onClick={toggleFullscreen}>
+          <button
+            aria-label={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+            className={styles.fullscreenBtn}
+            onClick={toggleFullscreen}
+          >
             {isFullscreen ? <ExitFullscreenIcon /> : <EnterFullscreenIcon />}
           </button>
         </div>

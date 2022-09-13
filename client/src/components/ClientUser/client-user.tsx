@@ -35,7 +35,7 @@ export const ClientUser = memo(
         const cameraTrack = await AgoraRTC.createCameraVideoTrack({
           facingMode,
           optimizationMode: "motion",
-          encoderConfig: { bitrateMin: 512, bitrateMax: 2048, height: window.innerHeight, width: window.innerWidth },
+          encoderConfig: { bitrateMin: 512, bitrateMax: 2048 },
         });
         setClientVideoTrack(cameraTrack);
       } catch (err) {
