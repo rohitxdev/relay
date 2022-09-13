@@ -4,34 +4,6 @@
     overflow: hidden;
 }
 
-@mixin username {
-    position: absolute;
-    color: var(--color-white);
-    width: 100%;
-    text-align: center;
-    margin-block: 1em;
-    font-size: 1em;
-    font-variation-settings: 'wght' 700;
-    z-index: 10;
-    opacity: 0;
-    transform: translateY(-150%);
-    transition: all 0.2s ease-in-out;
-}
-
-@mixin video-stream {
-    position: relative;
-    overflow: hidden;
-    outline: var(--color-grey) solid 2px;
-    height: 100%;
-    width: 100%;
-    border-radius: 2em;
-    background-color: var(--color-dark-200);
-
-    &:fullscreen {
-        border-radius: 0;
-    }
-}
-
 @keyframes slide-from-left {
     from {
         transform: translateX(-50%);

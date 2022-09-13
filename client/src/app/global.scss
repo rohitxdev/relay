@@ -3,7 +3,7 @@
     --color-lightblue: hsl(208, 97%, 87%);
     --color-accent: hsl(18, 100%, 62%);
     --color-red: hsl(4, 100%, 58%);
-    --color-dark-100: hsl(235, 21%, 14%);
+    --color-dark-100: hsl(235, 21%, 10%);
     --color-dark-200: hsl(208, 100%, 5%);
     --color-white: hsl(0, 0%, 100%);
     --color-grey: hsl(257, 12%, 65%);
@@ -20,10 +20,8 @@
     width: 100vw;
     user-select: none;
     scroll-behavior:smooth;
-    -webkit-tap-highlight-color: transparent;
-    background-image: linear-gradient(var(--color-purple), var(--color-dark-200));
     background-color: var(--color-dark-200);
-    background-blend-mode: overlay;
+    -webkit-tap-highlight-color: transparent;
 }
 
 @font-face {

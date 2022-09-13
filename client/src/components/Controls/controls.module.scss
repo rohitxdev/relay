@@ -14,7 +14,7 @@
         align-items: center;
         background-color: var(--color-dark-100);
         width: clamp(18em, calc(100% - 1em), 25em);
-        outline: var(--color-grey-opaque) solid 1px;
+        outline: var(--color-grey) solid 1px;
         animation: slide-up ease 0.5s 1 forwards;
     }
 
@@ -71,7 +71,7 @@
         fill: var(--color-white);
     }
 
-    &:where(:hover, :focus) {
+    &:where(:hover, :focus, :active) {
         outline-offset: 3px;
     }
 }
