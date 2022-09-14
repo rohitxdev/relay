@@ -96,16 +96,17 @@ Delete username of the client from database when leaving room.
 - Video conferencing with upto 20 people in a room
 - Switch cameras on supported devices
 - Screen sharing with audio on supported devices
+- Floating client video in 2 user call
 - Fullscreen mode
-- Cross platform
+- Progressive Web App (PWA)
 
 ## Screenshots
 
-![App Screenshot 1](https://i.postimg.cc/b8WsBsbz/Screenshot-2022-09-09-at-18-54-44-Free-Video-Conferencing-for-Everyone.png)
+![App Screenshot 1](https://i.postimg.cc/0y2yFrKX/Screenshot-2022-09-14-at-21-34-41-Free-Video-Conferencing-for-Everyone.png)
 
-![App Screenshot 2](https://i.postimg.cc/jKLDczDg/Screenshot-2022-09-09-at-19-48-12-Free-Video-Conferencing-for-Everyone.png)
+![App Screenshot 2](https://i.postimg.cc/K8q82FnG/Screenshot-2022-09-14-214546.png)
 
-![App Screenshot 3](https://i.postimg.cc/h4dPB1xK/Screenshot-2022-09-09-200036.png)
+![App Screenshot 3](https://i.postimg.cc/XYGwGVnJ/Screenshot-2022-09-14-at-21-53-16-Free-Video-Conferencing-for-Everyone.png)
 
 ## Run Locally
 

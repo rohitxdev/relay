@@ -71,14 +71,16 @@ export const ScreenShare = () => {
     if (screenVideoTrack) {
       shareScreen();
     }
+    return () => {
+      screenVideoTrack?.close();
+      screenAudioTrack?.close();
+    };
   }, [screenVideoTrack]);
 
   useEffect(() => {
     acquireTracks();
 
     return () => {
-      screenVideoTrack?.close();
-      screenAudioTrack?.close();
       if (screenClient.current.connectionState === "CONNECTED") {
         screenClient.current.leave();
       }

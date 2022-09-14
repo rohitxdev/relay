@@ -1,36 +1,43 @@
 declare const self: ServiceWorkerGlobalScope;
 
 export const serviceWorker = () => {
-  const cacheVersion = "v1.0.6";
+  const cacheVersion = "v1.0.7";
   const cacheName = `relay-cache-${cacheVersion}`;
 
-  const cacheDynamicResource = async (req: Request, res: Response) => {
-    caches.open(cacheName).then((cache) => cache.put(req, res));
+  const cacheFirstThenFetch = async (req: Request) => {
+    const cacheRes = await caches.match(req);
+    if (cacheRes) {
+      return cacheRes;
+    }
+    const fetchRes = await fetch(req);
+    const cache = await caches.open(cacheName);
+    await cache.put(req, fetchRes.clone());
+    return fetchRes;
+  };
+
+  const fetchWithFallback = async (req: Request) => {
+    try {
+      const fetchRes = await fetch(req);
+      return fetchRes;
+    } catch (err) {
+      const fallbackRes = await caches.match("/");
+      return fallbackRes as Response;
+    }
   };
 
   self.addEventListener("install", () => {
     self.skipWaiting();
   });
 
-  self.addEventListener("activate", () => {
-    caches
-      .keys()
-      .then((keys) => keys.map((key) => key !== cacheName && caches.delete(key)))
-      .catch((err) => {
-        console.error(err);
-      });
+  self.addEventListener("activate", async (e) => {
+    const keys = await caches.keys();
+    e.waitUntil(Promise.all(keys.filter((key) => key !== cacheName).map((key) => caches.delete(key))));
+    await self.clients.claim();
   });
 
   self.addEventListener("fetch", async (e) => {
-    if (!e.request.url.includes("api") && e.request.method === "GET") {
-      const res = caches.match(e.request).then(
-        (cacheRes) =>
-          cacheRes ??
-          fetch(e.request).then((res) => {
-            cacheDynamicResource(e.request, res.clone());
-            return res;
-          })
-      );
+    if (e.request.url.includes("assets") || !e.request.url.includes("api")) {
+      const res = e.request.mode === "navigate" ? fetchWithFallback(e.request) : cacheFirstThenFetch(e.request);
       e.respondWith(res);
     }
   });

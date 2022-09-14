@@ -68,7 +68,7 @@
 
 .btn-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     gap: 2em;
     margin: 1em 0;
@@ -86,7 +86,7 @@
     display: flex;
     justify-content: space-evenly;
     cursor: pointer;
-    width: fit-content;
+    width: max-content;
     gap: 1em;
 
     &:active {

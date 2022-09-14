@@ -23,8 +23,8 @@ export const RemoteUsers = memo(() => {
   const [remoteUsers, setRemoteUsers] = useState<IRemoteUser[]>([]);
   const userLeftTone = new Audio(callLeftTone);
   const userJoinedTone = new Audio(callJoinTone);
-  userJoinedTone.volume = 0.4;
-  userLeftTone.volume = 0.4;
+  userJoinedTone.volume = 0.3;
+  userLeftTone.volume = 0.3;
 
   useEffect(() => {
     client.on("user-joined", async (user) => {

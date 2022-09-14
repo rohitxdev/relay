@@ -68,10 +68,15 @@ export const ClientUser = memo(
       } else {
         if (clientMicrophoneTrack) {
           client.unpublish(clientMicrophoneTrack);
+        }
+      }
+
+      return () => {
+        if (clientMicrophoneTrack) {
           clientMicrophoneTrack.close();
           setClientMicrophoneTrack(null);
         }
-      }
+      };
     }, [isMicOn, clientMicrophoneTrack]);
 
     useEffect(() => {
@@ -84,10 +89,15 @@ export const ClientUser = memo(
       } else {
         if (clientVideoTrack) {
           client.unpublish(clientVideoTrack);
+        }
+      }
+
+      return () => {
+        if (clientVideoTrack) {
           clientVideoTrack.close();
           setClientVideoTrack(null);
         }
-      }
+      };
     }, [isVideoOn, clientVideoTrack]);
 
     useEffect(() => {
@@ -99,17 +109,6 @@ export const ClientUser = memo(
         setClientVideoTrack(null);
       }
     }, [facingMode]);
-
-    useEffect(() => {
-      return () => {
-        if (clientVideoTrack) {
-          clientVideoTrack.close();
-        }
-        if (clientMicrophoneTrack) {
-          clientMicrophoneTrack.close();
-        }
-      };
-    }, []);
 
     return (
       <div

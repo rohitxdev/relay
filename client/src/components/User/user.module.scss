@@ -11,11 +11,12 @@
 
     &:fullscreen {
         border-radius: 0;
+
     }
 
     video {
-        z-index: 20;
         object-fit: contain !important;
+        background-color: var(--color-dark-100);
     }
 }
 
@@ -25,7 +26,6 @@
     display: grid;
     place-items: center;
     position: absolute;
-    z-index: 10;
 
     .user-icon {
         border-radius: 50%;
@@ -40,7 +40,7 @@
             text {
                 font-size: 0.5px;
                 font-variation-settings: 'wght' 600;
-                fill: var(--color-white);
+                fill: var(--color-dark-100);
             }
         }
     }
@@ -56,13 +56,34 @@
     padding: 1.5em;
     opacity: 0;
     z-index: 10;
-    transform: translateY(200%);
-    transition: all 0.4s ease-in-out;
+    transform: translateY(100%);
+    transition: all 0.3s;
 
-    div:where(:hover, :active) > & {
+    .user:where(:hover, :active) > & {
         opacity: 1;
         transform: translateY(0);
+
     }
+}
+
+div[class*="float"] {
+
+    video {
+        object-fit: cover !important;
+    }
+
+    .user-info {
+        padding: 1em;
+    }
+
+    .username {
+        font-size: 0.75em;
+    }
+
+    .fullscreen-btn {
+        display: none;
+    }
+
 }
 
 .username {

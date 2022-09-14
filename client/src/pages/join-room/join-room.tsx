@@ -93,3 +93,5 @@ export const JoinRoom = () => {
     </div>
   );
 };
+
+export default JoinRoom;
