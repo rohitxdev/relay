@@ -2,7 +2,7 @@
   "name": "relay",
   "description": "A free video conferencing app made with react, typescript, express, redis and agora sdk.",
   "private": true,
-  "version": "1.4.10",
+  "version": "1.4.11",
   "type": "module",
   "scripts": {
     "dev": "concurrently \"cd ./client && vite\" \"cd ./server/src && cross-env NODE_ENV=development nodemon index.ts\"",

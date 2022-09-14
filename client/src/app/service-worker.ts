@@ -1,7 +1,7 @@
 declare const self: ServiceWorkerGlobalScope;
 
 export const serviceWorker = () => {
-  const cacheVersion = "v1.0.7";
+  const cacheVersion = "v1.0.8";
   const cacheName = `relay-cache-${cacheVersion}`;
 
   const cacheFirstThenFetch = async (req: Request) => {
@@ -36,9 +36,15 @@ export const serviceWorker = () => {
   });
 
   self.addEventListener("fetch", async (e) => {
-    if (e.request.url.includes("assets") || !e.request.url.includes("api")) {
-      const res = e.request.mode === "navigate" ? fetchWithFallback(e.request) : cacheFirstThenFetch(e.request);
-      e.respondWith(res);
+    if (!e.request.url.includes("api")) {
+      if (e.request.mode === "same-origin") {
+        const res = cacheFirstThenFetch(e.request);
+        e.respondWith(res);
+      }
+      if (e.request.mode === "navigate") {
+        const res = fetchWithFallback(e.request);
+        e.respondWith(res);
+      }
     }
   });
 };
