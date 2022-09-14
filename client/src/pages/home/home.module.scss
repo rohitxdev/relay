@@ -2,6 +2,7 @@
 
 .home {
   @include page;
+  position: relative;
   display: grid;
   place-items: center;
   color: var(--white);
@@ -108,7 +109,7 @@
   left: 50%;
   transform: translateX(-50%);
   animation: show-up 2s ease 1 forwards;
-  outline: none;
+  box-shadow: 0 0 1px var(--color-white);
 
   &::before {
     --border-width: 0.4em;
