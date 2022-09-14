@@ -59,7 +59,7 @@
     transform: translateY(200%);
     transition: all 0.4s ease-in-out;
 
-    div:hover > & {
+    div:where(:hover, :active) > & {
         opacity: 1;
         transform: translateY(0);
     }

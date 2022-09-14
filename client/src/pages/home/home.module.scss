@@ -108,6 +108,7 @@
   left: 50%;
   transform: translateX(-50%);
   animation: show-up 2s ease 1 forwards;
+  outline: none;
 
   &::before {
     --border-width: 0.4em;

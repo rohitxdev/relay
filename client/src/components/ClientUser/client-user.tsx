@@ -15,10 +15,17 @@ export const ClientUser = memo(
 
     const getMicrophoneTrack = async () => {
       try {
-        const microphoneTrack = await AgoraRTC.createMicrophoneAudioTrack({
-          AEC: true,
-          AGC: true,
-          ANS: true,
+        const microphoneTracks = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            noiseSuppression: true,
+            autoGainControl: true,
+            suppressLocalAudioPlayback: true,
+            echoCancellation: true,
+          },
+          video: false,
+        });
+        const microphoneTrack = AgoraRTC.createCustomAudioTrack({
+          mediaStreamTrack: microphoneTracks.getAudioTracks()[0],
           encoderConfig: { bitrate: 128, stereo: true },
         });
         setClientMicrophoneTrack(microphoneTrack);
@@ -32,10 +39,15 @@ export const ClientUser = memo(
 
     const getCameraTrack = async () => {
       try {
-        const cameraTrack = await AgoraRTC.createCameraVideoTrack({
-          facingMode,
+        const cameraTracks = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: facingMode === "user" ? "user" : { exact: "environment" } },
+          audio: false,
+        });
+        const cameraTrack = AgoraRTC.createCustomVideoTrack({
+          mediaStreamTrack: cameraTracks.getVideoTracks()[0],
           optimizationMode: "motion",
-          encoderConfig: { bitrateMin: 512, bitrateMax: 2048 },
+          bitrateMin: 512,
+          bitrateMax: 2048,
         });
         setClientVideoTrack(cameraTrack);
       } catch (err) {
