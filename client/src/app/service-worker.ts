@@ -1,7 +1,7 @@
 declare const self: ServiceWorkerGlobalScope;
 
 export const serviceWorker = () => {
-  const cacheVersion = "v1.0.8";
+  const cacheVersion = "v1.0.9";
   const cacheName = `relay-cache-${cacheVersion}`;
 
   const cacheFirstThenFetch = async (req: Request) => {
@@ -15,14 +15,9 @@ export const serviceWorker = () => {
     return fetchRes;
   };
 
-  const fetchWithFallback = async (req: Request) => {
-    try {
-      const fetchRes = await fetch(req);
-      return fetchRes;
-    } catch (err) {
-      const fallbackRes = await caches.match("/");
-      return fallbackRes as Response;
-    }
+  const fetchPage = async (req: Request) => {
+    const cacheRes = await caches.match("/");
+    return cacheRes ? cacheRes : fetch(req);
   };
 
   self.addEventListener("install", () => {
@@ -36,15 +31,24 @@ export const serviceWorker = () => {
   });
 
   self.addEventListener("fetch", async (e) => {
-    if (!e.request.url.includes("api")) {
-      if (e.request.mode === "same-origin") {
-        const res = cacheFirstThenFetch(e.request);
-        e.respondWith(res);
-      }
-      if (e.request.mode === "navigate") {
-        const res = fetchWithFallback(e.request);
-        e.respondWith(res);
-      }
+    const fileTypesToBeCached: RequestDestination[] = [
+      "font",
+      "image",
+      "audio",
+      "document",
+      "style",
+      "script",
+      "worker",
+      "manifest",
+    ];
+    if (fileTypesToBeCached.includes(e.request.destination) || e.request.url.includes("assets")) {
+      const res = cacheFirstThenFetch(e.request);
+      e.respondWith(res);
+    }
+
+    if (e.request.mode === "navigate") {
+      const res = fetchPage(e.request);
+      e.respondWith(res);
     }
   });
 };

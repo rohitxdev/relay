@@ -89,7 +89,7 @@ div[class*="float"] {
     padding: 0.5em 0.75em;
     color: var(--color-white);
     opacity: 0.7;
-    width: min-content;
+    width: fit-content;
     font-size: 1em;
     font-variation-settings: 'wght' 700;
 }
@@ -108,7 +108,7 @@ div[class*="float"] {
     }
 }
 
-@media screen and (max-width:400px) {
+@media screen and (max-width:500px) {
     .user-info {
         padding: 0.75em;
     }
