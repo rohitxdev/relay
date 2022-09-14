@@ -1,7 +1,7 @@
 declare const self: ServiceWorkerGlobalScope;
 
 export const serviceWorker = () => {
-  const cacheVersion = "v1.0.9";
+  const cacheVersion = "v1.0.10";
   const cacheName = `relay-cache-${cacheVersion}`;
 
   const cacheFirstThenFetch = async (req: Request) => {
@@ -15,9 +15,9 @@ export const serviceWorker = () => {
     return fetchRes;
   };
 
-  const fetchPage = async (req: Request) => {
-    const cacheRes = await caches.match("/");
-    return cacheRes ? cacheRes : fetch(req);
+  const fetchPage = async (url: string) => {
+    const cacheRes = await caches.match(url);
+    return cacheRes ? cacheRes : fetch(url);
   };
 
   self.addEventListener("install", () => {
@@ -41,13 +41,13 @@ export const serviceWorker = () => {
       "worker",
       "manifest",
     ];
-    if (fileTypesToBeCached.includes(e.request.destination) || e.request.url.includes("assets")) {
+    if (e.request.method === "GET" && fileTypesToBeCached.includes(e.request.destination)) {
       const res = cacheFirstThenFetch(e.request);
       e.respondWith(res);
     }
 
     if (e.request.mode === "navigate") {
-      const res = fetchPage(e.request);
+      const res = fetchPage("/");
       e.respondWith(res);
     }
   });
