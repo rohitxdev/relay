@@ -107,13 +107,10 @@ Delete username of the client from database when leaving room.
 
 <div style="display:flex; align-items:center;">
 
-![App Screenshot 1](https://i.postimg.cc/nz2YWB8f/Screenshot-2022-09-15-18-36-52-365-com-android-chrome.jpg)
-
-![App Screenshot 2](https://i.postimg.cc/SNJ7ZnDH/Screenshot-2022-09-15-18-37-19-847-com-android-chrome.jpg)
-
-![App Screenshot 3](https://i.postimg.cc/XqhFMgQm/Screenshot-2022-09-15-18-42-12-256-com-android-chrome.jpg)
-
-![App Screenshot 4](https://i.postimg.cc/t4HcL073/Screenshot-2022-09-15-184904.png)
+<img src="https://i.postimg.cc/nz2YWB8f/Screenshot-2022-09-15-18-36-52-365-com-android-chrome.jpg" height="400"/>
+<img src="https://i.postimg.cc/SNJ7ZnDH/Screenshot-2022-09-15-18-37-19-847-com-android-chrome.jpg" height="400"/>
+<img src="https://i.postimg.cc/XqhFMgQm/Screenshot-2022-09-15-18-42-12-256-com-android-chrome.jpg" height="400"/>
+<img src="https://i.postimg.cc/t4HcL073/Screenshot-2022-09-15-184904.png" width="800"/>
 
 </div>
 
