@@ -103,13 +103,13 @@
   font-size: 0.9em;
   background-color: var(--color-white);
   color: var(--color-dark-200);
-  border-radius: 0.5em;
-  padding: 0.6em;
+  border-radius: 0.6em;
+  border: 1px solid var(--color-white);
+  padding: 0.5em;
   top: -220%;
   left: 50%;
   transform: translateX(-50%);
   animation: show-up 2s ease 1 forwards;
-  box-shadow: 0 0 1px var(--color-white);
 
   &::before {
     --border-width: 0.4em;

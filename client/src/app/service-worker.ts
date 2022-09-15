@@ -1,23 +1,22 @@
 declare const self: ServiceWorkerGlobalScope;
 
 export const serviceWorker = () => {
-  const cacheVersion = "v1.0.10";
+  const cacheVersion = "v1.0.11";
   const cacheName = `relay-cache-${cacheVersion}`;
+  const indexURL = new URL("/", import.meta.url);
 
   const cacheFirstThenFetch = async (req: Request) => {
-    const cacheRes = await caches.match(req);
+    const proxiedReq = req.mode == "navigate" ? indexURL : req;
+    const cacheRes = await caches.match(proxiedReq);
     if (cacheRes) {
       return cacheRes;
     }
-    const fetchRes = await fetch(req);
+    const fetchRes = await fetch(proxiedReq);
     const cache = await caches.open(cacheName);
-    await cache.put(req, fetchRes.clone());
+    const cacheKeys = await cache.keys();
+    if (cacheKeys.length > 20) cache.delete(cacheKeys[0]);
+    await cache.put(proxiedReq, fetchRes.clone());
     return fetchRes;
-  };
-
-  const fetchPage = async (url: string) => {
-    const cacheRes = await caches.match(url);
-    return cacheRes ? cacheRes : fetch(url);
   };
 
   self.addEventListener("install", () => {
@@ -41,13 +40,8 @@ export const serviceWorker = () => {
       "worker",
       "manifest",
     ];
-    if (e.request.method === "GET" && fileTypesToBeCached.includes(e.request.destination)) {
+    if (e.request.url.includes(indexURL.hostname) && fileTypesToBeCached.includes(e.request.destination)) {
       const res = cacheFirstThenFetch(e.request);
-      e.respondWith(res);
-    }
-
-    if (e.request.mode === "navigate") {
-      const res = fetchPage("/");
       e.respondWith(res);
     }
   });

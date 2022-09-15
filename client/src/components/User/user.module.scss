@@ -68,15 +68,7 @@
     }
 }
 
-div[class*="float"] {
-
-    video {
-        object-fit: cover !important;
-    }
-
-    .username {
-        font-size: 0.75em;
-    }
+div[data-client] {
 
     .fullscreen-btn {
         display: none;
@@ -108,7 +100,7 @@ div[class*="float"] {
     }
 }
 
-@media screen and (max-width:500px) {
+@media screen and (max-width:450px) {
     .user-info {
         padding: 0.75em;
     }

@@ -114,6 +114,7 @@ export const ClientUser = memo(
       <div
         className={[floatClient && styles.float, facingMode === "user" && styles.mirrored].join(" ")}
         ref={clientRef}
+        data-client
       >
         <User
           username={username}
