@@ -11,6 +11,7 @@ A free video conferencing app made with React, Typescript, Express.js, Redis, an
 ![MIT License](https://img.shields.io/github/license/rohitman47/relay?style=for-the-badge)
 
 </div>
+
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
