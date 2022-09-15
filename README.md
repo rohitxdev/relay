@@ -1,13 +1,16 @@
-# Relay
+# Relay <img src="./client/src/public/relay-256x256.png" style="height:1em; transform:translateY(20%)"/>
 
 A free video conferencing app made with React, Typescript, Express.js, Redis, and Agora SDK which uses webRTC protocol under the hood.
 
-![MIT License](https://img.shields.io/github/license/rohitman47/relay?style=for-the-badge)
-
-![Version](https://img.shields.io/github/package-json/v/rohitman47/relay?color=gre&style=for-the-badge)
+<div style="display:flex;">
 
 ![Github Release](https://img.shields.io/github/v/release/rohitman47/relay?style=for-the-badge)
 
+![Version](https://img.shields.io/github/package-json/v/rohitman47/relay?color=gre&style=for-the-badge)
+
+![MIT License](https://img.shields.io/github/license/rohitman47/relay?style=for-the-badge)
+
+</div>
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
@@ -93,7 +96,7 @@ Delete username of the client from database when leaving room.
 
 ## Features
 
-- Video conferencing with upto 20 people in a room
+- Video conferencing with upto 20 people in a call
 - Switch cameras on supported devices
 - Screen sharing with audio on supported devices
 - Floating client video in 2 user call
@@ -102,11 +105,17 @@ Delete username of the client from database when leaving room.
 
 ## Screenshots
 
-![App Screenshot 1](https://i.postimg.cc/0y2yFrKX/Screenshot-2022-09-14-at-21-34-41-Free-Video-Conferencing-for-Everyone.png)
+<div style="display:flex; align-items:center;">
 
-![App Screenshot 2](https://i.postimg.cc/K8q82FnG/Screenshot-2022-09-14-214546.png)
+![App Screenshot 1](https://i.postimg.cc/nz2YWB8f/Screenshot-2022-09-15-18-36-52-365-com-android-chrome.jpg)
 
-![App Screenshot 3](https://i.postimg.cc/XYGwGVnJ/Screenshot-2022-09-14-at-21-53-16-Free-Video-Conferencing-for-Everyone.png)
+![App Screenshot 2](https://i.postimg.cc/SNJ7ZnDH/Screenshot-2022-09-15-18-37-19-847-com-android-chrome.jpg)
+
+![App Screenshot 3](https://i.postimg.cc/XqhFMgQm/Screenshot-2022-09-15-18-42-12-256-com-android-chrome.jpg)
+
+![App Screenshot 4](https://i.postimg.cc/t4HcL073/Screenshot-2022-09-15-184904.png)
+
+</div>
 
 ## Run Locally
 
@@ -137,7 +146,3 @@ Start the server
 ## Demo
 
 <https://relay.rohitman47.xyz>
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
