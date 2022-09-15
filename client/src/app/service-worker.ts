@@ -1,7 +1,7 @@
 declare const self: ServiceWorkerGlobalScope;
 
 export const serviceWorker = () => {
-  const cacheVersion = "v1.0.11";
+  const cacheVersion = "v1.0.12";
   const cacheName = `relay-cache-${cacheVersion}`;
   const indexURL = new URL("/", import.meta.url);
 

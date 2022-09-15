@@ -6,7 +6,7 @@
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#5b2ff9",
-  "orientation": "any",
+  "orientation": "natural",
   "icons": [
     {
       "src": "relay-maskable.png",
