@@ -4,6 +4,7 @@ import { Provider } from "react-redux";
 import { store } from "@store";
 import { ErrorAlert } from "@components";
 import { lazy, Suspense } from "react";
+
 const Home = lazy(() => import("../pages/home/home"));
 const JoinRoom = lazy(() => import("../pages/join-room/join-room"));
 const Room = lazy(() => import("../pages/room/room"));

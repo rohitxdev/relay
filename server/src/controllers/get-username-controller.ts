@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
 import { redis } from "../utils/database.js";
 
-export const getUsernameController = async (req: Request, res: Response) => {
+export const getUsernameController: RequestHandler = async (req, res) => {
   const { uid } = req.params;
   try {
     const username = await redis.get(uid);

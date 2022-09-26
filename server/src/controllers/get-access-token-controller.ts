@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
 import agoraAccessToken from "agora-access-token";
 import { secrets } from "../utils/secrets.js";
 import { redis } from "../utils/database.js";
@@ -7,7 +7,7 @@ import { redis } from "../utils/database.js";
 const { AGORA_APP_ID, AGORA_APP_CERTIFICATE, EXPIRATION_TIME_IN_SECONDS } = secrets;
 const { RtcRole, RtcTokenBuilder } = agoraAccessToken;
 
-export const getAccessTokenController = async (req: Request, res: Response) => {
+export const getAccessTokenController: RequestHandler = async (req, res) => {
   try {
     const { roomId, username } = req.query;
     const currentTimestamp = Math.floor(Date.now() / 1000);

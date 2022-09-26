@@ -1,33 +1,26 @@
 import cors from "cors";
 import express from "express";
 import { secrets } from "./utils/secrets.js";
-import {
-  entryPointController,
-  verifyRoomIdController,
-  deleteUsernameController,
-  getAccessTokenController,
-  getRoomIdController,
-  getUsernameController,
-  wildcardController,
-} from "./controllers/index.js";
+import { connectToDb } from "./utils/database.js";
+import { deleteUsernameController } from "./controllers/delete-username-controller.js";
+import { entryPointController } from "./controllers/entry-point-controller.js";
+import { getAccessTokenController } from "./controllers/get-access-token-controller.js";
+import { getRoomIdController } from "./controllers/get-room-id-controller.js";
+import { getUsernameController } from "./controllers/get-username-controller.js";
+import { verifyRoomIdController } from "./controllers/verify-room-id-controller.js";
+import { wildcardController } from "./controllers/wildcard-controller.js";
 
+const { PORT, HOST, NODE_ENV } = secrets;
 const server = express();
-const { HOST, PORT, NODE_ENV } = secrets;
+connectToDb();
 
 server.use(cors(), express.static("../../client/dist/"));
-
-server.get("/api", entryPointController);
-
-server.get("/api/verify-room-id/:roomId", verifyRoomIdController);
-
-server.get("/api/get-room-id", getRoomIdController);
-
-server.get("/api/get-access-token", getAccessTokenController);
-
-server.get("/api/get-username/:uid", getUsernameController);
-
 server.delete("/api/delete-username/:uid", deleteUsernameController);
-
+server.get("/api", entryPointController);
+server.get("/api/verify-room-id/:roomId", verifyRoomIdController);
+server.get("/api/get-room-id", getRoomIdController);
+server.get("/api/get-access-token", getAccessTokenController);
+server.get("/api/get-username/:uid", getUsernameController);
 server.get("*", wildcardController);
 
 server.listen(PORT, HOST, () => {

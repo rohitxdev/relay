@@ -1,6 +1,6 @@
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
 
-export const wildcardController = (req: Request, res: Response) => {
+export const wildcardController: RequestHandler = (req, res) => {
   if (req.headers.accept?.includes("text/html")) {
     res.sendFile("index.html", { root: "../../client/dist" });
   } else {

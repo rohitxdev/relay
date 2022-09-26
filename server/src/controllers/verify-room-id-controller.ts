@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import { RequestHandler } from "express";
 import { redis } from "../utils/database.js";
 
-export const verifyRoomIdController = async (req: Request, res: Response) => {
+export const verifyRoomIdController: RequestHandler = async (req, res) => {
   const { roomId } = req.params;
   try {
     const data = await redis.get(roomId);

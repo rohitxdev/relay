@@ -1,7 +1,7 @@
+import { RequestHandler } from "express";
 import { redis } from "../utils/database.js";
-import { Request, Response } from "express";
 
-export const deleteUsernameController = async (req: Request, res: Response) => {
+export const deleteUsernameController: RequestHandler = async (req, res) => {
   const { uid } = req.params;
   try {
     await redis.del(uid);
