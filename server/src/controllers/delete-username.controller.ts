@@ -1,4 +1,4 @@
-import { redis } from "../config/redis.js";
+import { redis } from "../utils/database.js";
 import { Request, Response } from "express";
 
 export const deleteUsernameController = async (req: Request, res: Response) => {

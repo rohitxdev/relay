@@ -1,8 +1,9 @@
 import crypto from "crypto";
-import { redis } from "../config/redis.js";
-import { EXPIRATION_TIME_IN_SECONDS } from "../config/secrets.js";
+import { redis } from "../utils/database.js";
 import { Request, Response } from "express";
+import { secrets } from "../utils/secrets.js";
 
+const { EXPIRATION_TIME_IN_SECONDS } = secrets;
 const generateRoomId = async () => {
   let roomId = crypto.randomInt(0, 10e9).toString(36).slice(0, 6);
   while (true) {

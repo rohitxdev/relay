@@ -1,5 +1,5 @@
-import { redis } from "../config/redis.js";
 import { Request, Response } from "express";
+import { redis } from "../utils/database.js";
 
 export const getUsernameController = async (req: Request, res: Response) => {
   const { uid } = req.params;

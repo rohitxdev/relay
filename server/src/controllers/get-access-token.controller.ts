@@ -1,9 +1,10 @@
 import crypto from "crypto";
 import { Request, Response } from "express";
 import agoraAccessToken from "agora-access-token";
-import { redis } from "../config/redis.js";
-import { AGORA_APP_ID, AGORA_APP_CERTIFICATE, EXPIRATION_TIME_IN_SECONDS } from "../config/secrets.js";
+import { secrets } from "../utils/secrets.js";
+import { redis } from "../utils/database.js";
 
+const { AGORA_APP_ID, AGORA_APP_CERTIFICATE, EXPIRATION_TIME_IN_SECONDS } = secrets;
 const { RtcRole, RtcTokenBuilder } = agoraAccessToken;
 
 export const getAccessTokenController = async (req: Request, res: Response) => {

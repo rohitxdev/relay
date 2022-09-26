@@ -6,14 +6,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-*.tsbuildinfo
-
-
-node_modules
-build
-dist
-dist-ssr
-*.local
 
 # Editor directories and files
 .vscode/*
@@ -25,5 +17,21 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-*.env.*
-app.json
+
+# Dependency directories
+node_modules
+
+# Dotenv environment variables file
+*.env*
+
+# Build output
+.next
+build
+dist
+dist-ssr
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Miscellaneous
+*.local

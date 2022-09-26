@@ -1,6 +1,6 @@
-import { HOST, PORT, NODE_ENV } from "./config/secrets.js";
 import cors from "cors";
 import express from "express";
+import { secrets } from "./utils/secrets.js";
 import {
   entryPointController,
   verifyRoomIdController,
@@ -12,6 +12,8 @@ import {
 } from "./controllers/index.js";
 
 const server = express();
+const { HOST, PORT, NODE_ENV } = secrets;
+
 server.use(cors(), express.static("../../client/dist/"));
 
 server.get("/api", entryPointController);
@@ -29,7 +31,8 @@ server.delete("/api/delete-username/:uid", deleteUsernameController);
 server.get("*", wildcardController);
 
 server.listen(PORT, HOST, () => {
+  const ENV = NODE_ENV === "development" ? `\u001b[33;1m${NODE_ENV}` : `\u001b[32;1m${NODE_ENV}`;
   console.log(
-    `✨ Server is running on \u001b[35;1mhttp://${HOST}:${PORT}\u001b[0m in \u001b[37;1m${NODE_ENV}\u001b[0m environment ✨`
+    `\u001b[37;1mServer is listening to \u001b[35;1mhttp://${HOST}:${PORT}\u001b[0m \u001b[37;1mand running in ${ENV}\u001b[0m \u001b[37;1menvironment...`
   );
 });
