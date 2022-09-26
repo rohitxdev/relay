@@ -20,11 +20,7 @@ To run this project, you will need to add the following environment variables to
 
 `AGORA_APP_CERTIFICATE`
 
-`REDIS_URL`
-
-`REDIS_USERNAME`
-
-`REDIS_PASSWORD`
+`DB_URL`
 
 ## API Reference
 

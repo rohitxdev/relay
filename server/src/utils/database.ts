@@ -1,11 +1,9 @@
 import { createClient } from "redis";
 import { secrets } from "./secrets.js";
 
-const { DB_URL, DB_USERNAME, DB_PASSWORD } = secrets;
+const { DB_URL } = secrets;
 export const redis = createClient({
   url: DB_URL,
-  username: DB_USERNAME,
-  password: DB_PASSWORD,
 });
 
 redis
