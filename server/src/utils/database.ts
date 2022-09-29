@@ -1,8 +1,12 @@
 import { secrets } from "./secrets.js";
 import { createClient } from "redis";
 
-const { DB_URL } = secrets;
-export const redis = createClient({ url: DB_URL });
+const { DB_URL, DB_USERNAME, DB_PASSWORD } = secrets;
+export const redis = createClient({
+  url: DB_URL,
+  username: DB_USERNAME,
+  password: DB_PASSWORD,
+});
 
 export const connectToDb = async () => {
   try {
