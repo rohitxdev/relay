@@ -1,7 +1,9 @@
 @use '../config' as *;
 
 .room {
-    @include page;
+    height: var(--vh);
+    width: var(--vw);
+    overflow: hidden;
     display: grid;
     grid-template-rows: min-content auto 6rem;
 }

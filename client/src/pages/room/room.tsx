@@ -1,14 +1,15 @@
 import styles from "./room.module.scss";
 import AgoraRTC from "agora-rtc-sdk-ng";
-import { useEffect, useMemo } from "react";
+import React, { CSSProperties, useEffect, useMemo } from "react";
 import { ClientUser, Controls, LiveChat, RemoteUsers, ScreenShare } from "@components";
-import { useAppContext, useError, useRoomContext } from "@hooks";
+import { useAppContext, useError, useRoomContext, useViewportSize } from "@hooks";
 import { useNavigate } from "react-router-dom";
 import { api } from "@helpers";
 
 export const Room = () => {
   const navigate = useNavigate();
   const { setErrorMessage } = useError();
+  const { vh, vw } = useViewportSize();
   const {
     appState: { roomId, username },
   } = useAppContext();
@@ -50,7 +51,7 @@ export const Room = () => {
   return (
     <>
       {roomId && username && (
-        <div className={styles.room}>
+        <div className={styles.room} style={{ "--vh": vh + "px", "--vw": vw + "px" } as CSSProperties}>
           <div className={styles.options}>
             <div className={styles.roomId}>
               <p>room id</p>
