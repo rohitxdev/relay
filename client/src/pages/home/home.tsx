@@ -1,7 +1,7 @@
 import styles from "./home.module.scss";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { api } from "../../services/api-service";
+import { api } from "@helpers";
 import AddIcon from "@assets/icons/add.svg";
 import PeopleIcon from "@assets/icons/people.svg";
 import GithubIcon from "@assets/icons/github.svg";
@@ -9,19 +9,22 @@ import ShareIcon from "@assets/icons/share.svg";
 import CopyIcon from "@assets/icons/copy.svg";
 import LoaderIcon from "@assets/icons/loader.svg";
 import Illustration from "@assets/images/video-conference.svg";
-import { useError } from "@utils/hooks";
+import { useError, useAppContext } from "@hooks";
 
 export const Home = () => {
-  const [_, setError] = useError();
+  const {
+    appState: { canShareLink, canCopyToClipboard },
+    appDispatch,
+  } = useAppContext();
+  const { setErrorMessage } = useError();
   const navigate = useNavigate();
   const { state } = useLocation() as { state: { error?: string } };
-  const [canShare, setCanShare] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [roomId, setRoomId] = useState<string | null>(null);
 
   const shareData: ShareData = {
-    title: "Relay: Free video conferencing for everyone",
+    title: "Relay: Free Video Conferencing",
     text: `You've been invited to join a room on Relay!\n\nRoom ID is ${roomId}.\n\n`,
     url: `${window.location.href}join-room?roomId=${roomId}`,
   };
@@ -31,7 +34,7 @@ export const Home = () => {
       await navigator.share(shareData);
     } catch (err) {
       if (err instanceof Error) {
-        setError(err.message);
+        setErrorMessage(err.message);
         console.error(err);
       }
     }
@@ -48,7 +51,7 @@ export const Home = () => {
       }
     } catch (err) {
       if (err instanceof Error) {
-        setError(err.message);
+        setErrorMessage(err.message);
         console.error(err);
       }
     }
@@ -57,35 +60,49 @@ export const Home = () => {
   const getRoomId = async () => {
     try {
       setIsLoading(true);
-      const response = await api.getRoomID();
-      if (!response.ok) throw new Error("Could not get room ID!");
-      const roomId = await response.text();
-      setTimeout(() => {
-        setRoomId(roomId);
-        setIsLoading(false);
-      }, 400);
+      const res = await api.getRoomID();
+      if (!res.ok) throw new Error("Could not get room ID.");
+      const roomId = await res.text();
+      setRoomId(roomId);
     } catch (err) {
       if (err instanceof Error) {
-        setIsLoading(false);
-        setError(err.message);
-        console.error(err);
+        setErrorMessage(err.message);
       }
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const goToJoinRoom = () => {
-    navigate("/join-room");
   };
 
   useEffect(() => {
     if (state?.error) {
-      setError(state.error);
+      setErrorMessage(state.error);
       history.replaceState({}, document.title);
     }
-    if ("share" in navigator && navigator.canShare(shareData)) {
-      setCanShare(true);
+    appDispatch({ type: "setCanShareLink", payload: "share" in navigator && navigator.canShare(shareData) });
+    appDispatch({
+      type: "setCanShareScreen",
+      payload: "mediaDevices" in navigator && "getDisplayMedia" in navigator.mediaDevices,
+    });
+    appDispatch({
+      type: "setCanCopyToClipboard",
+      payload: "clipboard" in navigator && "writeText" in navigator.clipboard,
+    });
+    if ("mediaDevices" in navigator && "getUserMedia" in navigator.mediaDevices) {
+      navigator.mediaDevices
+        .getUserMedia({
+          video: { facingMode: { exact: "environment" } },
+          audio: false,
+        })
+        .then((tracks) => {
+          tracks.getVideoTracks().forEach((track) => {
+            track.stop();
+          });
+          appDispatch({ type: "setCanUseRearCamera", payload: true });
+        })
+        .catch(() => {
+          appDispatch({ type: "setCanUseRearCamera", payload: false });
+        });
     }
-    sessionStorage.clear();
   }, []);
 
   return (
@@ -115,16 +132,18 @@ export const Home = () => {
               <>
                 <div className={styles.roomId}>
                   <p>{roomId}</p>
-                  <button aria-label="Copy room ID to clipboard" className={styles.copyBtn} onClick={copyToClipboard}>
-                    {showTooltip && <span className={styles.tooltip}>Copied!</span>}
-                    <CopyIcon />
-                  </button>
+                  {canCopyToClipboard && (
+                    <button aria-label="Copy room ID to clipboard" className={styles.copyBtn} onClick={copyToClipboard}>
+                      {showTooltip && <span className={styles.tooltip}>Copied!</span>}
+                      <CopyIcon />
+                    </button>
+                  )}
+                  {canShareLink && (
+                    <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
+                      <ShareIcon />
+                    </button>
+                  )}
                 </div>
-                {canShare && (
-                  <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
-                    <ShareIcon />
-                  </button>
-                )}
               </>
             ) : (
               <div className={styles.loader}>{isLoading && <LoaderIcon />}</div>
@@ -133,7 +152,7 @@ export const Home = () => {
           <button className={styles.btn} onClick={getRoomId}>
             Create Room <AddIcon />
           </button>
-          <button className={styles.btn} onClick={goToJoinRoom}>
+          <button className={styles.btn} onClick={() => navigate("/join-room")}>
             Join Room <PeopleIcon />
           </button>
         </main>
@@ -141,5 +160,3 @@ export const Home = () => {
     </div>
   );
 };
-
-export default Home;

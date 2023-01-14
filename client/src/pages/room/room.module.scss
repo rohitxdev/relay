@@ -1,11 +1,38 @@
-@use '../../app/config' as *;
+@use '../config' as *;
 
 .room {
     @include page;
+    display: grid;
+    grid-template-rows: min-content auto 6rem;
+}
+
+.options {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    align-items: center;
+
+    .room-id {
+        justify-self: center;
+        color: white;
+        display: grid;
+        justify-items: center;
+        gap: 0.25rem;
+        font-variation-settings: 'wght' 700;
+
+        p {
+            color: gray;
+        }
+    }
+
+    .chat-btn {
+        justify-self: start;
+    }
+
 }
 
 .user-grid {
-    height: calc(100% - 6em);
+    height: 100%;
     width: 100%;
     padding: 0.5em;
     display: grid;

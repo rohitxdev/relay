@@ -57,7 +57,7 @@ export const User = memo(
         <div className={styles.userIconContainer}>
           <div className={styles.userIcon}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 1">
-              <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central">
+              <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central">
                 {initials}
               </text>
             </svg>

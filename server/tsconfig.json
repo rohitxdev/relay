@@ -1,18 +1,18 @@
 {
   "ts-node": {
-    "esm": true
+    "esm": true,
   },
   "compilerOptions": {
     "allowJs": true,
     "strict": true,
-    "module": "ESNext",
+    "module": "NodeNext",
     "target": "ESNext",
     "removeComments": true,
     "preserveWatchOutput": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noImplicitReturns": true,
@@ -20,6 +20,8 @@
     "noImplicitThis": true,
     "noEmitOnError": true,
     "outDir": "./dist",
+    "sourceMap": true,
+    "skipLibCheck": true
   },
   "include": [
     "src",

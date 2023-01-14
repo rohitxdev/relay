@@ -1,0 +1,106 @@
+.auth-modal {
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: grid;
+    place-content: center;
+    padding: 1rem;
+    border-radius: 1rem;
+    gap: 2rem;
+    background-color: rgb(50, 50, 50);
+    // width: clamp(300px, 50vw, 30rem);
+    // height: clamp(500px, 50vh, 40rem);
+
+    svg {
+        height: 2rem;
+        color: var(--color-white);
+    }
+
+    button {
+        background-color: transparent;
+    }
+
+    input {
+        padding: 0.5rem;
+        background-color: transparent;
+        border: 1px solid gray;
+
+        &:focus {
+            outline: var(--color-purple) solid 2px;
+        }
+    }
+
+    button[type="submit"] {
+        background-color: var(--color-purple);
+        padding: 0.5rem;
+        font-variation-settings: 'wght' 600;
+        color: white;
+        font-size: 1em;
+        border-radius: 0.5em;
+    }
+}
+
+.input-component {
+    position: relative;
+    width: max(80%, 12em);
+
+    button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translate(0, 100%);
+        padding: 0 0.75em;
+        display: grid;
+        place-content: center;
+    }
+
+    span {
+        color: var(--color-grey);
+        position: absolute;
+        pointer-events: none;
+        top: 1.6em;
+        left: 0;
+        font-variation-settings: "wght" 600;
+        font-size: calc(0.8 * 1.5em);
+        margin: 0.5em 1em;
+    }
+
+
+    input:is(:focus, :valid) ~ span {
+        background-color: rgb(50, 50, 50);
+        color: var(--color-purple);
+        top: 1.05em;
+        left: 0.7em;
+        font-size: 0.9em;
+        font-variation-settings: "wght" 600;
+        padding: 0 0.55em;
+        margin: 0 0.5em;
+        transition: all 0.1s ease-in-out;
+    }
+
+    input:invalid ~ span {
+        transition: all 0.1s ease-in-out;
+    }
+
+    input:is(:focus, :valid) {
+        transition: all 0.1s ease-in-out;
+        border: 2px solid var(--color-purple);
+    }
+
+
+    input {
+        background-color: transparent;
+        color: var(--color-white);
+        padding: 0.5em 0.75em;
+        margin: 1em 0;
+        outline: none;
+        border-radius: 0.4em;
+        border: 2px solid var(--color-grey);
+        font-variation-settings: "wght" 600;
+        font-size: 1.5em;
+        width: 100%;
+        letter-spacing: 0.1ch;
+    }
+}

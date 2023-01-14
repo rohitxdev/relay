@@ -1,12 +1,11 @@
 import crypto from "crypto";
-import { redis } from "./database.js";
+import { rooms } from "../models/mongodb.js";
 
 export const generateRoomId = async () => {
-  const expirationTimeInSeconds = 2 * 86400;
   let roomId = crypto.randomInt(0, 10e9).toString(36).slice(0, 6);
   while (true) {
-    if (!(await redis.get(roomId))) {
-      await redis.setEx(roomId, expirationTimeInSeconds, roomId);
+    if (!(await rooms.findOne({ room_id: roomId }))) {
+      await rooms.insertOne({ room_id: roomId, members: [], chats: [] });
       return roomId;
     }
     roomId = crypto.randomInt(0, 10e9).toString(36);

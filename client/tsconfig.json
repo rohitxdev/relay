@@ -39,14 +39,11 @@
       "@pages": [
         "./src/pages"
       ],
-      "@services": [
-        "./src/services"
+      "@hooks": [
+        "./src/hooks/"
       ],
-      "@store": [
-        "./src/store"
-      ],
-      "@utils/*": [
-        "./src/utils/*"
+      "@helpers": [
+        "./src/helpers"
       ],
     }
   },

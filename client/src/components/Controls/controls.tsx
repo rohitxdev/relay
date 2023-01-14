@@ -9,18 +9,17 @@ import ScreenShareOnIcon from "@assets/icons/screen-share.svg";
 import ScreenShareOffIcon from "@assets/icons/stop-screen-share.svg";
 import { ExitModal } from "@components";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "@utils/hooks";
-import { toggleVideo, toggleMic, toggleFacingMode, toggleScreenShare } from "@store";
+import { useAppContext, useRoomContext } from "@hooks";
 
 export const Controls = () => {
-  const dispatch = useAppDispatch();
   const [showExitModal, setShowExitModal] = useState(false);
-  const isVideoOn = useAppSelector((state) => state.room.isVideoOn);
-  const isMicOn = useAppSelector((state) => state.room.isMicOn);
-  const isSharingScreen = useAppSelector((state) => state.room.isSharingScreen);
-  const facingMode = useAppSelector((state) => state.room.facingMode);
-  const isRearCameraAvailable = useAppSelector((state) => state.room.isRearCameraAvailable);
-  const isScreenSharingAvailable = useAppSelector((state) => state.room.isScreenSharingAvailable);
+  const {
+    appState: { canShareScreen, canUseRearCamera },
+  } = useAppContext();
+  const {
+    roomState: { facingMode, isMicOn, isSharingScreen, isVideoOn },
+    roomDispatch,
+  } = useRoomContext();
 
   const toggleExitModal = () => {
     setShowExitModal((state) => !state);
@@ -34,17 +33,17 @@ export const Controls = () => {
           <button
             aria-label={isSharingScreen ? "Stop screenshare" : "Start screenshare"}
             onClick={() => {
-              dispatch(toggleScreenShare());
+              roomDispatch({ type: "toggleScreenShare" });
             }}
             className={isSharingScreen ? styles.btnOn : styles.btnOff}
-            disabled={!isScreenSharingAvailable}
+            disabled={!canShareScreen}
           >
             {isSharingScreen ? <ScreenShareOnIcon /> : <ScreenShareOffIcon />}
           </button>
           <button
             aria-label={isVideoOn ? "Turn off video" : "Turn on video"}
             onClick={() => {
-              dispatch(toggleVideo());
+              roomDispatch({ type: "toggleVideo" });
             }}
             className={isVideoOn ? styles.btnOn : styles.btnOff}
           >
@@ -56,7 +55,7 @@ export const Controls = () => {
           <button
             aria-label={isMicOn ? "Turn off mic" : "Turn on mic"}
             onClick={() => {
-              dispatch(toggleMic());
+              roomDispatch({ type: "toggleMic" });
             }}
             className={isMicOn ? styles.btnOn : styles.btnOff}
           >
@@ -65,10 +64,10 @@ export const Controls = () => {
           <button
             aria-label={facingMode === "environment" ? "Switch to front camera" : "Switch to rear camera"}
             onClick={() => {
-              dispatch(toggleFacingMode());
+              roomDispatch({ type: "toggleFacingMode" });
             }}
             className={facingMode === "environment" ? styles.btnOn : styles.btnOff}
-            disabled={!isRearCameraAvailable}
+            disabled={!canUseRearCamera}
           >
             <FlipCameraIcon />
           </button>
