@@ -11,9 +11,9 @@
     border-top: 2px solid var(--color-purple);
     border-radius: 1.5rem 1.5rem 0 0;
     position: absolute;
-    bottom: 0;
+    bottom: -0.5rem;
     right: 0;
-    transform: translateY(calc(100% + 0.5rem));
+    transform: translateY(100%);
     transition: transform 0.2s ease;
 
     &.show {
