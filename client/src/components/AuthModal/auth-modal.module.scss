@@ -1,17 +1,80 @@
-.auth-modal {
-
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.type {
     display: grid;
-    place-content: center;
-    padding: 1rem;
+    grid-template-columns: 1fr;
+    position: relative;
+    width: 100%;
+
+    div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button {
+        width: 50%;
+        background-color: transparent;
+        padding: 1rem;
+        font-size: 1.25rem;
+        font-variation-settings: 'wght' 600;
+        border: none;
+        outline: none;
+        color: var(--color-grey);
+    }
+
+    .mover {
+        position: absolute;
+        top: calc(3.25rem + 3px);
+        left: 0;
+        height: 0.25rem;
+        width: 50%;
+        background-color: var(--color-white);
+        transition: all 0.2s;
+
+
+    }
+
+    .line {
+        height: 2px;
+        width: 100%;
+        background-color: var(--color-grey);
+    }
+
+    &[data-type="log-in"] {
+        button:nth-child(1) {
+            color: var(--color-white);
+        }
+
+        .mover {
+            transform: translate(0);
+        }
+    }
+
+    &[data-type="sign-up"] {
+        button:nth-child(2) {
+            color: var(--color-white);
+        }
+
+        .mover {
+            transform: translate(100%);
+        }
+    }
+}
+
+
+
+.auth-modal {
+    transform: scale(1);
+    display: grid;
+    place-items: center;
+    padding: 2rem;
     border-radius: 1rem;
-    gap: 2rem;
-    background-color: rgb(50, 50, 50);
-    // width: clamp(300px, 50vw, 30rem);
+    gap: 1.5rem;
+    background-color: var(--color-dark-200);
+    z-index: 1000;
+    margin: 1rem;
+    width: clamp(300px, 50vw, 30rem);
     // height: clamp(500px, 50vh, 40rem);
+    transition: all 0.2s ease;
 
     svg {
         height: 2rem;
@@ -20,87 +83,88 @@
 
     button {
         background-color: transparent;
-    }
-
-    input {
-        padding: 0.5rem;
-        background-color: transparent;
-        border: 1px solid gray;
-
-        &:focus {
-            outline: var(--color-purple) solid 2px;
-        }
-    }
-
-    button[type="submit"] {
-        background-color: var(--color-purple);
-        padding: 0.5rem;
-        font-variation-settings: 'wght' 600;
-        color: white;
-        font-size: 1em;
-        border-radius: 0.5em;
-    }
-}
-
-.input-component {
-    position: relative;
-    width: max(80%, 12em);
-
-    button {
-        position: absolute;
-        right: 0;
-        top: 0;
-        transform: translate(0, 100%);
-        padding: 0 0.75em;
         display: grid;
         place-content: center;
     }
 
-    span {
-        color: var(--color-grey);
-        position: absolute;
-        pointer-events: none;
-        top: 1.6em;
-        left: 0;
-        font-variation-settings: "wght" 600;
-        font-size: calc(0.8 * 1.5em);
-        margin: 0.5em 1em;
+
+
+    button[type="submit"] {
+        background-color: var(--color-purple);
+        padding: 0.5rem 1.5rem;
+        font-variation-settings: 'wght' 600;
+        color: white;
+        font-size: 1.2rem;
+        border-radius: 0.5rem;
     }
+}
 
-
-    input:is(:focus, :valid) ~ span {
-        background-color: rgb(50, 50, 50);
-        color: var(--color-purple);
-        top: 1.05em;
-        left: 0.7em;
-        font-size: 0.9em;
-        font-variation-settings: "wght" 600;
-        padding: 0 0.55em;
-        margin: 0 0.5em;
-        transition: all 0.1s ease-in-out;
-    }
-
-    input:invalid ~ span {
-        transition: all 0.1s ease-in-out;
-    }
-
-    input:is(:focus, :valid) {
-        transition: all 0.1s ease-in-out;
-        border: 2px solid var(--color-purple);
-    }
-
+.input-util {
+    --height: 1.75rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
+    border: 2px solid var(--color-grey);
 
     input {
         background-color: transparent;
-        color: var(--color-white);
-        padding: 0.5em 0.75em;
-        margin: 1em 0;
+        border: none;
         outline: none;
-        border-radius: 0.4em;
-        border: 2px solid var(--color-grey);
-        font-variation-settings: "wght" 600;
-        font-size: 1.5em;
+        color: var(--color-white);
+        justify-self: left;
         width: 100%;
-        letter-spacing: 0.1ch;
+
+        &::placeholder {
+            color: var(--color-grey);
+        }
+    }
+
+    svg {
+        padding: 0.125rem;
+        height: var(--height);
+        width: var(--height);
+        pointer-events: none;
+    }
+}
+
+.forgot-password-link {
+    cursor: pointer;
+    font-size: 0.75rem;
+    justify-self: right;
+    color: var(--color-grey);
+    margin-top: -1rem;
+
+    &:hover {
+        color: var(--color-purple);
+    }
+}
+
+.container {
+    height: var(--vh);
+    width: var(--vw);
+    background-color: rgb(0 0 0 / 0.8);
+    display: grid;
+    place-content: center;
+    pointer-events: all;
+    opacity: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: all 0.2s ease;
+
+
+    &.hide {
+        pointer-events: none;
+        opacity: 0;
+
+        .auth-modal {
+            transform: scale(0.25);
+        }
     }
 }

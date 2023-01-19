@@ -9,7 +9,7 @@ export const ScreenShare = () => {
     appState: { roomId, username },
   } = useAppContext();
   const { roomDispatch } = useRoomContext();
-  const { setErrorMessage } = useError();
+  const { setError } = useError();
   const screenUsername = `${username}'s screen`;
   const [isPublished, setIsPublished] = useState(false);
   const screenClient = useRef(AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }));
@@ -31,7 +31,7 @@ export const ScreenShare = () => {
     } catch (err) {
       if (err instanceof Error) {
         console.error(err.message);
-        setErrorMessage(err.message);
+        setError(err.message);
         roomDispatch({ type: "toggleScreenShare" });
       }
     }
@@ -64,7 +64,7 @@ export const ScreenShare = () => {
     } catch (err) {
       if (err instanceof Error) {
         console.error(err.message);
-        setErrorMessage(err.message);
+        setError(err.message);
       }
     }
   };

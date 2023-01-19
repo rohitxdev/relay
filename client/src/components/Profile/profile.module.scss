@@ -1,0 +1,65 @@
+.profile {
+    position: relative;
+    display: grid;
+    place-content: center;
+    justify-self: left;
+
+
+    button {
+        height: 3.5rem;
+        width: 3.5rem;
+        background-color: transparent;
+
+        svg {
+            color: white;
+            padding: 0.5rem;
+            height: 100%;
+            width: 100%;
+        }
+    }
+
+
+
+}
+
+.options {
+    position: absolute;
+    width: max-content;
+    height: auto;
+    top: 100%;
+    right: 0;
+    transform: translateX(100%) scale(1);
+    z-index: 1000;
+    border-radius: 0.75rem;
+    opacity: 1;
+    pointer-events: all;
+    // transition: all 0.2s ease;
+    transform-origin: top right;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    overflow: hidden;
+    grid-template-columns: 1fr;
+
+    &.hide {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(100%) scale(0);
+
+    }
+
+    button {
+        padding: 0.5rem 2rem;
+        width: 10rem;
+        color: white;
+        background-color: var(--color-dark-100);
+        text-align: center;
+        justify-self: center;
+
+        &:hover {
+            color: var(--color-dark-100);
+            background-color: white;
+        }
+    }
+
+}

@@ -1,6 +1,6 @@
 import styles from "./home.module.scss";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { CSSProperties, useEffect, useState } from "react";
 import { api } from "@helpers";
 import AddIcon from "@assets/icons/add.svg";
 import PeopleIcon from "@assets/icons/people.svg";
@@ -9,18 +9,21 @@ import ShareIcon from "@assets/icons/share.svg";
 import CopyIcon from "@assets/icons/copy.svg";
 import LoaderIcon from "@assets/icons/loader.svg";
 import Illustration from "@assets/images/video-conference.svg";
-import { useError, useAppContext } from "@hooks";
+import { useError, useAppContext, useViewportSize } from "@hooks";
+import { AuthModal, JoinRoomModal, Profile } from "@components";
 
 export const Home = () => {
   const {
     appState: { canShareLink, canCopyToClipboard },
     appDispatch,
   } = useAppContext();
-  const { setErrorMessage } = useError();
-  const navigate = useNavigate();
+  const { setError } = useError();
+  const { vh, vw } = useViewportSize();
+
   const { state } = useLocation() as { state: { error?: string } };
   const [isLoading, setIsLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [showJoinRoomModal, setShowJoinRoomModal] = useState(false);
   const [roomId, setRoomId] = useState<string | null>(null);
 
   const shareData: ShareData = {
@@ -34,7 +37,7 @@ export const Home = () => {
       await navigator.share(shareData);
     } catch (err) {
       if (err instanceof Error) {
-        setErrorMessage(err.message);
+        setError(err.message);
         console.error(err);
       }
     }
@@ -51,7 +54,7 @@ export const Home = () => {
       }
     } catch (err) {
       if (err instanceof Error) {
-        setErrorMessage(err.message);
+        setError(err.message);
         console.error(err);
       }
     }
@@ -66,16 +69,20 @@ export const Home = () => {
       setRoomId(roomId);
     } catch (err) {
       if (err instanceof Error) {
-        setErrorMessage(err.message);
+        setError(err.message);
       }
     } finally {
       setIsLoading(false);
     }
   };
 
+  const toggleJoinRoomModal = () => {
+    return setShowJoinRoomModal((state) => !state);
+  };
+
   useEffect(() => {
     if (state?.error) {
-      setErrorMessage(state.error);
+      setError(state.error);
       history.replaceState({}, document.title);
     }
     appDispatch({ type: "setCanShareLink", payload: "share" in navigator && navigator.canShare(shareData) });
@@ -106,7 +113,7 @@ export const Home = () => {
   }, []);
 
   return (
-    <div className={styles.home}>
+    <div className={styles.home} style={{ "--vh": vh + "px", "--vw": vw + "px" } as CSSProperties}>
       <a
         aria-label="Link to Github profile"
         href="https://github.com/rohitman47"
@@ -115,6 +122,7 @@ export const Home = () => {
       >
         <GithubIcon />
       </a>
+      <Profile />
       <section className={styles.banner} role="banner" aria-label="Page banner">
         <div className={styles.appName}>
           <p>Relay</p>
@@ -134,16 +142,16 @@ export const Home = () => {
                   <p>{roomId}</p>
                   {canCopyToClipboard && (
                     <button aria-label="Copy room ID to clipboard" className={styles.copyBtn} onClick={copyToClipboard}>
-                      {showTooltip && <span className={styles.tooltip}>Copied!</span>}
+                      <span className={[styles.tooltip, !showTooltip && styles.hide].join(" ")}>Copied!</span>
                       <CopyIcon />
                     </button>
                   )}
-                  {canShareLink && (
-                    <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
-                      <ShareIcon />
-                    </button>
-                  )}
                 </div>
+                {canShareLink && (
+                  <button aria-label="Share room ID" className={styles.shareBtn} onClick={shareRoomId}>
+                    <ShareIcon />
+                  </button>
+                )}
               </>
             ) : (
               <div className={styles.loader}>{isLoading && <LoaderIcon />}</div>
@@ -152,11 +160,12 @@ export const Home = () => {
           <button className={styles.btn} onClick={getRoomId}>
             Create Room <AddIcon />
           </button>
-          <button className={styles.btn} onClick={() => navigate("/join-room")}>
+          <button className={styles.btn} onClick={toggleJoinRoomModal}>
             Join Room <PeopleIcon />
           </button>
         </main>
       </div>
+      <JoinRoomModal showModal={showJoinRoomModal} setShowModal={setShowJoinRoomModal} />
     </div>
   );
 };

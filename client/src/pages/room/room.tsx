@@ -1,21 +1,23 @@
 import styles from "./room.module.scss";
 import AgoraRTC from "agora-rtc-sdk-ng";
-import React, { CSSProperties, useEffect, useMemo } from "react";
-import { ClientUser, Controls, LiveChat, RemoteUsers, ScreenShare } from "@components";
+import { CSSProperties, useEffect, useMemo, useState } from "react";
+import { ClientUser, Controls, LiveChat, Profile, RemoteUsers, ScreenShare } from "@components";
 import { useAppContext, useError, useRoomContext, useViewportSize } from "@hooks";
 import { useNavigate } from "react-router-dom";
 import { api } from "@helpers";
+import ChatIcon from "@assets/icons/chat.svg";
 
 export const Room = () => {
   const navigate = useNavigate();
-  const { setErrorMessage } = useError();
+  const { setError } = useError();
   const { vh, vw } = useViewportSize();
+  const [showLiveChat, setShowLiveChat] = useState(false);
+
   const {
     appState: { roomId, username },
   } = useAppContext();
   const {
-    roomState: { facingMode, isMicOn, isVideoOn, isSharingScreen, floatClient },
-    roomDispatch,
+    roomState: { facingMode, isMicOn, isVideoOn, isSharingScreen, floatClient, showNotification },
   } = useRoomContext();
 
   const client = useMemo(() => AgoraRTC.createClient({ mode: "rtc", codec: "vp8" }), []);
@@ -30,9 +32,13 @@ export const Room = () => {
     } catch (err) {
       if (err instanceof Error) {
         console.error(err);
-        setErrorMessage(err.message);
+        setError(err.message);
       }
     }
+  };
+
+  const toggleLiveChatVisibility = () => {
+    setShowLiveChat((state) => !state);
   };
 
   useEffect(() => {
@@ -53,10 +59,17 @@ export const Room = () => {
       {roomId && username && (
         <div className={styles.room} style={{ "--vh": vh + "px", "--vw": vw + "px" } as CSSProperties}>
           <div className={styles.options}>
+            <Profile />
             <div className={styles.roomId}>
               <p>room id</p>
               <h1 onClick={() => navigator.clipboard.writeText(roomId)}>{roomId}</h1>
             </div>
+            <button
+              className={[styles.chatBtn, showNotification && styles.showNotification].join(" ")}
+              onClick={toggleLiveChatVisibility}
+            >
+              <ChatIcon />
+            </button>
           </div>
           <div className={[styles.userGrid, floatClient && styles.floatingClient].join(" ")}>
             {isSharingScreen && <ScreenShare />}
@@ -69,7 +82,7 @@ export const Room = () => {
             <RemoteUsers client={client} />
           </div>
           <Controls />
-          <LiveChat roomId={roomId} username={username} />
+          <LiveChat roomId={roomId} username={username} showLiveChat={showLiveChat} setShowLiveChat={setShowLiveChat} />
         </div>
       )}
     </>

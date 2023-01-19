@@ -1,15 +1,30 @@
-import styles from "./join-room.module.scss";
+import styles from "./join-room-modal.module.scss";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import EnterIcon from "@assets/icons/enter.svg";
 import BackIcon from "@assets/icons/arrow-back.svg";
+import CrossIcon from "@assets/icons/cross.svg";
 import { useAppContext, useError } from "@hooks";
 import { api } from "@helpers";
+import { useEffect } from "react";
 
-export const JoinRoom = () => {
-  const { appDispatch } = useAppContext();
-  const { setErrorMessage } = useError();
+export const JoinRoomModal = ({
+  showModal,
+  setShowModal,
+}: {
+  showModal: boolean;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+  const {
+    appState: { roomId },
+    appDispatch,
+  } = useAppContext();
+  const { setError } = useError();
   const navigate = useNavigate();
   const [searchParams, _setSearchParams] = useSearchParams();
+
+  const toggleJoinRoomModal = () => {
+    setShowModal((state) => !state);
+  };
 
   const handleEnterRoom: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -22,24 +37,44 @@ export const JoinRoom = () => {
       }
       appDispatch({ type: "setRoomId", payload: roomId });
       appDispatch({ type: "setUsername", payload: username });
-      setTimeout(() => {
-        navigate(`/room`);
-      }, 0);
     } catch (err) {
       if (err instanceof Error) {
-        setErrorMessage(err.message);
+        setError(err.message);
         console.error(err);
       }
     }
   };
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+  useEffect(() => {
+    const escapeHandler = (e: KeyboardEvent) => {
+      if (showModal && e.key === "Escape") {
+        setShowModal(false);
+      }
+    };
+    window.addEventListener("keydown", escapeHandler);
+
+    return () => {
+      window.removeEventListener("keydown", escapeHandler);
+    };
+  }, [showModal]);
+
+  useEffect(() => {
+    if (roomId) {
+      navigate("/room");
+    }
+  }, [roomId]);
 
   return (
-    <>
-      <form className={styles.joinRoom} onSubmit={handleEnterRoom} autoComplete="off">
+    <div className={[styles.container, !showModal && styles.hide].join(" ")} onClick={toggleJoinRoomModal}>
+      <form
+        className={styles.joinRoom}
+        onSubmit={handleEnterRoom}
+        onClick={(e) => e.stopPropagation()}
+        autoComplete="off"
+      >
+        <button aria-label="Go back" className={styles.closeBtn} type="button" onClick={toggleJoinRoomModal}>
+          <CrossIcon />
+        </button>
         <div className={styles.enterInfo}>
           <div className={styles.enterRoomId}>
             <input
@@ -57,15 +92,12 @@ export const JoinRoom = () => {
             <span>Name</span>
           </div>
           <div className={styles.btnContainer}>
-            <button aria-label="Go back" className={styles.btn} type="button" onClick={handleBack}>
-              <BackIcon />
-            </button>
             <button className={styles.btn} type="submit">
               Enter Room <EnterIcon />
             </button>
           </div>
         </div>
       </form>
-    </>
+    </div>
   );
 };

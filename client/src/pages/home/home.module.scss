@@ -1,10 +1,11 @@
 @use '../config' as *;
 
 .home {
-  @include page;
+  height: var(--vh);
+  width: var(--vw);
   position: relative;
   display: grid;
-  place-items: center;
+  justify-items: center;
   color: var(--white);
 }
 
@@ -58,7 +59,7 @@
 }
 
 .main-container {
-  width: 80%;
+  width: 100%;
   display: grid;
   place-items: center;
   gap: 5em;
@@ -108,8 +109,11 @@
   padding: 0.5em;
   top: -220%;
   left: 50%;
-  transform: translateX(-50%);
-  animation: show-up 2s ease 1 forwards;
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: all;
+  transition: all 0.2s ease;
+
 
   &::before {
     --border-width: 0.4em;
@@ -122,6 +126,12 @@
     border-left: var(--border-width) solid transparent;
     border-bottom: var(--border-width) solid transparent;
     border-top: var(--border-width) solid var(--color-white);
+  }
+
+  &.hide {
+    transform: translate(-50%, 50%);
+    opacity: 0;
+    pointer-events: none;
   }
 }
 

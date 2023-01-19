@@ -29,22 +29,22 @@ const appReducer = (state: AppState, action: { type: AppActions; payload?: unkno
 
   switch (type) {
     case "setError":
-      if (typeof payload !== "string") {
+      if (payload !== null && typeof payload !== "string") {
         throw new Error("Invalid payload type.");
       }
       return { ...state, error: payload };
     case "setRoomId":
-      if (typeof payload !== "string") {
+      if (payload !== null && typeof payload !== "string") {
         throw new Error("Invalid payload type.");
       }
       return { ...state, roomId: payload };
     case "setUsername":
-      if (typeof payload !== "string") {
+      if (payload !== null && typeof payload !== "string") {
         throw new Error("Invalid payload type.");
       }
       return { ...state, username: payload };
     case "setAccessToken":
-      if (typeof payload !== "string") {
+      if (payload !== null && typeof payload !== "string") {
         throw new Error("Invalid payload type.");
       }
       return { ...state, accessToken: payload };

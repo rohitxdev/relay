@@ -1,29 +1,28 @@
-class ApiAdaptor {
-  async #apiFetch(input: RequestInfo | URL, init?: RequestInit | undefined) {
-    return fetch("/api" + input, init);
-  }
+export const api = {
+  getRoomID: () => fetch(`/api/get-room-id`),
 
-  async getRoomID() {
-    return this.#apiFetch(`/get-room-id`);
-  }
+  getUsername: (uid: string) => fetch(`/api/get-username/${uid}`),
 
-  async getUsername(uid: string) {
-    return this.#apiFetch(`/get-username/${uid}`);
-  }
+  getAgoraAccessToken: (roomId: string, username: string) =>
+    fetch(`/api/get-agora-access-token?roomId=${roomId}&username=${username}`),
+  verifyRoomId: (roomId: string) => fetch(`/api/verify-room-id/${roomId}`),
 
-  async getAgoraAccessToken(roomId: string, username: string) {
-    return this.#apiFetch(`/get-agora-access-token?roomId=${roomId}&username=${username}`);
-  }
+  deleteUsername: (uid: string) => fetch(`/api/delete-username/${uid}`, { method: "DELETE" }),
 
-  async verifyRoomId(roomId: string) {
-    return this.#apiFetch(`/verify-room-id/${roomId}`);
-  }
+  signUp: ({ email, username, password }: { email: string; username: string; password: string }) =>
+    fetch("/api/auth/sign-up", {
+      method: "POST",
+      body: JSON.stringify({ email, username, password }),
+      headers: { "Content-Type": "application/json" },
+    }),
 
-  async deleteUsername(uid: string) {
-    return this.#apiFetch(`/delete-username/${uid}`, { method: "DELETE" });
-  }
+  logIn: ({ username, password }: { username: string; password: string }) =>
+    fetch("/api/auth/log-in", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+      headers: { "Content-Type": "application/json" },
+    }),
+  getAccessToken: () => fetch(`/api/auth/get-access-token`),
 
-  async getJWTAccessToken() {}
-}
-
-export const api = new ApiAdaptor();
+  logOut: () => fetch("/api/auth/log-out"),
+};

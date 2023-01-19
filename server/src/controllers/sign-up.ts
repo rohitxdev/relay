@@ -27,6 +27,8 @@ export const signUpController: RequestHandler<
   const hashedPassword = crypto.scryptSync(password, salt, 128).toString(`hex`);
   await users.insertOne({ email, username, hashedPassword, salt });
   const refreshToken = jwt.sign({ username }, JWT_REFRESH_TOKEN_SECRET, { expiresIn: "90d" });
+  console.log(username);
+
   return res
     .status(200)
     .cookie("refresh_token", refreshToken, COOKIE_OPTIONS)

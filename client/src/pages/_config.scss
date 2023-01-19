@@ -47,24 +47,6 @@
     }
 }
 
-@keyframes show-up {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, 50%);
-    }
-
-    10%,
-    90% {
-        opacity: 1;
-        transform: translate(-50%, 0);
-    }
-
-    100% {
-        opacity: 0;
-        transform: translate(-50%, 50%);
-    }
-}
-
 @keyframes scale-up {
     from {
         transform: scale(0.5);

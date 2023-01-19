@@ -6,6 +6,7 @@ const initialRoomState: RoomState = {
   facingMode: "user",
   floatClient: false,
   isSharingScreen: false,
+  showNotification: false,
 };
 
 const roomReducer = (state: RoomState, action: { type: RoomActions; payload?: unknown }): RoomState => {
@@ -21,6 +22,8 @@ const roomReducer = (state: RoomState, action: { type: RoomActions; payload?: un
       return { ...state, floatClient: state.floatClient };
     case "toggleScreenShare":
       return { ...state, isSharingScreen: !state.isSharingScreen };
+    case "toggleNotification":
+      return { ...state, showNotification: !state.showNotification };
     case "resetRoomState":
       return initialRoomState;
     default:

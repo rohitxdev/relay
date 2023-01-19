@@ -4,8 +4,8 @@
     --color-purple: hsl(253, 94%, 58%);
     --color-accent: hsl(18, 100%, 62%);
     --color-red: hsl(4, 100%, 58%);
-    --color-dark-100: hsl(235, 21%, 10%);
-    --color-dark-200: hsl(208, 100%, 5%);
+    --color-dark-100: hsl(235, 21%, 15%);
+    --color-dark-200: hsl(235, 21%, 10%);
     --color-white: hsl(0, 0%, 100%);
     --color-grey: hsl(257, 12%, 65%);
     --color-grey-opaque: hsla(0, 0%, 100%, 0.3);
@@ -20,7 +20,7 @@
     height: 100vh;
     width: 100vw;
     overflow: hidden;
-    user-select: none;
+    // user-select: none;
     scroll-behavior:smooth;
     background-color: var(--color-dark-200);
     -webkit-tap-highlight-color: transparent;

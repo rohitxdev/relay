@@ -7,9 +7,9 @@ export function useError(timer: number = 3000) {
     appDispatch,
   } = useAppContext();
 
-  const setErrorMessage = (err: string | null) => {
+  const setError = (err: string | null) => {
     if (!error) {
-      appDispatch({ type: "setError", payload: error });
+      appDispatch({ type: "setError", payload: err });
     }
   };
 
@@ -21,5 +21,5 @@ export function useError(timer: number = 3000) {
     }
   }, [error]);
 
-  return { error, setErrorMessage };
+  return { error, setError };
 }

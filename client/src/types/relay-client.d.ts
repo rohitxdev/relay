@@ -34,6 +34,7 @@ interface RoomState {
   isSharingScreen: boolean;
   facingMode: facingMode;
   floatClient: boolean;
+  showNotification: boolean;
 }
 
 interface AppState {

@@ -16,7 +16,7 @@ export const ClientUser = memo(
     facingMode: facingMode;
     client: IAgoraRTCClient;
   }) => {
-    const { setErrorMessage } = useError();
+    const { setError } = useError();
     const {
       appState: { username },
     } = useAppContext();
@@ -44,7 +44,7 @@ export const ClientUser = memo(
       } catch (err) {
         if (err instanceof Error) {
           console.error(err.message);
-          setErrorMessage(err.message);
+          setError(err.message);
         }
       }
     };
@@ -65,7 +65,7 @@ export const ClientUser = memo(
       } catch (err) {
         if (err instanceof Error) {
           console.error(err.message);
-          setErrorMessage(err.message);
+          setError(err.message);
         }
       }
     };
