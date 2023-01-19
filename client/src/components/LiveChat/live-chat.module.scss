@@ -4,7 +4,7 @@
     z-index: 1000;
     background-color: var(--color-dark-200);
     display: grid;
-    grid-template-rows: auto 1.5rem auto;
+    grid-template-rows: auto 1.5rem min-content;
     padding: 2rem 0.25rem 1.5rem 0.25rem;
     margin: 0 0.5rem;
     border-inline: 2px solid var(--color-purple);
@@ -13,7 +13,7 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    transform: translateY(100%);
+    transform: translateY(calc(100% + 0.5rem));
     transition: transform 0.2s ease;
 
     &.show {
