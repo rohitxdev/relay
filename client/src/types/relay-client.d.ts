@@ -19,7 +19,6 @@ const appActions = [
   "setError",
   "setRoomId",
   "setUsername",
-  "setAccessToken",
   "setCanShareLink",
   "setCanShareScreen",
   "setCanUseRearCamera",
@@ -27,6 +26,9 @@ const appActions = [
   "resetAppState",
 ] as const;
 type AppActions = typeof appActions[number];
+
+const authActions = ["setAccessToken", "setIsLoggedIn"] as const;
+type AuthActions = typeof authActions[number];
 
 interface RoomState {
   isVideoOn: boolean;
@@ -41,7 +43,6 @@ interface AppState {
   error: string | null;
   roomId: string | null;
   username: string | null;
-  accessToken: string | null;
   canShareLink: boolean;
   canShareScreen: boolean;
   canUseRearCamera: boolean;
@@ -69,4 +70,17 @@ interface ChatMessage {
   type: "message" | "meta";
   data: string;
   time: string;
+}
+
+interface AuthState {
+  accessToken: string | null;
+  isLoggedIn: boolean;
+}
+
+interface AuthContext {
+  authState: AuthState;
+  authDispatch: React.Dispatch<{
+    type: AuthActions;
+    payload?: unknown;
+  }>;
 }

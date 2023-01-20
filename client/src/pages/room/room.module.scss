@@ -30,8 +30,8 @@
 }
 
 .options {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     padding: 0 1rem;
 
@@ -56,11 +56,12 @@
     width: 3.5rem;
     color: var(--color-white);
     background-color: transparent;
+    padding: 0.25rem;
+    justify-self: right;
 
     svg {
         height: 100%;
         width: 100%;
-        padding: 0.5rem;
     }
 
     &.show-notification {

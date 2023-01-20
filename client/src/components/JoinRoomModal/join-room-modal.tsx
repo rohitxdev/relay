@@ -29,14 +29,13 @@ export const JoinRoomModal = ({
   const handleEnterRoom: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(new FormData(e.currentTarget).entries());
-    const { roomId, username } = formData as Record<string, string>;
+    const { roomId } = formData as Record<string, string>;
     try {
-      const res = await api.verifyRoomId(roomId);
+      const res = await api.verifyRoomId(roomId, "");
       if (!res.ok) {
         throw new Error("Invalid Room ID.");
       }
       appDispatch({ type: "setRoomId", payload: roomId });
-      appDispatch({ type: "setUsername", payload: username });
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -44,13 +43,13 @@ export const JoinRoomModal = ({
       }
     }
   };
+  const escapeHandler = (e: KeyboardEvent) => {
+    if (showModal && e.key === "Escape") {
+      setShowModal(false);
+    }
+  };
 
   useEffect(() => {
-    const escapeHandler = (e: KeyboardEvent) => {
-      if (showModal && e.key === "Escape") {
-        setShowModal(false);
-      }
-    };
     window.addEventListener("keydown", escapeHandler);
 
     return () => {
@@ -86,10 +85,6 @@ export const JoinRoomModal = ({
               required
             />
             <span>Room ID</span>
-          </div>
-          <div className={styles.enterUsername}>
-            <input aria-label="Enter username" type="text" name="username" maxLength={24} required />
-            <span>Name</span>
           </div>
           <div className={styles.btnContainer}>
             <button className={styles.btn} type="submit">

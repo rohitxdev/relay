@@ -1,7 +1,7 @@
 import "./app.scss";
 import ReactDOM from "react-dom/client";
 import { Navigate, createBrowserRouter, RouterProvider } from "react-router-dom";
-import { AppContextProvider, RoomContextProvider } from "@context";
+import { AppContextProvider, AuthContextProvider, RoomContextProvider } from "@context";
 import { ErrorDialog } from "@components";
 import { Home } from "./home/home";
 import { Room } from "./room/room";
@@ -21,9 +21,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <AppContextProvider>
-    <>
+    <AuthContextProvider>
       <ErrorDialog />
       <RouterProvider router={router} />
-    </>
+    </AuthContextProvider>
   </AppContextProvider>
 );

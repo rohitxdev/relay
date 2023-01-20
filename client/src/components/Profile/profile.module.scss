@@ -2,9 +2,8 @@
     position: relative;
     display: grid;
     place-content: center;
-    justify-self: left;
-    margin: 1rem;
-
+    justify-self: right;
+    margin: 1.25rem;
 
     button {
         height: 3.5rem;
@@ -22,13 +21,23 @@
 
 }
 
+.username {
+    background-color: var(--color-purple);
+    color: var(--color-white);
+    font-variation-settings: 'wght' 600;
+    padding: 0.75rem;
+    text-align: center;
+
+}
+
+
 .options {
     position: absolute;
     width: max-content;
     height: auto;
     top: 100%;
-    right: 0;
-    transform: translateX(100%) scale(1);
+    right: 100%;
+    transform: scale(1);
     z-index: 1000;
     border-radius: 0.75rem;
     opacity: 1;
@@ -36,7 +45,6 @@
     transition: all 0.1s ease;
     transform-origin: top right;
     display: grid;
-    justify-items: stretch;
     align-items: center;
     overflow: hidden;
     grid-template-columns: 1fr;
@@ -44,14 +52,14 @@
     &.hide {
         opacity: 0;
         pointer-events: none;
-        transform: translateX(0) scale(0);
+        transform: scale(0);
 
     }
 
     button {
         font-variation-settings: 'wght' 500;
-        padding: 0.25rem 1.5rem;
-        width: max-content;
+        padding: 0 1.5rem;
+        width: 100%;
         color: white;
         background-color: var(--color-dark-100);
         text-align: center;

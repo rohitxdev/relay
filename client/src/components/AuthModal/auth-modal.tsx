@@ -5,7 +5,7 @@ import EyeOffIcon from "@assets/icons/eye-off.svg";
 import PersonIcon from "@assets/icons/person.svg";
 import EmailIcon from "@assets/icons/envelope-at.svg";
 import ShieldIcon from "@assets/icons/shield-lock.svg";
-import { useAppContext, useAuth, useError } from "@hooks";
+import { useAuthContext, useError } from "@hooks";
 
 export function AuthModal({
   showAuthModal,
@@ -18,13 +18,13 @@ export function AuthModal({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { setError } = useError();
-  const { appDispatch } = useAppContext();
+  const { authDispatch } = useAuthContext();
 
   const formSubmitHandler: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(new FormData(e.currentTarget).entries());
     if (type === "sign-up" && formData.password !== formData["confirm-password"]) {
-      return alert("Passwords dont match");
+      throw new Error("Passwords don't match.");
     }
     try {
       const res = await fetch(`/api/auth/${type}`, {
@@ -36,6 +36,8 @@ export function AuthModal({
       if (!res.ok) {
         throw new Error(data);
       }
+      authDispatch({ type: "setIsLoggedIn", payload: true });
+      setShowAuthModal(false);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);

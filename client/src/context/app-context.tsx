@@ -4,7 +4,6 @@ const initialAppState: AppState = {
   error: null,
   roomId: null,
   username: null,
-  accessToken: null,
   canShareLink: false,
   canShareScreen: false,
   canUseRearCamera: false,
@@ -39,15 +38,10 @@ const appReducer = (state: AppState, action: { type: AppActions; payload?: unkno
       }
       return { ...state, roomId: payload };
     case "setUsername":
-      if (payload !== null && typeof payload !== "string") {
+      if (typeof payload !== "string" && payload !== null) {
         throw new Error("Invalid payload type.");
       }
       return { ...state, username: payload };
-    case "setAccessToken":
-      if (payload !== null && typeof payload !== "string") {
-        throw new Error("Invalid payload type.");
-      }
-      return { ...state, accessToken: payload };
     case "setCanShareLink":
       if (typeof payload !== "boolean") {
         throw new Error("Invalid payload type.");

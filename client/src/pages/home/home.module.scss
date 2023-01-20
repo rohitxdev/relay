@@ -74,6 +74,7 @@
   height: 3em;
   width: 100%;
   margin-block: 0.5em;
+  position: relative;
 }
 
 .room-id {
@@ -198,6 +199,39 @@
     width: 1.25em;
 
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    filter: brightness(0.8);
+  }
+}
+
+.log-in-sign {
+  padding: 0.5rem 1rem;
+  width: max-content;
+  background-color: var(--color-red);
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-wrap: nowrap;
+
+  p {
+    color: var(--color-white);
+    font-variation-settings: 'wght' 600;
+
+  }
+
+  svg {
+    height: 1.5rem;
+    aspect-ratio: 1 /1;
+    justify-self: right;
+  }
+
 }
 
 @media screen and (max-width:600px) {

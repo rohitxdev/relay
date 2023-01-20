@@ -4,12 +4,12 @@ import { CSSProperties, useEffect, useState } from "react";
 import { api } from "@helpers";
 import AddIcon from "@assets/icons/add.svg";
 import PeopleIcon from "@assets/icons/people.svg";
-import GithubIcon from "@assets/icons/github.svg";
+import ErrorIcon from "@assets/icons/error.svg";
 import ShareIcon from "@assets/icons/share.svg";
 import CopyIcon from "@assets/icons/copy.svg";
 import LoaderIcon from "@assets/icons/loader.svg";
 import Illustration from "@assets/images/video-conference.svg";
-import { useError, useAppContext, useViewportSize } from "@hooks";
+import { useError, useAppContext, useViewportSize, useAuthContext } from "@hooks";
 import { AuthModal, JoinRoomModal, Profile } from "@components";
 
 export const Home = () => {
@@ -17,6 +17,10 @@ export const Home = () => {
     appState: { canShareLink, canCopyToClipboard },
     appDispatch,
   } = useAppContext();
+  const {
+    authState: { accessToken, isLoggedIn },
+  } = useAuthContext();
+
   const { setError } = useError();
   const { vh, vw } = useViewportSize();
 
@@ -63,7 +67,7 @@ export const Home = () => {
   const getRoomId = async () => {
     try {
       setIsLoading(true);
-      const res = await api.getRoomID();
+      const res = await api.getRoomID("accessToken");
       if (!res.ok) throw new Error("Could not get room ID.");
       const roomId = await res.text();
       setRoomId(roomId);
@@ -114,14 +118,6 @@ export const Home = () => {
 
   return (
     <div className={styles.home} style={{ "--vh": vh + "px", "--vw": vw + "px" } as CSSProperties}>
-      {/* <a
-        aria-label="Link to Github profile"
-        href="https://github.com/rohitman47"
-        target="_blank"
-        className={styles.githubLink}
-      >
-        <GithubIcon />
-      </a> */}
       <Profile />
       <section className={styles.banner} role="banner" aria-label="Page banner">
         <div className={styles.appName}>
@@ -135,6 +131,12 @@ export const Home = () => {
           <Illustration />
         </div>
         <main className={[styles.btnContainer, styles.animateBtns].join(" ")}>
+          {!isLoggedIn && (
+            <div className={styles.logInSign}>
+              <p>Log in to join / create rooms.</p>
+              {/* <ErrorIcon /> */}
+            </div>
+          )}
           <div className={styles.roomIdContainer}>
             {!isLoading && roomId ? (
               <>
@@ -157,10 +159,10 @@ export const Home = () => {
               <div className={styles.loader}>{isLoading && <LoaderIcon />}</div>
             )}
           </div>
-          <button className={styles.btn} onClick={getRoomId}>
+          <button className={styles.btn} onClick={getRoomId} disabled={!isLoggedIn}>
             Create Room <AddIcon />
           </button>
-          <button className={styles.btn} onClick={toggleJoinRoomModal}>
+          <button className={styles.btn} onClick={toggleJoinRoomModal} disabled={!isLoggedIn}>
             Join Room <PeopleIcon />
           </button>
         </main>

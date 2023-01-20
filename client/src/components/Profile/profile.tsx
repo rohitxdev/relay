@@ -2,7 +2,7 @@ import styles from "./profile.module.scss";
 import UserIcon from "@assets/icons/user.svg";
 import { useEffect, useState } from "react";
 import { api } from "@helpers";
-import { useAppContext, useAuth, useError } from "@hooks";
+import { useAppContext, useAuthContext, useError } from "@hooks";
 import { AuthModal } from "@components";
 
 export function Profile() {
@@ -10,7 +10,11 @@ export function Profile() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { setError } = useError();
   const {
-    appState: { accessToken },
+    authState: { accessToken, isLoggedIn },
+    authDispatch,
+  } = useAuthContext();
+  const {
+    appState: { username },
   } = useAppContext();
   const toggleProfileOptionsVisibility = () => {
     setShowProfileOptions((state) => !state);
@@ -22,6 +26,7 @@ export function Profile() {
       if (!res.ok) {
         throw new Error("Could not log out.");
       }
+      authDispatch({ type: "setIsLoggedIn", payload: false });
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -41,6 +46,10 @@ export function Profile() {
     };
   }, [showAuthModal]);
 
+  useEffect(() => {
+    setShowProfileOptions(false);
+  }, [isLoggedIn]);
+
   return (
     <>
       <div className={styles.profile}>
@@ -48,8 +57,9 @@ export function Profile() {
           <UserIcon />
         </button>
         <div className={[styles.options, !showProfileOptions && styles.hide].join(" ")}>
-          {accessToken ? (
+          {isLoggedIn ? (
             <>
+              <p className={styles.username}>{username}</p>
               <button>Change username</button>
               <button>Change password</button>
               <button onClick={logOutHandler}>Log out</button>
