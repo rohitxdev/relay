@@ -3,6 +3,7 @@
     display: grid;
     place-content: center;
     justify-self: left;
+    margin: 1rem;
 
 
     button {
@@ -12,7 +13,6 @@
 
         svg {
             color: white;
-            padding: 0.5rem;
             height: 100%;
             width: 100%;
         }
@@ -33,10 +33,10 @@
     border-radius: 0.75rem;
     opacity: 1;
     pointer-events: all;
-    // transition: all 0.2s ease;
+    transition: all 0.1s ease;
     transform-origin: top right;
     display: grid;
-    justify-items: center;
+    justify-items: stretch;
     align-items: center;
     overflow: hidden;
     grid-template-columns: 1fr;
@@ -44,13 +44,14 @@
     &.hide {
         opacity: 0;
         pointer-events: none;
-        transform: translateX(100%) scale(0);
+        transform: translateX(0) scale(0);
 
     }
 
     button {
-        padding: 0.5rem 2rem;
-        width: 10rem;
+        font-variation-settings: 'wght' 500;
+        padding: 0.25rem 1.5rem;
+        width: max-content;
         color: white;
         background-color: var(--color-dark-100);
         text-align: center;

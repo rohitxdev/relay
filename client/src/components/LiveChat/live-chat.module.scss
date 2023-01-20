@@ -22,7 +22,8 @@
 }
 
 .messages {
-    overflow: hidden / auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     padding: 0 0.75rem;
 
     &::-webkit-scrollbar {

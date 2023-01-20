@@ -1,12 +1,13 @@
 import { api } from "@helpers";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useAppContext } from "./useAppContext";
 
 export function useAuth() {
-  const [accessToken, setAccessToken] = useState<string | null>(sessionStorage.getItem("access-token"));
   const tokenExpirationTimeInMs = useRef(0);
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("is-logged-in") === "true" ? true : false);
-
+  const {
+    appState: { accessToken },
+    appDispatch,
+  } = useAppContext();
   const getAccessToken = async () => {
     try {
       const res = await api.getAccessToken();
@@ -17,6 +18,7 @@ export function useAuth() {
       if (!(accessToken && username && tokenExpirationTimeInMs)) {
         throw new Error("Missing information in response object.");
       }
+      appDispatch({ type: "setAccessToken", payload: accessToken });
       tokenExpirationTimeInMs.current = Number(expiryTime);
     } catch (err) {
       console.error(err);
@@ -24,7 +26,7 @@ export function useAuth() {
   };
 
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!accessToken) return;
     getAccessToken();
     const intervalId = setInterval(getAccessToken, tokenExpirationTimeInMs.current);
 
@@ -34,8 +36,8 @@ export function useAuth() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("is-logged-in", `${isLoggedIn}`);
-  }, [isLoggedIn]);
+    localStorage.setItem("is-logged-in", `${accessToken}`);
+  }, [accessToken]);
 
   useEffect(() => {
     if (accessToken) {
@@ -43,5 +45,5 @@ export function useAuth() {
     }
   }, [accessToken]);
 
-  return { isLoggedIn, setIsLoggedIn };
+  return { accessToken };
 }

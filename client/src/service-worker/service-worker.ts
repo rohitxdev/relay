@@ -1,12 +1,12 @@
 declare const self: ServiceWorkerGlobalScope;
 
 export const serviceWorker = () => {
-  const cacheVersion = "v2";
+  const cacheVersion = "v1";
   const cacheName = `relay-cache-${cacheVersion}`;
   const indexURL = new URL("/", import.meta.url);
 
   const cacheFirstThenFetch = async (req: Request) => {
-    const proxiedReq = req.mode == "navigate" ? indexURL : req;
+    const proxiedReq = req.mode === "navigate" && /^https?:\/\//.test(req.url) ? indexURL : req;
     const cacheRes = await caches.match(proxiedReq);
     if (cacheRes) {
       return cacheRes;

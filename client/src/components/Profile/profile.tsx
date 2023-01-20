@@ -2,15 +2,16 @@ import styles from "./profile.module.scss";
 import UserIcon from "@assets/icons/user.svg";
 import { useEffect, useState } from "react";
 import { api } from "@helpers";
-import { useAuth, useError } from "@hooks";
+import { useAppContext, useAuth, useError } from "@hooks";
 import { AuthModal } from "@components";
 
 export function Profile() {
   const [showProfileOptions, setShowProfileOptions] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { setError } = useError();
-  const { isLoggedIn } = useAuth();
-
+  const {
+    appState: { accessToken },
+  } = useAppContext();
   const toggleProfileOptionsVisibility = () => {
     setShowProfileOptions((state) => !state);
   };
@@ -47,20 +48,18 @@ export function Profile() {
           <UserIcon />
         </button>
         <div className={[styles.options, !showProfileOptions && styles.hide].join(" ")}>
-          {isLoggedIn ? (
+          {accessToken ? (
             <>
               <button>Change username</button>
               <button>Change password</button>
               <button onClick={logOutHandler}>Log out</button>
             </>
           ) : (
-            <>
-              <button onClick={() => setShowAuthModal(true)}>Log In / Sign Up</button>
-            </>
+            <button onClick={() => setShowAuthModal(true)}>Log In / Sign Up</button>
           )}
         </div>
       </div>
-      <AuthModal showAuthModal={showAuthModal} />
+      <AuthModal showAuthModal={showAuthModal} setShowAuthModal={setShowAuthModal} />
     </>
   );
 }

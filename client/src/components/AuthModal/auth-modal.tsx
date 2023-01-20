@@ -5,14 +5,20 @@ import EyeOffIcon from "@assets/icons/eye-off.svg";
 import PersonIcon from "@assets/icons/person.svg";
 import EmailIcon from "@assets/icons/envelope-at.svg";
 import ShieldIcon from "@assets/icons/shield-lock.svg";
-import { useAuth, useError } from "@hooks";
+import { useAppContext, useAuth, useError } from "@hooks";
 
-export function AuthModal({ showAuthModal }: { showAuthModal: boolean }) {
+export function AuthModal({
+  showAuthModal,
+  setShowAuthModal,
+}: {
+  showAuthModal: boolean;
+  setShowAuthModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [type, setType] = useState<"log-in" | "sign-up">("log-in");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { setIsLoggedIn } = useAuth();
   const { setError } = useError();
+  const { appDispatch } = useAppContext();
 
   const formSubmitHandler: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
@@ -30,7 +36,6 @@ export function AuthModal({ showAuthModal }: { showAuthModal: boolean }) {
       if (!res.ok) {
         throw new Error(data);
       }
-      setIsLoggedIn(true);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -39,12 +44,24 @@ export function AuthModal({ showAuthModal }: { showAuthModal: boolean }) {
   };
 
   return (
-    <div className={[styles.container, !showAuthModal && styles.hide].join(" ")}>
-      <form className={styles.authModal} onSubmit={formSubmitHandler} autoComplete="off">
+    <div
+      className={[styles.container, !showAuthModal && styles.hide].join(" ")}
+      onClick={() => setShowAuthModal(false)}
+    >
+      <form
+        className={styles.authModal}
+        onSubmit={formSubmitHandler}
+        autoComplete="off"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className={styles.type} data-type={type}>
           <div>
-            <button onClick={() => setType("log-in")}>Log In</button>
-            <button onClick={() => setType("sign-up")}>Sign Up</button>
+            <button type="button" onClick={() => setType("log-in")}>
+              Log In
+            </button>
+            <button type="button" onClick={() => setType("sign-up")}>
+              Sign Up
+            </button>
           </div>
           <hr className={styles.mover} />
           <hr className={styles.line} />

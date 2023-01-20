@@ -42,12 +42,16 @@ export const LiveChat = memo(
     );
 
     const inputHandler: React.FormEventHandler<HTMLInputElement> = (e) => {
-      setMessage({
-        sender: username,
-        type: "message",
-        data: e.currentTarget.value,
-        time: new Date().toISOString(),
-      });
+      if (e.currentTarget.value.trim()) {
+        setMessage({
+          sender: username,
+          type: "message",
+          data: e.currentTarget.value,
+          time: new Date().toISOString(),
+        });
+      } else {
+        setMessage(null);
+      }
     };
 
     const keyDownHandler: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
@@ -60,7 +64,7 @@ export const LiveChat = memo(
     };
 
     const sendMessageHandler = () => {
-      if (message && socket.connected) {
+      if (message && socket.active) {
         socket.emit("text", message);
         setMessagesList((messages) => [...messages, message]);
         setMessage(null);
