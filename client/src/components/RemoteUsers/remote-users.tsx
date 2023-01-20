@@ -31,7 +31,7 @@ export const RemoteUsers = memo(({ client }: { client: IAgoraRTCClient }) => {
 
   useEffect(() => {
     client.on("user-joined", async (user) => {
-      const res = await api.getUsername(user.uid as string);
+      const res = await api.getUsername(user.uid as string, "");
       const username = await res.text();
       setRemoteUsers((prevUsers) => [
         ...prevUsers,
@@ -51,7 +51,7 @@ export const RemoteUsers = memo(({ client }: { client: IAgoraRTCClient }) => {
 
     client.on("user-left", async (user) => {
       setRemoteUsers((prevUsers) => prevUsers.filter((prevUser) => prevUser.uid !== user.uid));
-      await api.deleteUsername(user.uid as string);
+      await api.deleteUsername(user.uid as string, "");
       if (user.uid !== screenUid.current) {
         await userLeftTone.play();
       }

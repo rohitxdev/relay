@@ -39,7 +39,7 @@ export const ScreenShare = () => {
 
   const joinRoomAsUser = async () => {
     if (roomId && screenClient.current.connectionState !== "CONNECTED") {
-      const response = await api.getAgoraAccessToken(roomId, screenUsername);
+      const response = await api.getAgoraAccessToken(roomId, screenUsername, "");
       const { appId, uid, accessToken } = await response.json();
       await screenClient.current.join(appId, roomId, accessToken, uid);
     }
