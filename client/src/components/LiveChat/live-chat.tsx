@@ -41,7 +41,6 @@ export const LiveChat = memo(
         io(`ws://${location.host}`, {
           query: { roomId, username },
           reconnectionAttempts: 5,
-          transports: ["websocket", "polling"],
         }),
       []
     );
@@ -121,9 +120,6 @@ export const LiveChat = memo(
 
     useEffect(() => {
       socket.connect();
-      socket.on("connect_error", () => {
-        socket.io.opts.transports = ["polling", "websocket"];
-      });
 
       socket.on("old_texts", (oldMessages: ChatMessage[]) => {
         if (messagesList.length === 0) {
