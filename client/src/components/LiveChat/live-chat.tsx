@@ -37,7 +37,12 @@ export const LiveChat = memo(
         : typingUsers[0] + " is typing...");
 
     const socket = useMemo(
-      () => io(`ws://${location.host}`, { query: { roomId, username }, reconnectionAttempts: 5 }),
+      () =>
+        io(`ws://${location.host}`, {
+          query: { roomId, username },
+          reconnectionAttempts: 5,
+          transports: ["websocket", "polling"],
+        }),
       []
     );
 
@@ -91,7 +96,7 @@ export const LiveChat = memo(
       if (isTyping) {
         socket.emit("typing");
       } else {
-        socket.emit("not-typing");
+        socket.emit("not_typing");
       }
     }, [isTyping]);
 
@@ -116,8 +121,11 @@ export const LiveChat = memo(
 
     useEffect(() => {
       socket.connect();
+      socket.on("connect_error", () => {
+        socket.io.opts.transports = ["polling", "websocket"];
+      });
 
-      socket.on("old-texts", (oldMessages: ChatMessage[]) => {
+      socket.on("old_texts", (oldMessages: ChatMessage[]) => {
         if (messagesList.length === 0) {
           setMessagesList((messages) => messages.concat(oldMessages));
         }
@@ -127,7 +135,7 @@ export const LiveChat = memo(
         setTypingUsers((users) => [...users, username]);
       });
 
-      socket.on("not-typing", (username: string) => {
+      socket.on("not_typing", (username: string) => {
         setTypingUsers((users) => users.filter((user) => user !== username));
       });
 

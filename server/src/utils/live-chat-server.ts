@@ -16,7 +16,7 @@ export class LiveChatServer {
       if (!(roomId && username)) return socket.disconnect();
 
       rooms.findOne({ room_id: roomId }).then((room) => {
-        socket.emit("old-texts", room?.chats);
+        socket.emit("old_texts", room?.chats);
       });
       socket.join(roomId);
 
@@ -26,8 +26,8 @@ export class LiveChatServer {
         socket.broadcast.to(roomId).emit("typing", username);
       });
 
-      socket.on("not-typing", () => {
-        socket.broadcast.to(roomId).emit("not-typing", username);
+      socket.on("not_typing", () => {
+        socket.broadcast.to(roomId).emit("not_typing", username);
       });
 
       socket.on("text", (text: ChatMessage) => {
@@ -36,7 +36,7 @@ export class LiveChatServer {
       });
 
       socket.on("disconnect", () => {
-        socket.broadcast.to(roomId).emit("not-typing", username);
+        socket.broadcast.to(roomId).emit("not_typing", username);
         socket.broadcast.to(roomId).emit("leave", username);
       });
 
