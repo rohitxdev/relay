@@ -9,19 +9,8 @@
   color: var(--white);
 }
 
-.github-link {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 1em;
-  height: 1.5em;
-  width: 1.5em;
-  color: var(--color-white);
-}
-
-
 .banner {
-  margin: 2em;
+  margin: 1rem 2em;
   animation: slide-down 0.5s 1 forwards;
   color: var(--color-white);
 
@@ -53,7 +42,7 @@
 }
 
 .illustration {
-  margin: 1em 2em;
+  margin: 0 2rem;
   width: clamp(5em, 75%, 25em);
   aspect-ratio: 1 / 1;
 }
@@ -62,7 +51,7 @@
   width: 100%;
   display: grid;
   place-items: center;
-  gap: 5em;
+  gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
@@ -171,7 +160,7 @@
 .btn-container {
   display: grid;
   place-items: center;
-  gap: 2em;
+  gap: 1.5em;
   width: 15em;
   margin-bottom: 2em;
 }

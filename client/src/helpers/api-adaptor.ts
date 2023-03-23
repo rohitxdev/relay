@@ -28,7 +28,22 @@ export const api = {
       body: JSON.stringify({ username, password }),
       headers: { "Content-Type": "application/json" },
     }),
+
   getAccessToken: () => fetch(`/api/auth/get-access-token`),
+
+  changeUsername: (newUsername: string, accessToken: string) =>
+    fetch("/api/change-username", {
+      method: "PUT",
+      body: JSON.stringify({ newUsername }),
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+    }),
+
+  changePassword: (currentPassword: string, newPassword: string, accessToken: string) =>
+    fetch("/api/change-password", {
+      method: "PUT",
+      body: JSON.stringify({ currentPassword, newPassword }),
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+    }),
 
   logOut: () => fetch("/api/auth/log-out"),
 };

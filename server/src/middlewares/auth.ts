@@ -10,15 +10,14 @@ export const authMiddleware: RequestHandler = async (req, res, next) => {
   if (!authorization.startsWith(`Bearer `) || !(authorization.split(` `).length === 2)) {
     return res.status(400).send(`Invalid authorization header.`);
   }
-  if (!JWT_ACCESS_TOKEN_SECRET) {
-    res.sendStatus(500);
-    throw new Error(`JWT_ACCESS_TOKEN_SECRET not provided.`);
-  }
   const accessToken = authorization.split(` `)[1];
   try {
     jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
     return next();
   } catch (err) {
-    return res.status(401).send(`Access token expired.`);
+    if (err instanceof jwt.TokenExpiredError) {
+      return res.status(403).send(`Access token expired.`);
+    }
+    return res.sendStatus(500);
   }
 };

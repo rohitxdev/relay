@@ -31,7 +31,7 @@ const authReducer = (state: AuthState, action: { type: AuthActions; payload?: un
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const { appDispatch } = useAppContext();
   const [authState, authDispatch] = useReducer(authReducer, initialAuthState);
-  const { accessToken, isLoggedIn } = authState;
+  const { isLoggedIn } = authState;
   const timerId = useRef<number | null>(null);
   const logInAttempts = useRef(0);
 
@@ -43,22 +43,21 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
           throw new Error("Could not get access token.");
         }
         logInAttempts.current++;
-        window.setTimeout(getAccessToken, 3000);
+        window.setTimeout(getAccessToken, 2000);
       }
       if (res.status === 401) {
         authDispatch({ type: "setIsLoggedIn", payload: false });
-        throw new Error("Login session has expired.");
+        throw new Error("User is not logged in.");
       }
       if (res.status === 403) {
         authDispatch({ type: "setIsLoggedIn", payload: false });
-        throw new Error("User is not logged in.");
+        throw new Error("Login session has expired.");
       }
       const { accessToken, username, tokenExpiryTimeInMs } = await res.json();
 
       if (!(accessToken && username && tokenExpiryTimeInMs)) {
         throw new Error("Missing information in response object.");
       }
-
       authDispatch({ type: "setAccessToken", payload: accessToken });
       appDispatch({ type: "setUsername", payload: username });
       timerId.current = window.setTimeout(() => {

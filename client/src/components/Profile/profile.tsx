@@ -2,7 +2,7 @@ import styles from "./profile.module.scss";
 import UserIcon from "@assets/icons/user.svg";
 import { useEffect, useState } from "react";
 import { api } from "@helpers";
-import { useAppContext, useAuthContext, useError } from "@hooks";
+import { useApi, useAppContext, useAuthContext, useError } from "@hooks";
 import { AuthModal } from "@components";
 
 export function Profile() {
@@ -16,6 +16,8 @@ export function Profile() {
   const {
     appState: { username },
   } = useAppContext();
+
+  const { changeUsername } = useApi();
   const toggleProfileOptionsVisibility = () => {
     setShowProfileOptions((state) => !state);
   };
@@ -39,6 +41,15 @@ export function Profile() {
     }
   };
 
+  const changeUsernameHandler = async () => {
+    // const res = await changeUsername("");
+    // if (!res.ok) {
+    //   throw new Error("Could not change username.");
+    // }
+  };
+
+  const resetPasswordHandler = async () => {};
+
   useEffect(() => {
     window.addEventListener("keydown", escapeHandler);
     return () => {
@@ -60,8 +71,8 @@ export function Profile() {
           {isLoggedIn ? (
             <>
               <p className={styles.username}>{username}</p>
-              <button>Change username</button>
-              <button>Change password</button>
+              <button onClick={changeUsernameHandler}>Change username</button>
+              <button onClick={resetPasswordHandler}>Change password</button>
               <button onClick={logOutHandler}>Log out</button>
             </>
           ) : (
