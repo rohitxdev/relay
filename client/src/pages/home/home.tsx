@@ -88,21 +88,6 @@ export const Home = () => {
 	}, [isLoggedIn]);
 
 	useEffect(() => {
-		console.log(`
-    
-    ***** Made by Team B2, IV-ECE, MRCET *****
-
-    G. Rohit Reddy, 19N31A0472
-    G. Manoj Kumar, 19N31A0468
-    G. Yeshwanth, 19N31A0483
-
-    Under the esteemed guidance of Mr. V. Shiva Raj Kumar, Asst. Professor, Dept. of ECE, MRCET.
-
-    
-    `);
-	}, []);
-
-	useEffect(() => {
 		if (state?.error) {
 			setError(state.error);
 			history.replaceState({}, document.title);
